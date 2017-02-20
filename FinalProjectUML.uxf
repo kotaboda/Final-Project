@@ -31,7 +31,7 @@
       <x>848</x>
       <y>16</y>
       <w>632</w>
-      <h>480</h>
+      <h>496</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Abstract&gt;&gt;
 Character
@@ -157,7 +157,8 @@ Floor
 -boss : Boss
 -enemy : Enemy
 -bossBattle : BossBattle
--battles : Battle[ ]</panel_attributes>
+-battles : Battle[ ]
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -302,7 +303,7 @@ Item
       <x>1656</x>
       <y>192</y>
       <w>264</w>
-      <h>240</h>
+      <h>280</h>
     </coordinates>
     <panel_attributes>Inventory
 -
@@ -314,6 +315,7 @@ items : ArrayList&lt;Items&gt;
 
 +getItems() : Item[ ]
 +addItem(item : Item) : boolean
++addAllItems(items : Item...) : void
 +removeItem(item : Item) : Item
 +isMaxed() : boolean
 
@@ -385,23 +387,23 @@ Lootable
     <id>Relation</id>
     <coordinates>
       <x>1160</x>
-      <y>424</y>
+      <y>464</y>
       <w>512</w>
-      <h>224</h>
+      <h>184</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>620.0;10.0;620.0;260.0;10.0;250.0</additional_attributes>
+    <additional_attributes>620.0;10.0;620.0;210.0;10.0;200.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>800</x>
-      <y>424</y>
+      <y>464</y>
       <w>896</w>
-      <h>192</h>
+      <h>152</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>1100.0;10.0;1100.0;220.0;10.0;210.0</additional_attributes>
+    <additional_attributes>1100.0;10.0;1100.0;170.0;10.0;160.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -411,7 +413,11 @@ Lootable
       <w>360</w>
       <h>280</h>
     </coordinates>
-    <panel_attributes>GameGUI</panel_attributes>
+    <panel_attributes>GameGUI
+-
+
+
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -433,7 +439,8 @@ Lootable
 
 +GameEngine(player : Player, view : Viewable, floors : Floor...) : &lt;&lt;ctor&gt;&gt;
 
-+run() : void</panel_attributes>
++run() : void
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -469,7 +476,11 @@ Application</panel_attributes>
     </coordinates>
     <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Viewable
--</panel_attributes>
+-
+
++displayBattle() : void
++displayGeneral() : void
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -498,34 +509,34 @@ Viewable
     <id>Relation</id>
     <coordinates>
       <x>1328</x>
-      <y>488</y>
+      <y>504</y>
       <w>24</w>
-      <h>168</h>
+      <h>152</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;190.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>944</x>
-      <y>488</y>
+      <y>504</y>
       <w>112</w>
-      <h>152</h>
+      <h>136</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;170.0;120.0;10.0</additional_attributes>
+    <additional_attributes>10.0;150.0;120.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>800</x>
-      <y>488</y>
+      <y>504</y>
       <w>208</w>
-      <h>80</h>
+      <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;80.0;240.0;10.0</additional_attributes>
+    <additional_attributes>10.0;60.0;240.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -595,7 +606,8 @@ STAMINA</panel_attributes>
 Observable
 -
 
-+notify() : void</panel_attributes>
++notify() : void
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -611,7 +623,8 @@ Observer
 -
 
 +subscribe : void
-+unsubscribe : void</panel_attributes>
++unsubscribe : void
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -670,7 +683,8 @@ Observer
 AttackType
 -
 
-(Need to come up with attack types)</panel_attributes>
+(Need to come up with attack types)
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -686,8 +700,10 @@ Paintable
 -
 -
 
-+getImage() : Image
-</panel_attributes>
++getWorldImage() : Image
++getBattleImage() : Image
+
+bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
