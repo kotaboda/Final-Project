@@ -415,7 +415,9 @@ Lootable
     </coordinates>
     <panel_attributes>GameGUI
 -
-
+GameGui(layout : GUILayout): &lt;&lt;ctor&gt;&gt;
+-
++changeLayout(newLayout : GUILayouts): void
 
 bg=orange</panel_attributes>
     <additional_attributes/>
@@ -742,6 +744,7 @@ GUILayouts
 
 BATTLE,
 GENERAL,
+MENU,
 DIALOG</panel_attributes>
     <additional_attributes/>
   </element>
@@ -766,5 +769,50 @@ DIALOG</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2632</x>
+      <y>736</y>
+      <w>304</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Tile
+--
+
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3008</x>
+      <y>760</y>
+      <w>304</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Collidable
+--
+
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3008</x>
+      <y>1040</y>
+      <w>304</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Interactable
+--
+
+--</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
