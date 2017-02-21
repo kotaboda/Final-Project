@@ -29,7 +29,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>530</x>
-      <y>195</y>
+      <y>105</y>
       <w>395</w>
       <h>395</h>
     </coordinates>
@@ -44,8 +44,9 @@ Character
 #level : int
 #coordinates : Coordinates
 #floorNum : int
-#worldImage : Image
-#battleImage : Image
+#subscribers : ArrayList&lt;Listener&lt;Character&gt; &gt;
+#worldImage : BufferedImage
+#battleImage : BufferedImage
 #stats : HashMap&lt;Stats, Integer&gt; 
         |
        V
@@ -57,23 +58,27 @@ Character
 +getInventoryContents() : Item[]
 +modifyInventory(ACTION : InvAction, items : Item...) : boolean   
                                                                       (Returns Success of Operation)
++modifyField(ModifiableFields r, modification : int) : void
 +getStat(stat : Stat) : int
 +getCoordinates() : Coordinates
++addSubscriber(Listener&lt;Character&gt;) : void
++notifySubscribers() : void
 
 &lt;&lt;Abstract Methods&gt;&gt;
 +takeDmg(int dmg) : int;
 +attack() : int;
 
-+toString() : String &lt;&lt;override&gt;&gt;</panel_attributes>
++toString() : String &lt;&lt;override&gt;&gt;
+bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>325</x>
-      <y>605</y>
+      <y>515</y>
       <w>180</w>
-      <h>145</h>
+      <h>125</h>
     </coordinates>
     <panel_attributes>Enemy
 -
@@ -90,7 +95,7 @@ Character
     <id>UMLClass</id>
     <coordinates>
       <x>810</x>
-      <y>660</y>
+      <y>570</y>
       <w>205</w>
       <h>155</h>
     </coordinates>
@@ -110,7 +115,7 @@ Character
     <id>UMLClass</id>
     <coordinates>
       <x>550</x>
-      <y>650</y>
+      <y>560</y>
       <w>180</w>
       <h>145</h>
     </coordinates>
@@ -134,10 +139,10 @@ Character
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1585</x>
-      <y>370</y>
+      <x>1555</x>
+      <y>280</y>
       <w>180</w>
-      <h>80</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Usable
@@ -152,9 +157,9 @@ Usable
     <id>UMLClass</id>
     <coordinates>
       <x>1080</x>
-      <y>640</y>
-      <w>180</w>
-      <h>145</h>
+      <y>500</y>
+      <w>205</w>
+      <h>195</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Abstract&gt;&gt;
 Floor
@@ -167,15 +172,25 @@ Floor
 -battles : Battle[ ]
 -
 
-+Floor()
-bg=orange</panel_attributes>
++Floor() : &lt;&lt;ctor&gt;&gt;
++getTiles() : Tile[][]
++startBattle(e : Enemy, p : Player) : void
++startBossBattle(p : Player) : void
+
++toString() : String &lt;&lt;override&gt;&gt;
+
+
+
+
+
+bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>1355</x>
-      <y>370</y>
+      <y>280</y>
       <w>180</w>
       <h>100</h>
     </coordinates>
@@ -194,19 +209,23 @@ Item
     <id>UMLClass</id>
     <coordinates>
       <x>230</x>
-      <y>855</y>
+      <y>765</y>
       <w>260</w>
-      <h>145</h>
+      <h>165</h>
     </coordinates>
     <panel_attributes>Battle
+-
 -player : Player
 -enemies : Enemy[]
+-subscribers : ArrayList&lt; Listener&lt;Battle&gt; &gt;
 -
 
 +Battle(player : Player, enemies : Enemy...) &lt;&lt;ctor&gt;&gt;
 
 +start() : void
 -createTurnList() : Character[ ]
++addSubscriber(Listener&lt;Battle&gt;) : void &lt;&lt;override&gt;&gt;
+notifySubscribers() : void &lt;&lt;override&gt;&gt;
 
 +toString : String &lt;&lt;override&gt;&gt;</panel_attributes>
     <additional_attributes/>
@@ -215,7 +234,7 @@ Item
     <id>UMLClass</id>
     <coordinates>
       <x>700</x>
-      <y>860</y>
+      <y>770</y>
       <w>265</w>
       <h>145</h>
     </coordinates>
@@ -224,8 +243,8 @@ Item
 
 +BossBattle(player : Player, boss : Boss) &lt;&lt;ctor&gt;&gt;
 
-+start() : void
--createTurnList() : Character[ ]
++start() : void &lt;&lt;override&gt;&gt;
+-createTurnList() : Character[ ] &lt;&lt;override&gt;&gt;
 
 +toString : String &lt;&lt;override&gt;&gt;</panel_attributes>
     <additional_attributes/>
@@ -234,7 +253,7 @@ Item
     <id>Relation</id>
     <coordinates>
       <x>485</x>
-      <y>800</y>
+      <y>710</y>
       <w>335</w>
       <h>80</h>
     </coordinates>
@@ -245,40 +264,18 @@ Item
     <id>Relation</id>
     <coordinates>
       <x>335</x>
-      <y>745</y>
+      <y>635</y>
       <w>15</w>
-      <h>120</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;220.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>665</x>
-      <y>790</y>
-      <w>50</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;140.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>880</x>
-      <y>810</y>
-      <w>15</w>
-      <h>60</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;260.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>725</x>
-      <y>770</y>
+      <y>680</y>
       <w>365</w>
       <h>15</h>
     </coordinates>
@@ -289,7 +286,7 @@ Item
     <id>Relation</id>
     <coordinates>
       <x>1010</x>
-      <y>675</y>
+      <y>585</y>
       <w>80</w>
       <h>15</h>
     </coordinates>
@@ -300,7 +297,7 @@ Item
     <id>Relation</id>
     <coordinates>
       <x>500</x>
-      <y>635</y>
+      <y>545</y>
       <w>590</w>
       <h>20</h>
     </coordinates>
@@ -311,7 +308,7 @@ Item
     <id>UMLClass</id>
     <coordinates>
       <x>1035</x>
-      <y>380</y>
+      <y>290</y>
       <w>165</w>
       <h>175</h>
     </coordinates>
@@ -336,7 +333,7 @@ items : ArrayList&lt;Items&gt;
     <id>Relation</id>
     <coordinates>
       <x>920</x>
-      <y>445</y>
+      <y>355</y>
       <w>125</w>
       <h>15</h>
     </coordinates>
@@ -347,7 +344,7 @@ items : ArrayList&lt;Items&gt;
     <id>UMLClass</id>
     <coordinates>
       <x>295</x>
-      <y>480</y>
+      <y>390</y>
       <w>195</w>
       <h>80</h>
     </coordinates>
@@ -364,7 +361,7 @@ Lootable
     <id>Relation</id>
     <coordinates>
       <x>340</x>
-      <y>555</y>
+      <y>465</y>
       <w>15</w>
       <h>60</h>
     </coordinates>
@@ -375,7 +372,7 @@ Lootable
     <id>Relation</id>
     <coordinates>
       <x>465</x>
-      <y>555</y>
+      <y>465</y>
       <w>120</w>
       <h>105</h>
     </coordinates>
@@ -386,7 +383,7 @@ Lootable
     <id>Relation</id>
     <coordinates>
       <x>1195</x>
-      <y>445</y>
+      <y>355</y>
       <w>170</w>
       <h>15</h>
     </coordinates>
@@ -397,7 +394,7 @@ Lootable
     <id>Relation</id>
     <coordinates>
       <x>725</x>
-      <y>550</y>
+      <y>460</y>
       <w>320</w>
       <h>115</h>
     </coordinates>
@@ -408,7 +405,7 @@ Lootable
     <id>Relation</id>
     <coordinates>
       <x>500</x>
-      <y>550</y>
+      <y>460</y>
       <w>560</w>
       <h>95</h>
     </coordinates>
@@ -419,26 +416,35 @@ Lootable
     <id>UMLClass</id>
     <coordinates>
       <x>1340</x>
-      <y>765</y>
+      <y>675</y>
       <w>225</w>
       <h>175</h>
     </coordinates>
     <panel_attributes>GameGUI
 -
-GameGui(layout : GUILayout): &lt;&lt;ctor&gt;&gt;
 -
+
++GameGUI(layout : GUILayout): &lt;&lt;ctor&gt;&gt;
 +changeLayout(newLayout : GUILayouts): void
 
-bg=orange</panel_attributes>
++displayBattle(b : Battle) : void &lt;&lt;override&gt;&gt;
++displayGeneral() : void &lt;&lt;override&gt;&gt;
++displayLootManager() : void &lt;&lt;override&gt;&gt;
++displayInventory() : void &lt;&lt;override&gt;&gt;
++displayCharacter() : void &lt;&lt;override&gt;&gt;
++displayMainMenu() : void &lt;&lt;override&gt;&gt;
++displayPauseMenu() : void &lt;&lt;override&gt;&gt;
+
+bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>975</x>
-      <y>860</y>
+      <y>770</y>
       <w>335</w>
-      <h>145</h>
+      <h>185</h>
     </coordinates>
     <panel_attributes>GameEngine
 -
@@ -449,17 +455,23 @@ bg=orange</panel_attributes>
 
 -
 
+
 +GameEngine(player : Player, view : Viewable, floors : Floor...) : &lt;&lt;ctor&gt;&gt;
 
 +run() : void
-bg=orange</panel_attributes>
+
+_+main(args : String[]) : void_
+_+loadGame() : GameEngine_
+_+saveGame(e : GameEngine) : void_
+
+bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>1325</x>
-      <y>695</y>
+      <y>605</y>
       <w>150</w>
       <h>30</h>
     </coordinates>
@@ -471,7 +483,7 @@ Application</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1395</x>
-      <y>720</y>
+      <y>630</y>
       <w>15</w>
       <h>55</h>
     </coordinates>
@@ -482,24 +494,30 @@ Application</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1520</x>
-      <y>565</y>
-      <w>150</w>
-      <h>110</h>
+      <y>455</y>
+      <w>230</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Viewable
 -
 
-+displayBattle() : void
++displayBattle(b : Battle) : &lt;&lt;override&gt;&gt;
 +displayGeneral() : void
-bg=orange</panel_attributes>
++displayLootManager() : void
++displayInventory() : void
++displayCharacter() : void
++displayMainMenu() : void
++displayPauseMenu() : void
+
+bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1545</x>
-      <y>670</y>
+      <y>580</y>
       <w>15</w>
       <h>105</h>
     </coordinates>
@@ -510,7 +528,7 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1290</x>
-      <y>595</y>
+      <y>505</y>
       <w>240</w>
       <h>275</h>
     </coordinates>
@@ -521,7 +539,7 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>830</x>
-      <y>585</y>
+      <y>495</y>
       <w>15</w>
       <h>85</h>
     </coordinates>
@@ -532,7 +550,7 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>590</x>
-      <y>585</y>
+      <y>495</y>
       <w>70</w>
       <h>75</h>
     </coordinates>
@@ -543,7 +561,7 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>500</x>
-      <y>585</y>
+      <y>495</y>
       <w>130</w>
       <h>30</h>
     </coordinates>
@@ -554,7 +572,7 @@ bg=orange</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>975</x>
-      <y>260</y>
+      <y>170</y>
       <w>200</w>
       <h>85</h>
     </coordinates>
@@ -569,19 +587,19 @@ TAKE</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>815</x>
-      <y>340</y>
-      <w>180</w>
-      <h>80</h>
+      <x>810</x>
+      <y>250</y>
+      <w>175</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>340.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>330.0;10.0;10.0;160.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>325</x>
-      <y>370</y>
+      <y>280</y>
       <w>115</w>
       <h>95</h>
     </coordinates>
@@ -599,73 +617,18 @@ STAMINA</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>435</x>
-      <y>450</y>
+      <y>350</y>
       <w>105</w>
-      <h>15</h>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;190.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>945</x>
-      <y>1060</y>
-      <w>150</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;Interface&gt;&gt;
-Observable
--
-
-+notify() : void
-bg=orange</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1705</x>
-      <y>565</y>
-      <w>150</w>
-      <h>85</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;Interface&gt;&gt;
-Observer
--
-
-+subscribe : void
-+unsubscribe : void
-bg=orange</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1665</x>
-      <y>615</y>
-      <w>50</w>
-      <h>15</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1070</x>
-      <y>1000</y>
-      <w>15</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;190.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1305</x>
-      <y>895</y>
+      <y>805</y>
       <w>45</w>
       <h>15</h>
     </coordinates>
@@ -676,7 +639,7 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>595</x>
-      <y>810</y>
+      <y>720</y>
       <w>225</w>
       <h>225</h>
     </coordinates>
@@ -687,7 +650,7 @@ bg=orange</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>555</x>
-      <y>1025</y>
+      <y>935</y>
       <w>175</w>
       <h>110</h>
     </coordinates>
@@ -695,15 +658,14 @@ bg=orange</panel_attributes>
 AttackType
 -
 
-(Need to come up with attack types)
-bg=orange</panel_attributes>
+(Need to come up with attack types)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>385</y>
+      <y>295</y>
       <w>130</w>
       <h>120</h>
     </coordinates>
@@ -714,15 +676,14 @@ Paintable
 
 +getWorldImage() : Image
 +getBattleImage() : Image
-
-bg=orange</panel_attributes>
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>125</x>
-      <y>290</y>
+      <y>200</y>
       <w>415</w>
       <h>120</h>
     </coordinates>
@@ -733,7 +694,7 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>125</x>
-      <y>490</y>
+      <y>400</y>
       <w>1065</w>
       <h>350</h>
     </coordinates>
@@ -743,9 +704,9 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1355</x>
-      <y>1040</y>
-      <w>135</w>
+      <x>1325</x>
+      <y>950</y>
+      <w>125</w>
       <h>130</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Enum&gt;&gt;
@@ -758,26 +719,25 @@ LOOT_MANAGER,
 MAIN_MENU,
 PLAYER_MENU
 DIALOG
-
-bg=red</panel_attributes>
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1255</x>
-      <y>1000</y>
-      <w>110</w>
-      <h>85</h>
+      <y>950</y>
+      <w>80</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>200.0;150.0;10.0;10.0</additional_attributes>
+    <additional_attributes>140.0;70.0;10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1430</x>
-      <y>935</y>
+      <y>845</y>
       <w>15</w>
       <h>115</h>
     </coordinates>
@@ -788,7 +748,7 @@ bg=red</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1645</x>
-      <y>715</y>
+      <y>625</y>
       <w>190</w>
       <h>165</h>
     </coordinates>
@@ -809,14 +769,13 @@ bg=red</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1900</x>
-      <y>925</y>
+      <y>835</y>
       <w>190</w>
       <h>165</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Collidable
 --
-
 --
 
 bg=red</panel_attributes>
@@ -826,7 +785,7 @@ bg=red</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1900</x>
-      <y>715</y>
+      <y>625</y>
       <w>190</w>
       <h>165</h>
     </coordinates>
@@ -835,45 +794,53 @@ Interactable
 --
 --
 
-interact(player : Player): void
++interact(player : Player) : void
 bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1860</x>
-      <y>1000</y>
-      <w>50</w>
+      <x>1870</x>
+      <y>910</y>
+      <w>40</w>
       <h>15</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;.
+bg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1685</x>
-      <y>875</y>
-      <w>270</w>
-      <h>85</h>
+      <x>1700</x>
+      <y>765</y>
+      <w>210</w>
+      <h>105</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;150.0;510.0;100.0;520.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;.
+bg=red</panel_attributes>
+    <additional_attributes>10.0;190.0;400.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1570</x>
-      <y>950</y>
-      <w>135</w>
+      <x>1470</x>
+      <y>860</y>
+      <w>235</w>
       <h>165</h>
     </coordinates>
     <panel_attributes>Chest
 --
+
+-subscribers : ArrayList&lt;Listener&lt;Chest&gt;&gt;
+
 --
 
 + Chest(tileNum : int) &lt;&lt;ctor&gt;&gt;
+
++addSubscriber(Listener&lt;Chest&gt;) : void &lt;&lt;override&gt;&gt;
++notifySubscribers() : void &lt;&lt;override&gt;&gt;
 
 bg=red</panel_attributes>
     <additional_attributes/>
@@ -881,10 +848,10 @@ bg=red</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1730</x>
-      <y>950</y>
-      <w>135</w>
-      <h>165</h>
+      <x>1725</x>
+      <y>860</y>
+      <w>150</w>
+      <h>125</h>
     </coordinates>
     <panel_attributes>Wall
 --
@@ -899,40 +866,42 @@ bg=red</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1675</x>
-      <y>875</y>
-      <w>25</w>
+      <y>785</y>
+      <w>15</w>
       <h>85</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;150.0;30.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+bg=red</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1740</x>
-      <y>875</y>
+      <y>785</y>
       <w>40</w>
       <h>85</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+bg=red</panel_attributes>
     <additional_attributes>60.0;150.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>55</x>
-      <y>535</y>
-      <w>1545</w>
+      <y>445</y>
+      <w>1540</w>
       <h>690</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>480.0;10.0;10.0;10.0;20.0;1350.0;3060.0;1360.0;3070.0;1160.0</additional_attributes>
+    <additional_attributes>480.0;10.0;10.0;10.0;20.0;1350.0;3060.0;1360.0;3060.0;1160.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>1605</x>
-      <y>1130</y>
+      <y>1040</y>
       <w>190</w>
       <h>165</h>
     </coordinates>
@@ -949,38 +918,45 @@ bg=red</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1700</x>
-      <y>1020</y>
+      <y>985</y>
       <w>210</w>
       <h>15</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;.
+bg=red</panel_attributes>
     <additional_attributes>10.0;10.0;400.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1705</x>
-      <y>875</y>
+      <x>1710</x>
+      <y>785</y>
       <w>15</w>
       <h>265</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+bg=red</panel_attributes>
     <additional_attributes>10.0;510.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1830</x>
-      <y>1150</y>
-      <w>185</w>
+      <x>1820</x>
+      <y>1060</y>
+      <w>235</w>
       <h>165</h>
     </coordinates>
     <panel_attributes>FloorMessage
 --
 
+-subscribers : ArrayList&lt;Listener&lt;Interactable&gt;&gt;
+
 --
 
 +FloorMessage(tileSheetNum : int) : &lt;&lt;ctor&gt;&gt;
+
++addSubscriber(Listener&lt;Interactable&gt;) &lt;&lt;override&gt;&gt;
++notifySubscribers() : void &lt;&lt;override&gt;&gt;
 
 bg=red</panel_attributes>
     <additional_attributes/>
@@ -989,27 +965,33 @@ bg=red</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1830</x>
-      <y>830</y>
-      <w>85</w>
+      <y>740</y>
+      <w>70</w>
       <h>330</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>150.0;640.0;100.0;10.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+bg=red</panel_attributes>
+    <additional_attributes>120.0;640.0;110.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>2075</x>
-      <y>1110</y>
-      <w>135</w>
+      <y>1030</y>
+      <w>235</w>
       <h>165</h>
     </coordinates>
     <panel_attributes>WallMessage
 --
 
+-subscribers : ArrayList&lt;Listener&lt;Interactable&gt;&gt;
+
 --
 
-WallMessage(tileSheetNum : int) &lt;&lt;ctor&gt;&gt;
++WallMessage(tileSheetNum : int) &lt;&lt;ctor&gt;&gt;
+
++addSubscriber(Listener&lt;Interactable&gt;) &lt;&lt;override&gt;&gt;
++notifySubscribers() : void &lt;&lt;override&gt;&gt;
 
 bg=red</panel_attributes>
     <additional_attributes/>
@@ -1018,30 +1000,32 @@ bg=red</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1805</x>
-      <y>1110</y>
+      <y>980</y>
       <w>280</w>
-      <h>25</h>
+      <h>65</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>540.0;10.0;10.0;30.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;-
+bg=red</panel_attributes>
+    <additional_attributes>540.0;110.0;10.0;110.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1995</x>
-      <y>1085</y>
-      <w>125</w>
-      <h>35</h>
+      <x>2085</x>
+      <y>995</y>
+      <w>35</w>
+      <h>45</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>230.0;50.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;.
+bg=red</panel_attributes>
+    <additional_attributes>50.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>115</x>
-      <y>0</y>
-      <w>300</w>
+      <x>205</x>
+      <y>5</y>
+      <w>190</w>
       <h>175</h>
     </coordinates>
     <panel_attributes>Coordinates
@@ -1057,18 +1041,258 @@ bg=red</panel_attributes>
 +setX(x : int) : void
 +setY(y : int) : void
 +setCoordinates(x : int, y : int) : void
-</panel_attributes>
+
++toString() : String &lt;&lt;override&gt;&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>410</x>
-      <y>130</y>
-      <w>130</w>
-      <h>110</h>
+      <x>390</x>
+      <y>135</y>
+      <w>150</w>
+      <h>15</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;240.0;200.0</additional_attributes>
+    <additional_attributes>10.0;10.0;280.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>675</x>
+      <y>0</y>
+      <w>230</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Subscribable&lt;Character&gt;
+-
+
++addSubscriber(Listener&lt;Character&gt;) : void
++notifySubscribers() : void
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>735</x>
+      <y>65</y>
+      <w>15</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2085</x>
+      <y>785</y>
+      <w>65</w>
+      <h>255</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+bg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;490.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>485</x>
+      <y>820</y>
+      <w>225</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;430.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1035</x>
+      <y>1020</y>
+      <w>100</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Listener&lt;Character&gt;
+-
+
++notify() : void
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1085</x>
+      <y>950</y>
+      <w>15</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>245</x>
+      <y>975</y>
+      <w>195</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Subscribable&lt;Battle&gt;
+-
+
++addSubscriber(Listener&lt;Battle&gt;) : void
++notifySubscribers() : void
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>385</x>
+      <y>925</y>
+      <w>15</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>935</x>
+      <y>1020</y>
+      <w>85</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Listener&lt;Battle&gt;
+-
+
++notify() : void
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>995</x>
+      <y>950</y>
+      <w>15</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>945</x>
+      <y>375</y>
+      <w>80</w>
+      <h>115</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+ModifiableFields
+-
+
+HITPOINTS,
+ENERGY
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>775</x>
+      <y>365</y>
+      <w>180</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>340.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1955</x>
+      <y>700</y>
+      <w>415</w>
+      <h>595</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+bg=red</panel_attributes>
+    <additional_attributes>270.0;10.0;810.0;10.0;810.0;1170.0;10.0;1170.0;10.0;1050.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1830</x>
+      <y>590</y>
+      <w>370</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>720.0;880.0;720.0;10.0;10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2085</x>
+      <y>630</y>
+      <w>200</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+bg=red</panel_attributes>
+    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2275</x>
+      <y>615</y>
+      <w>250</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Subscribable&lt;Interactable&gt;
+-
+
++addSubscriber(Listener&lt;Interactable&gt;) : void
++notifySubscribers(Listener&lt;Interactable&gt;) : void
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1190</x>
+      <y>950</y>
+      <w>15</w>
+      <h>85</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1145</x>
+      <y>1025</y>
+      <w>120</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+Listener&lt;Interactable&gt;
+-
+
++notify() : void
+bg=red</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
