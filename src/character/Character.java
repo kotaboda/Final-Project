@@ -11,8 +11,8 @@ public abstract class Character implements Subscribable<Character> {
 
 	public final String name;
 	protected Inventory inv;
-	protected int hitPoints;
-	protected int energy;
+	protected int hitPoints = 100;
+	protected int energy = 100;
 	protected int level = 1;
 	protected Coordinates coordinates;
 	protected int floorNum;
