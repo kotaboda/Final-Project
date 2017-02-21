@@ -1,6 +1,6 @@
 package itemSystem;
 
-import characters.Character;
+import character.Character;
 
 public interface Usable {
 	public void use(Character target);
