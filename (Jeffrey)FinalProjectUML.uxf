@@ -1130,7 +1130,7 @@ bg=red</panel_attributes>
 Listener&lt;Character&gt;
 -
 
-+notify() : void
++update() : void
 bg=red</panel_attributes>
     <additional_attributes/>
   </element>
@@ -1184,7 +1184,7 @@ bg=red</panel_attributes>
 Listener&lt;Battle&gt;
 -
 
-+notify() : void
++update() : void
 bg=red</panel_attributes>
     <additional_attributes/>
   </element>
@@ -1302,7 +1302,7 @@ bg=red</panel_attributes>
 Listener&lt;Interactable&gt;
 -
 
-+notify() : void
++update() : void
 bg=red</panel_attributes>
     <additional_attributes/>
   </element>
