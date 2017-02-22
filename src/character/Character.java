@@ -54,6 +54,18 @@ public abstract class Character implements Subscribable<Character> {
 		} while (true);
 		return leveledUp;
 	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public int getNumOfCredits(){
+		return currentCredits;
+	}
+	
+	public int getCreditRequirement(){
+		return creditReq;
+	}
 
 	public Item[] getInventoryContents() {
 		return inv.getItems();
