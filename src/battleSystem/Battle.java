@@ -2,7 +2,7 @@ package battleSystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import character.Character;
 import character.Enemy;
 import character.Player;
 import characterInterfaces.Listener;
@@ -20,6 +20,13 @@ public class Battle implements Subscribable<Battle>{
 	
 	public void start() {
 		Character[] turnList = createTurnList();
+		
+		boolean battleOngoing = false;
+		do {
+			for(int i = 0 ; i < turnList.length ; i++) {
+				int dmg = turnList[i].attack();
+			}
+		}while(battleOngoing);
 	}
 	
 	private Character[] createTurnList() {
