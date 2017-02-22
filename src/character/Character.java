@@ -9,9 +9,9 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import enums.InvAction;
-import enums.ModifiableFields;
-import enums.Stats;
+import characterEnums.InventoryAction;
+import characterEnums.ModifiableFields;
+import characterEnums.Stats;
 import itemSystem.Inventory;
 import itemSystem.Item;
 import models.Coordinates;
@@ -96,7 +96,7 @@ public abstract class Character implements Subscribable<Character>, Serializable
 		return inv.getItems();
 	}
 
-	public boolean modifyInventory(InvAction ACTION, Item... items) {
+	public boolean modifyInventory(InventoryAction ACTION, Item... items) {
 		boolean successful = false;
 		switch (ACTION) {
 		case GIVE:
