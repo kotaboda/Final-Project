@@ -1,8 +1,16 @@
 package character;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 import enums.InvAction;
 import enums.ModifiableFields;
@@ -34,6 +42,11 @@ public abstract class Character implements Subscribable<Character> {
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
 		this.name = name;
+		
+		//TODO Complete Paths to Image Files.
+		worldImage = ImageIO.read(new File("Images/World Images/"));
+		battleImage = ImageIO.read(new File("Images/Battle Images/"));
+		
 	}
 
 	protected void levelUp(int level) {
@@ -114,8 +127,8 @@ public abstract class Character implements Subscribable<Character> {
 	}
 
 	public void notifySubscribers() {
-		for (int i = 0; i < subscribers.size(); i++) {
-			subscribers.get(i).notify();
+		for (Listener<Character> subscriber : subscribers) {
+			subscriber.notify();
 		}
 	}
 
