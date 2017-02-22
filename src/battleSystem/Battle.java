@@ -8,9 +8,9 @@ import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
 
 public class Battle implements Subscribable<Battle>{
-	private Player player;
-	private Enemy[] enemies;
-	private ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
+	protected Player player;
+	protected Enemy[] enemies;
+	protected ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
 	
 	public Battle(Player player, Enemy...enemies) {
 		this.enemies = enemies;
@@ -18,7 +18,7 @@ public class Battle implements Subscribable<Battle>{
 	}
 	
 	public void start() {
-		
+		Character[] turnList = createTurnList();
 	}
 	
 	private Character[] createTurnList() {
