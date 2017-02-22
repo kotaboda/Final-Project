@@ -1,9 +1,14 @@
 package itemSystem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Inventory {
+public class Inventory implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1194551955890872233L;
 	private ArrayList<Item> items = new ArrayList<Item>();
 	public final int invMax;
 

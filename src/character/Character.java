@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,8 +20,12 @@ import itemSystem.Inventory;
 import itemSystem.Item;
 import models.Coordinates;
 
-public abstract class Character implements Subscribable<Character> {
+public abstract class Character implements Subscribable<Character>, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -888637062240963044L;
 	public final String name;
 	protected Inventory inv;
 	protected int hitPoints = 100;
