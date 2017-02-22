@@ -11,7 +11,7 @@ public class Inventory {
 		invMax = 20;
 	}
 
-	public Inventory(ArrayList<Item> itemsToAdd, int invMax) {
+	public Inventory(int invMax,Item...itemsToAdd ) {
 		addAllItems(itemsToAdd);
 
 		this.invMax = invMax;
@@ -32,9 +32,9 @@ public class Inventory {
 		return successful;
 	}
 
-	public boolean addAllItems(ArrayList<Item> itemsToAdd) {
+	public boolean addAllItems(Item... itemsToAdd) {
 		boolean successful = true;
-		if (itemsToAdd.size() + items.size() >= invMax) {
+		if (itemsToAdd.length + items.size() >= invMax) {
 			successful = false;
 		} else {
 			for (Item thing : itemsToAdd) {
@@ -43,9 +43,24 @@ public class Inventory {
 		}
 		return successful;
 	}
-
-	public void removeAllItems() {
+	
+	public void clearInventory(){
 		items.clear();
+	}
+
+	public boolean removeAllItems(Item...items) {
+		
+		for(Item item : items){
+			if(!this.items.contains(item)){
+				return false;
+			}
+		}
+		
+		for(int i = 0; i < items.length; i++){
+			removeItem(items[i]);
+		}
+		
+		return true;
 	}
 	
 	public void removeItem(Item item) {

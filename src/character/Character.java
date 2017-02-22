@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import enums.InvAction;
 import enums.Stats;
 import itemSystem.Inventory;
 import itemSystem.Item;
