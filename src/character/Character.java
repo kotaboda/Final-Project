@@ -2,17 +2,14 @@ package character;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import characterInterfaces.Listener;
+import characterInterfaces.Subscribable;
 import enums.InvAction;
 import enums.ModifiableFields;
 import enums.Stats;
