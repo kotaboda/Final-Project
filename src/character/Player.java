@@ -3,14 +3,9 @@ package character;
 import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
-
-import publisherSubscriberInterfaces.Listener;
-import characterEnums.AttackTypes;
-import javafx.animation.Animation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 public class Player extends Character {
 	
 	/**
@@ -54,7 +49,6 @@ public class Player extends Character {
 			ability.use(this);
 		}
 		
-		return 15;
 	}
 	
 	public void move() {

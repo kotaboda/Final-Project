@@ -26,10 +26,4 @@ public class Enemy extends Character {
 		return 0;
 	}
 
-	@Override
-	public void addSubscriber(Listener<Character> listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
