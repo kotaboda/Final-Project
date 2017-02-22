@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import itemSystem.Inventory;
 import itemSystem.Item;
+import models.Coordinates;
 
 public abstract class Character implements Subscribable<Character> {
 
