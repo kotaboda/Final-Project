@@ -2,6 +2,7 @@ package character;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +14,14 @@ import characterInterfaces.Subscribable;
 import enums.InvAction;
 import enums.ModifiableFields;
 import enums.Stats;
+import characterEnums.InventoryAction;
+import characterEnums.ModifiableFields;
+import characterEnums.Stats;
 import itemSystem.Inventory;
 import itemSystem.Item;
 import models.Coordinates;
+import publisherSubscriberInterfaces.Listener;
+import publisherSubscriberInterfaces.Subscribable;
 
 public abstract class Character implements Subscribable<Character>, Serializable {
 
@@ -46,8 +52,13 @@ public abstract class Character implements Subscribable<Character>, Serializable
 		this.name = name;
 		
 		//TODO Complete Paths to Image Files.
-		worldImage = ImageIO.read(new File("Images/World Images/"));
-		battleImage = ImageIO.read(new File("Images/Battle Images/"));
+		try {
+			worldImage = ImageIO.read(new File("Images/World Images/"));
+			battleImage = ImageIO.read(new File("Images/Battle Images/"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -90,7 +101,7 @@ public abstract class Character implements Subscribable<Character>, Serializable
 		return inv.getItems();
 	}
 
-	public boolean modifyInventory(InvAction ACTION, Item... items) {
+	public boolean modifyInventory(InventoryAction ACTION, Item... items) {
 		boolean successful = false;
 		switch (ACTION) {
 		case GIVE:
@@ -130,7 +141,7 @@ public abstract class Character implements Subscribable<Character>, Serializable
 
 	public void notifySubscribers() {
 		for (Listener<Character> subscriber : subscribers) {
-			subscriber.notify();
+			subscriber.update();
 		}
 	}
 

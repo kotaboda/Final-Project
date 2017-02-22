@@ -1,5 +1,8 @@
 package floors;
 
+import character.Boss;
+import character.Enemy;
+import character.Player;
 import drawinterfaces.Paintable;
 import javafx.scene.image.Image;
 import tiles.Tile;

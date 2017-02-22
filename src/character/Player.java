@@ -1,12 +1,12 @@
 package character;
 
-import characterInterfaces.Listener;
+import publisherSubscriberInterfaces.Listener;
+import characterEnums.AttackTypes;
 import javafx.animation.Animation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-
 public class Player extends Character {
 	
 	/**
@@ -40,7 +40,7 @@ public class Player extends Character {
 		return 10;
 	}
 	
-	public int attack(AttackType TYPE){
+	public int attack(AttackTypes TYPE){
 		//TODO Come up with final implementation
 		switch(TYPE){
 		
@@ -53,24 +53,8 @@ public class Player extends Character {
 		 final ImageView imageView = new ImageView(IMAGE);
 	        imageView.setViewport(new Rectangle2D(WIDTH, HEIGHT, WIDTH, HEIGHT));
 
-	        final Animation animation = new SpriteAnimation(
-	                imageView,
-	                Duration.millis(1000),
-	                COUNT, COLUMNS,
-	                WIDTH, HEIGHT
-	        );
-	        animation.setCycleCount(1);
-	        animation.play();
-	}
-
 	@Override
-	public void addSubscriber(Listener<Character> sub) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeSubscriber(Listener<Character> sub) {
+	public void addSubscriber(Listener<Character> listener) {
 		// TODO Auto-generated method stub
 		
 	}
