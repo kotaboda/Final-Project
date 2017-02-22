@@ -1,7 +1,8 @@
 package character;
 
-import characterEnums.AttackTypes;
-import publisherSubscriberInterfaces.Listener;
+import abilityInterfaces.Ability;
+import abilityInterfaces.AttackAbility;
+import abilityInterfaces.BuffAbility;
 
 public class Player extends Character {
 
@@ -17,7 +18,7 @@ public class Player extends Character {
 
 	@Override
 	public int takeDmg(int dmg) {
-		//TODO Come up with final implementation
+		// TODO Come up with final implementation
 		hitPoints -= dmg;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		return dmg;
@@ -28,20 +29,16 @@ public class Player extends Character {
 		// TODO Come up with final implementation
 		return 10;
 	}
-	
-	public int attack(AttackTypes TYPE){
-		//TODO Come up with final implementation
-		switch(TYPE){
-		
+
+	public void ability(Ability ability, Character... targets) {
+
+		if (ability instanceof AttackAbility) {
+			for (int i = 0; i < targets.length; i++) {
+				ability.use(targets[i]);
+			}
+		} else if (ability instanceof BuffAbility) {
+			ability.use(this);
 		}
-		
-		return 15;
-	}
 
-	@Override
-	public void addSubscriber(Listener<Character> listener) {
-		// TODO Auto-generated method stub
-		
 	}
-
 }
