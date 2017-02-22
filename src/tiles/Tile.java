@@ -8,4 +8,7 @@ public abstract class Tile {
 		this.tileSheetNum = tileSheetNum;
 	}
 	
+	public int getTileSheetNum(){
+		return this.tileSheetNum;
+	}
 }
