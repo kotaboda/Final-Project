@@ -511,11 +511,11 @@ Application</panel_attributes>
 Viewable
 -
 
-+displayBattle(b : Battle) : &lt;&lt;override&gt;&gt;
-+displayGeneral() : void
++displayBattleView(b : Battle) : &lt;&lt;override&gt;&gt;
++displayGeneralView() : void
 +displayLootManager() : void
-+displayInventory() : void
-+displayCharacter() : void
++displayInventoryView(inv : Inventory) : void
++displayCharacterManager() : void
 +displayMainMenu() : void
 +displayPauseMenu() : void
 
