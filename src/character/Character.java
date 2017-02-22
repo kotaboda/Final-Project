@@ -9,19 +9,14 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import characterInterfaces.Listener;
-import characterInterfaces.Subscribable;
-import enums.InvAction;
-import enums.ModifiableFields;
-import enums.Stats;
 import characterEnums.InventoryAction;
 import characterEnums.ModifiableFields;
 import characterEnums.Stats;
+import characterInterfaces.Listener;
+import characterInterfaces.Subscribable;
 import itemSystem.Inventory;
 import itemSystem.Item;
 import models.Coordinates;
-import publisherSubscriberInterfaces.Listener;
-import publisherSubscriberInterfaces.Subscribable;
 
 public abstract class Character implements Subscribable<Character>, Serializable {
 
@@ -139,11 +134,17 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	public void addSubscriber(Listener<Character> listener) {
 		subscribers.add(listener);
 	}
-
+	
+	@Override
 	public void notifySubscribers() {
 		for (Listener<Character> subscriber : subscribers) {
-			subscriber.update();
+			subscriber.update(this);
 		}
+	}
+	
+	@Override
+	public void removeSubscriber(Listener<Character> sub) {
+		subscribers.remove(sub);
 	}
 
 	public abstract int takeDmg(int dmg);
