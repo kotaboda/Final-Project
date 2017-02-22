@@ -63,18 +63,12 @@ public class Inventory {
 		return true;
 	}
 	
-	public void removeItem(Item item) {
-		items.remove(item);
+	public boolean removeItem(Item item) {
+		return items.remove(item);
 	}
 	
 	public boolean isMaxed() {
-		boolean max = false;
-		
-		if(items.size() == invMax) {
-			max = true;
-		}
-		
-		return max;
+		return (items.size() == invMax);
 	}
 	
 	@Override

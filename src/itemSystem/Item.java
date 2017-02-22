@@ -1,6 +1,6 @@
 package itemSystem;
 
-public abstract class Item implements Usable{
+public abstract class Item {
 	
 	public final String name;
 	
