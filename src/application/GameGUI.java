@@ -1,12 +1,15 @@
 package application;
 	
+import battle.Battle;
+import itemSystem.Inventory;
 import javafx.application.Application;
-import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import viewInterface.Viewable;
 
 
-public class GameGUI extends Application {
+public class GameGUI extends Application implements Viewable {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -23,4 +26,48 @@ public class GameGUI extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
+	@Override
+	public void displayMainMenu() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayPauseMenu() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayBattleView(Battle b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayGeneralView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayInventoryView(Inventory inv) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayCharacterManager() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayLootManager() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

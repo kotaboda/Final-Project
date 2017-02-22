@@ -1,5 +1,9 @@
 package character;
 
+import abilityInterfaces.Ability;
+import abilityInterfaces.AttackAbility;
+import abilityInterfaces.BuffAbility;
+
 import publisherSubscriberInterfaces.Listener;
 import characterEnums.AttackTypes;
 import javafx.animation.Animation;
@@ -28,7 +32,7 @@ public class Player extends Character {
 
 	@Override
 	public int takeDmg(int dmg) {
-		//TODO Come up with final implementation
+		// TODO Come up with final implementation
 		hitPoints -= dmg;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		return dmg;
@@ -39,11 +43,15 @@ public class Player extends Character {
 		// TODO Come up with final implementation
 		return 10;
 	}
-	
-	public int attack(AttackTypes TYPE){
-		//TODO Come up with final implementation
-		switch(TYPE){
-		
+
+	public void ability(Ability ability, Character... targets) {
+
+		if (ability instanceof AttackAbility) {
+			for (int i = 0; i < targets.length; i++) {
+				ability.use(targets[i]);
+			}
+		} else if (ability instanceof BuffAbility) {
+			ability.use(this);
 		}
 		
 		return 15;
@@ -53,10 +61,5 @@ public class Player extends Character {
 		 final ImageView imageView = new ImageView(IMAGE);
 	        imageView.setViewport(new Rectangle2D(WIDTH, HEIGHT, WIDTH, HEIGHT));
 
-	@Override
-	public void addSubscriber(Listener<Character> listener) {
-		// TODO Auto-generated method stub
-		
 	}
-
 }

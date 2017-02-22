@@ -134,8 +134,9 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	public Coordinates getCoordinates() {
 		return coordinates;
 	}
-
-	public void addSubscribers(Listener<Character> listener) {
+	
+	@Override
+	public void addSubscriber(Listener<Character> listener) {
 		subscribers.add(listener);
 	}
 
