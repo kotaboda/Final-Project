@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import enums.InvAction;
+import enums.ModifiableFields;
 import enums.Stats;
 import itemSystem.Inventory;
 import itemSystem.Item;
