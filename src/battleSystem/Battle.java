@@ -1,6 +1,7 @@
 package battleSystem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import character.Enemy;
 import character.Player;
@@ -22,25 +23,34 @@ public class Battle implements Subscribable<Battle>{
 	}
 	
 	private Character[] createTurnList() {
-		return null;
+		Character[] turnList = new Character[1+enemies.length];
+		
+		Arrays.sort(turnList);
+		
+		return turnList;
 	}
 
 	@Override
 	public void addSubscriber(Listener<Battle> sub) {
-		// TODO Auto-generated method stub
-		
+		if(sub != null) {
+			sub.update(null);
+			//TODO not sure why listener is needed, if someone else wants to modify this?
+			subscribers.add(sub);
+		}
 	}
 
 	@Override
 	public void removeSubscriber(Listener<Battle> sub) {
-		// TODO Auto-generated method stub
-		
+		if(sub != null) {
+			subscribers.remove(sub);
+		}
 	}
 
 	@Override
 	public void notifySubscribers() {
-		// TODO Auto-generated method stub
-		
+		for(Listener<Battle> sub : subscribers) {
+			sub.update(null);
+		}
 	}
 	
 }

@@ -8,11 +8,10 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import characterEnums.ModifiableFields;
+import characterEnums.Stats;
 import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
-import enums.InvAction;
-import enums.ModifiableFields;
-import enums.Stats;
 import itemSystem.Inventory;
 import itemSystem.Item;
 import models.Coordinates;
@@ -132,6 +131,16 @@ public abstract class Character implements Subscribable<Character>, Serializable
 		for (Listener<Character> subscriber : subscribers) {
 			subscriber.notify();
 		}
+	}
+	
+	public int compareTo(Character chara) {
+		int num = 0;
+		if(this.getStat(Stats.WIT) > chara.getStat(Stats.WIT)) {
+			num = 1;
+		} else if(this.getStat(Stats.WIT) < chara.getStat(Stats.WIT)) {
+			num = -1;
+		}
+		return num;
 	}
 
 	public abstract int takeDmg(int dmg);
