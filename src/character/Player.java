@@ -1,6 +1,14 @@
 package character;
 
+import characterEnums.AttackTypes;
+import publisherSubscriberInterfaces.Listener;
+
 public class Player extends Character {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7445111099520272415L;
 
 	public Player(String name) {
 		super(name);
@@ -21,13 +29,19 @@ public class Player extends Character {
 		return 10;
 	}
 	
-	public int attack(AttackType TYPE){
+	public int attack(AttackTypes TYPE){
 		//TODO Come up with final implementation
 		switch(TYPE){
 		
 		}
 		
 		return 15;
+	}
+
+	@Override
+	public void addSubscriber(Listener<Character> listener) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

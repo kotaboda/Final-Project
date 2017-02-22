@@ -1,6 +1,13 @@
 package character;
 
+import publisherSubscriberInterfaces.Listener;
+
 public class Enemy extends Character {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4495778022214568163L;
 
 	public Enemy(String name) {
 		super(name);
@@ -17,6 +24,12 @@ public class Enemy extends Character {
 	public int attack() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void addSubscriber(Listener<Character> listener) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
