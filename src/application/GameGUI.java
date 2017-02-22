@@ -1,6 +1,6 @@
 package application;
 	
-import battle.Battle;
+import battleSystem.Battle;
 import itemSystem.Inventory;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -68,6 +68,7 @@ public class GameGUI extends Application implements Viewable {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 
 }

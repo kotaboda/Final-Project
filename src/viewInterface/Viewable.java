@@ -1,6 +1,6 @@
 package viewInterface;
 
-import battle.Battle;
+import battleSystem.Battle;
 import itemSystem.Inventory;
 
 public interface Viewable {

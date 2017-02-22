@@ -1,5 +1,7 @@
 package floors;
 
+import battleSystem.Battle;
+import battleSystem.BossBattle;
 import character.Boss;
 import character.Enemy;
 import character.Player;
