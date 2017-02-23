@@ -1,5 +1,7 @@
 package tiles;
 
+import character.Player;
+import itemSystem.Item;
 import tileinterfaces.Collidable;
 import tileinterfaces.Interactable;
 
@@ -21,5 +23,6 @@ public class Chest extends Tile implements Interactable, Collidable, Lootable {
 	@Override
 	public Item[] obtainLoot(){
 		//TODO(andrew): what exactly should this method do?
+		
 	}
 }

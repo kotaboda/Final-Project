@@ -1,5 +1,6 @@
 package tiles;
 
+import character.Player;
 import tileinterfaces.Interactable;
 
 public class WallMessage extends Wall implements Interactable {
