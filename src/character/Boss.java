@@ -26,7 +26,7 @@ public abstract class Boss extends Character {
 	}
 
 	@Override
-	public int attack() {
+	public int attack(Character target) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

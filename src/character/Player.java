@@ -35,7 +35,7 @@ public class Player extends Character {
 	}
 
 	@Override
-	public int attack() {
+	public int attack(Character target) {
 		// TODO Come up with final implementation
 		return 10;
 	}
