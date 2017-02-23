@@ -3,6 +3,7 @@ package character;
 import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
+import characterInterfaces.Listener;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -55,5 +56,11 @@ public class Player extends Character {
 		 final ImageView imageView = new ImageView(IMAGE);
 	        imageView.setViewport(new Rectangle2D(WIDTH, HEIGHT, WIDTH, HEIGHT));
 
+	}
+
+	@Override
+	public void addSubscriber(Listener<Character> sub) {
+		// TODO Auto-generated method stub
+		
 	}
 }

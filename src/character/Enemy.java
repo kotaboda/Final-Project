@@ -1,7 +1,5 @@
 package character;
 
-import publisherSubscriberInterfaces.Listener;
-
 public class Enemy extends Character {
 
 	/**
@@ -24,6 +22,12 @@ public class Enemy extends Character {
 	public int attack(Character target) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void addSubscriber(characterInterfaces.Listener<Character> sub) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
