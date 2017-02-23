@@ -19,6 +19,12 @@ public class GameEngine {
 		this.player = player;
 		this.view = view;
 		this.floors = floors;
+		init();
+	}
+
+	private void init() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public void run() {

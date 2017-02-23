@@ -14,11 +14,12 @@ import viewInterface.Viewable;
 
 
 public class GameGUI extends Application implements Viewable {
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			Parent battleView = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
+			Parent battleView = loader.load(Files.newInputStream(Paths.get("src/GeneralView.fxml")));
 			Scene scene = new Scene(battleView);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
