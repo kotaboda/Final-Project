@@ -166,9 +166,5 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	public abstract int attack();
 
 	@Override
-	public String toString() {
-		return "Character [name=" + name + ", hitPoints=" + hitPoints + ", energy=" + energy + ", level=" + level
-				+ ", floorNum=" + floorNum + "]";
-	}
-
-}
+	public void removeSubscriber(Listener<Character> sub) {
+		subscribers.remove(sub);

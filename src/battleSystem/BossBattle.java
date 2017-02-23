@@ -1,6 +1,9 @@
 package battleSystem;
 
+import java.util.Arrays;
+
 import character.Boss;
+import character.Character;
 import character.Enemy;
 import character.Player;
 
@@ -26,6 +29,11 @@ public class BossBattle extends Battle{
 	}
 	
 	private Character[] createTurnList() {
-		return null;
+		int bossAndPlayer = 2;
+		Character[] turnList = new Character[bossAndPlayer+enemies.length];
+		
+		Arrays.sort(turnList);
+		
+		return turnList;
 	}
 }
