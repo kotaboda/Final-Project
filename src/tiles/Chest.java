@@ -25,5 +25,6 @@ public class Chest extends Tile implements Interactable, Collidable, Lootable {
 	public Item[] obtainLoot(){
 		return loot;
 		//TODO(andrew): what exactly should this method do?
+		
 	}
 }
