@@ -1,5 +1,5 @@
 package characterInterfaces;
 
 public interface Listener<T> {
-	public void update(T value);
+	public void update(Character value);
 }

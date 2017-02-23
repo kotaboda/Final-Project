@@ -1,7 +1,10 @@
 package battleSystem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import application.GameEngine;
+import character.Character;
 import character.Enemy;
 import character.Player;
 import characterInterfaces.Listener;
@@ -19,28 +22,52 @@ public class Battle implements Subscribable<Battle>{
 	
 	public void start() {
 		Character[] turnList = createTurnList();
+		
+		boolean battleOngoing = false;
+		do {
+			for(int i = 0 ; i < turnList.length ; i++) {
+				if(turnList[i] instanceof Player) {
+					Character target = GameEngine.pickTarget();
+					int dmg = turnList[i].attack(target);
+					target.takeDmg(dmg);
+				} else {
+					int dmg = turnList[i].attack(player);
+					player.takeDmg(dmg);
+				}
+			}
+		}while(battleOngoing);
 	}
 	
 	private Character[] createTurnList() {
-		return null;
+		int playerCount = 1;
+		Character[] turnList = new Character[playerCount+enemies.length];
+		
+		Arrays.sort(turnList);
+		
+		return turnList;
 	}
 
 	@Override
 	public void addSubscriber(Listener<Battle> sub) {
-		// TODO Auto-generated method stub
-		
+		if(sub != null) {
+			sub.update(null);
+			//TODO not sure why listener is needed, if someone else wants to modify this?
+			subscribers.add(sub);
+		}
 	}
 
 	@Override
 	public void removeSubscriber(Listener<Battle> sub) {
-		// TODO Auto-generated method stub
-		
+		if(sub != null) {
+			subscribers.remove(sub);
+		}
 	}
 
 	@Override
 	public void notifySubscribers() {
-		// TODO Auto-generated method stub
-		
+		for(Listener<Battle> sub : subscribers) {
+			sub.update(null);
+		}
 	}
 	
 }

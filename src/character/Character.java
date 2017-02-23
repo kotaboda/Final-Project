@@ -129,27 +129,34 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	public Coordinates getCoordinates() {
 		return coordinates;
 	}
-	
-	@Override
-	public void addSubscriber(Listener<Character> listener) {
+
+	public void addSubscribers(Listener<Character> listener) {
 		subscribers.add(listener);
 	}
-	
-	@Override
+
 	public void notifySubscribers() {
 		for (Listener<Character> subscriber : subscribers) {
-			subscriber.update(this);
+			subscriber.notify();
 		}
 	}
-	
 	@Override
 	public void removeSubscriber(Listener<Character> sub) {
 		subscribers.remove(sub);
+	
 	}
 
+	public int compareTo(Character chara) {
+		int num = 0;
+		if(this.getStat(Stats.WIT) > chara.getStat(Stats.WIT)) {
+			num = 1;
+		} else if(this.getStat(Stats.WIT) < chara.getStat(Stats.WIT)) {
+			num = -1;
+		}
+		return num;
+	}
 	public abstract int takeDmg(int dmg);
 
-	public abstract int attack();
+	public abstract int attack(Character target);
 
 	@Override
 	public String toString() {
