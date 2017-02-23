@@ -1,10 +1,14 @@
 package application;
 	
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import battleSystem.Battle;
 import itemSystem.Inventory;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import viewInterface.Viewable;
 
@@ -13,8 +17,9 @@ public class GameGUI extends Application implements Viewable {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
+			FXMLLoader loader = new FXMLLoader();
+			Parent battleView = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
+			Scene scene = new Scene(battleView);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
