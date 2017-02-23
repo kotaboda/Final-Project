@@ -8,6 +8,10 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+<<<<<<< HEAD
+import characterEnums.InventoryAction;
+=======
+>>>>>>> Dakota
 import characterEnums.ModifiableFields;
 import characterEnums.Stats;
 import characterInterfaces.Listener;
@@ -133,6 +137,11 @@ public abstract class Character implements Subscribable<Character>, Serializable
 		}
 	}
 	
+<<<<<<< HEAD
+	@Override
+	public void removeSubscriber(Listener<Character> sub) {
+		subscribers.remove(sub);
+=======
 	public int compareTo(Character chara) {
 		int num = 0;
 		if(this.getStat(Stats.WIT) > chara.getStat(Stats.WIT)) {
@@ -141,11 +150,12 @@ public abstract class Character implements Subscribable<Character>, Serializable
 			num = -1;
 		}
 		return num;
+>>>>>>> Dakota
 	}
 
 	public abstract int takeDmg(int dmg);
 
-	public abstract int attack();
+	public abstract int attack(Character target);
 
 	@Override
 	public String toString() {
@@ -154,3 +164,10 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	}
 
 }
+
+import javax.imageio.ImageIO;
+import characterEnums.InventoryAction;
+	}
+	@Override
+	public void removeSubscriber(Listener<Character> sub) {
+		subscribers.remove(sub);

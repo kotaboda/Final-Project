@@ -2,6 +2,8 @@ package battleSystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
@@ -24,13 +26,21 @@ public class Battle implements Subscribable<Battle>{
 		boolean battleOngoing = false;
 		do {
 			for(int i = 0 ; i < turnList.length ; i++) {
-				int dmg = turnList[i].attack();
+				if(turnList[i] instanceof Player) {
+					Character target = GameEngine.pickTarget();
+					int dmg = turnList[i].attack(target);
+					target.takeDmg(dmg);
+				} else {
+					int dmg = turnList[i].attack(player);
+					player.takeDmg(dmg);
+				}
 			}
 		}while(battleOngoing);
 	}
 	
 	private Character[] createTurnList() {
-		Character[] turnList = new Character[1+enemies.length];
+		int playerCount = 1;
+		Character[] turnList = new Character[playerCount+enemies.length];
 		
 		Arrays.sort(turnList);
 		
