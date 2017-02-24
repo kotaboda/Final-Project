@@ -14,7 +14,7 @@ import tiles.Tile;
 
 public abstract class Floor implements Paintable{
 	
-	private Tile[][] tiles;
+	protected Tile[][] tiles;
 	private Boss boss;
 	private Enemy[] enemies;
 	private BossBattle bossBattle;
@@ -28,8 +28,8 @@ public abstract class Floor implements Paintable{
 	
 	public void genEnemies() {
 		Random xD = new Random();
-		int mapBorderX = getTiles()[0].length;
-		int mapBorderY = getTiles().length;
+		int mapBorderX = getTiles()[0].length - 2;
+		int mapBorderY = getTiles().length - 2;
 		for(int i = 0 ; i < getEnemies().length ; i++) {
 			boolean notValidPlace = false;
 			int x = 0;

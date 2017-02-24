@@ -16,7 +16,7 @@ public class TileManager {
 	private final static byte TILES_HIGH_TO_DRAW = 5;
 	private final static byte TILE_WIDTH = 32;
 	//TODO(andrew): add in the file path for the tile sheet when we have it
-	public static Image tileSheet = new Image("images/tileset.png");
+	public static Image tileSheet = new Image("file:../../images/tileset.png");
 	private final static int TILESHEET_TILES_WIDE = (int)tileSheet.getWidth() / TILE_WIDTH;
 	
 	public Tile createTile(int tileSheetNum){

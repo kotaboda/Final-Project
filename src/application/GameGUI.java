@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import battleSystem.Battle;
+import character.Player;
 import character.PlayerSummary;
 import floors.Floor;
 import floors.Floor1;
@@ -23,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
+import models.Coordinates;
 import tiles.TileManager;
 import viewInterface.Viewable;
 
@@ -30,7 +32,7 @@ import viewInterface.Viewable;
 public class GameGUI extends Application implements Viewable {
 	
 	private Stage primaryStage;
-	private PlayerSummary playerSummary;
+	private PlayerSummary playerSummary = new PlayerSummary(new Player("Test"));
 	
 	@FXML
 	private Button newGameButton;
@@ -160,7 +162,7 @@ public class GameGUI extends Application implements Viewable {
 			
 			//Drawing testing
 			GraphicsContext gc = canvas.getGraphicsContext2D();
-			WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
+			WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), new Coordinates(0, 5));
 			gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
 			primaryStage.setScene(new Scene(parent));
 			primaryStage.show();

@@ -1,12 +1,13 @@
 package floors;
 
-import character.Boss;
 import java.util.Random;
 
+import character.Boss;
 import character.Enemy;
 import character.Player;
-import tiles.TileManager;
 import tileinterfaces.Collidable;
+import tiles.Tile;
+import tiles.TileManager;
 
 public class Floor1 extends Floor {
 	
@@ -21,10 +22,10 @@ public class Floor1 extends Floor {
 			
 		});
 		setPlayer(new Player("Joe"));
-		getBoss().getCoordinates().setCoordinates(9, 1);
-		getPlayer().getCoordinates().setCoordinates(9, 12);
+		//getBoss().getCoordinates().setCoordinates(9, 1);
+		//getPlayer().getCoordinates().setCoordinates(9, 12);
 		setEnemies(new Enemy[5]);
-		genEnemies();
+//		genEnemies();
 		
 		Random xD = new Random();
 		int mapBorderX = 7;
@@ -35,16 +36,16 @@ public class Floor1 extends Floor {
 			int y = 0;
 			
 			do {
-				x = xD.nextInt(mapBorderX)+1;
-				y = xD.nextInt(mapBorderY)+1;
-				if(getTiles()[x][y] instanceof Collidable) {
+				x = xD.nextInt(mapBorderY)+1;
+				y = xD.nextInt(mapBorderX)+1;
+				if(getTiles()[x - 1][y - 1] instanceof Collidable) {
 					notValidPlace = false;
 				} else {
 					notValidPlace = true;
 				}
 			}while(notValidPlace);
 			
-			getEnemies()[i].getCoordinates().setCoordinates(x, y);
+			//getEnemies()[i].getCoordinates().setCoordinates(x, y);
 		}
 		
 		genTiles();
@@ -69,10 +70,11 @@ public class Floor1 extends Floor {
 				{48,53,53,53,53,53,53,53,53,53,49}
 		};
 		TileManager tileMan= new TileManager();
+		this.tiles = new Tile[tileRefs.length][tileRefs[0].length];
 		
 		for(int i = 0 ; i < tileRefs.length ; i++) {
 			for(int j = 0 ; j < tileRefs[i].length ; j++) {
-				getTiles()[i][j] = tileMan.createTile(tileRefs[i][j]);
+				this.tiles[i][j] = tileMan.createTile(tileRefs[i][j]);
 			}
 		}
 	}
