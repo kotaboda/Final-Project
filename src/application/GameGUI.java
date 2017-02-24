@@ -3,7 +3,6 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import battleSystem.Battle;
 import character.PlayerSummary;
 import floors.Floor;
@@ -28,6 +27,12 @@ public class GameGUI extends Application implements Viewable {
 	private Stage primaryStage;
 	private PlayerSummary playerSummary;
 	
+	@FXML
+	private Button newGameButton;
+	@FXML
+	private Button loadGameButton;
+	@FXML
+	private Button exitButton;
 	@FXML
 	private Button menuButton;
 	@FXML
@@ -60,6 +65,19 @@ public class GameGUI extends Application implements Viewable {
 	@Override
 	public void displayMainMenu() {
 		// TODO Auto-generated method stub
+		FXMLLoader loader = new FXMLLoader();
+		
+		loader.setController(this);
+		
+		try{
+			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
+			
+			primaryStage.setScene(new Scene(p));
+			primaryStage.show();
+			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		
 	}
 
