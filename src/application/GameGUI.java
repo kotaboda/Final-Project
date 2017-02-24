@@ -29,6 +29,12 @@ public class GameGUI extends Application implements Viewable {
 	private static GameEngine ge;
 	
 	@FXML
+	private Button newGameButton;
+	@FXML
+	private Button loadGameButton;
+	@FXML
+	private Button exitButton;
+	@FXML
 	private Button menuButton;
 	@FXML
 	private Canvas playerImage;
@@ -65,6 +71,19 @@ public class GameGUI extends Application implements Viewable {
 	@Override
 	public void displayMainMenu() {
 		// TODO Auto-generated method stub
+		FXMLLoader loader = new FXMLLoader();
+		
+		loader.setController(this);
+		
+		try{
+			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
+			
+			primaryStage.setScene(new Scene(p));
+			primaryStage.show();
+			
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		
 	}
 

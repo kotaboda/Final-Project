@@ -27,7 +27,7 @@ public class GameEngine {
 
 	public void run() {
 		
-		view.displayGeneralView();
+		view.displayMainMenu();
 
 	}
 	
