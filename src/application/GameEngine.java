@@ -8,6 +8,10 @@ import java.nio.file.Paths;
 
 import character.Player;
 import floors.Floor;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import viewInterface.Viewable;
 
 public class GameEngine {
@@ -19,12 +23,9 @@ public class GameEngine {
 		this.player = player;
 		this.view = view;
 		this.floors = floors;
-		init();
 	}
 
-	private void init() {
-		// TODO Auto-generated method stub
-		
+	void init() {
 	}
 
 	public void run() {

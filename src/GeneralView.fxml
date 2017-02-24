@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <SplitPane dividerPositions="0.5" prefHeight="500.0" prefWidth="600.0">
          <items>
@@ -33,7 +32,7 @@
                         <Separator prefWidth="200.0" />
                      </children>
                   </VBox>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Menu" />
+                  <Button fx:id="menuButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Menu" />
                </children>
             </VBox>
             <Canvas height="500.0" width="500.0" />
