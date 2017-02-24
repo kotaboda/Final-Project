@@ -59,6 +59,13 @@ public abstract class Character implements Subscribable<Character>, Serializable
 //		}
 		
 	}
+	
+	public Character() {
+		this.name = "test";
+		floorNum = 1;
+		inv = new Inventory();
+		coordinates = new Coordinates(5,5);
+	}
 
 	protected void levelUp(int level) {
 		if (level > 0) {
