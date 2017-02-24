@@ -7,6 +7,7 @@ import character.Enemy;
 import character.Player;
 import drawinterfaces.Paintable;
 import javafx.scene.image.Image;
+import models.Coordinates;
 import tiles.Tile;
 
 public abstract class Floor implements Paintable{
@@ -16,18 +17,35 @@ public abstract class Floor implements Paintable{
 	private Enemy[] enemies;
 	private BossBattle bossBattle;
 	private Battle[] battles;
+	private Player player;
 	
 
 	public Tile[][] getTiles(){
 		return this.tiles;
 	}
-	
+
 	public void startBattle(Enemy e, Player p){
 		
 	}
 	
 	public void startBossBattle(Player p){
 		
+	}
+	
+	public Enemy[] getEnemies() {
+		return enemies;
+	}
+	
+	public void setEnemies(Enemy...enemies) {
+		this.enemies = enemies;
+	}
+	
+	public Boss getBoss() {
+		return boss;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 	
 	@Override
