@@ -18,12 +18,12 @@
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="100.0">
                <children>
                   <ImageView fitHeight="95.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Player Name">
+                  <Label fx:id="playerName" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Player Name">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                   </Label>
-                  <ProgressBar prefWidth="200.0" progress="0.0" />
+                  <ProgressBar fx:id="playerHealthBar" prefWidth="200.0" progress="0.0" />
                   <ImageView fitHeight="20.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
                   <ProgressBar prefWidth="200.0" progress="0.0" />
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="100.0" prefHeight="304.0" prefWidth="100.0">

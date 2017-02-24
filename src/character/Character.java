@@ -1,22 +1,20 @@
 package character;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.imageio.ImageIO;
-
 import characterEnums.InventoryAction;
 import characterEnums.ModifiableFields;
 import characterEnums.Stats;
-import characterInterfaces.Listener;
-import characterInterfaces.Subscribable;
 import itemSystem.Inventory;
 import itemSystem.Item;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import models.Coordinates;
+import publisherSubscriberInterfaces.Listener;
+import publisherSubscriberInterfaces.Subscribable;
 
 public abstract class Character implements Subscribable<Character>, Serializable {
 
@@ -27,6 +25,8 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	public final String name;
 	protected Inventory inv;
 	protected int hitPoints = 100;
+	protected IntegerProperty hpProperty = new SimpleIntegerProperty();
+	protected IntegerProperty maxHPProperty = new SimpleIntegerProperty();
 	protected int energy = 100;
 	protected int level = 1;
 	protected Coordinates coordinates;
@@ -37,6 +37,7 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	protected BufferedImage worldImage;
 	protected BufferedImage battleImage;
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
+	private int maxHitPoints = hitPoints;
 
 	public Character(String name) {
 		if (name == null) {
@@ -45,15 +46,17 @@ public abstract class Character implements Subscribable<Character>, Serializable
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
 		this.name = name;
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 		
 		//TODO Complete Paths to Image Files.
-		try {
-			worldImage = ImageIO.read(new File("Images/World Images/"));
-			battleImage = ImageIO.read(new File("Images/Battle Images/"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			worldImage = ImageIO.read(new File("Images/World Images/"));
+//			battleImage = ImageIO.read(new File("Images/Battle Images/"));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 	}
 
@@ -82,6 +85,14 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	
 	public int getLevel() {
 		return level;
+	}
+	
+	public IntegerProperty getHPProperty(){
+		return hpProperty;
+	}
+	
+	public IntegerProperty getMaxHPProperty(){
+		return maxHPProperty;
 	}
 	
 	public int getNumOfCredits(){
@@ -130,10 +141,12 @@ public abstract class Character implements Subscribable<Character>, Serializable
 		return coordinates;
 	}
 
-	public void addSubscribers(Listener<Character> listener) {
+	@Override
+	public void addSubscriber(Listener<Character> listener) {
 		subscribers.add(listener);
 	}
 
+	@Override
 	public void notifySubscribers() {
 		for (Listener<Character> subscriber : subscribers) {
 			subscriber.notify();
@@ -143,6 +156,14 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	public void removeSubscriber(Listener<Character> sub) {
 		subscribers.remove(sub);
 	
+	}
+	
+	public int getCurrentHealth(){
+		return hitPoints;
+	}
+	
+	public int getMaxHealth(){
+		return maxHitPoints ;
 	}
 
 	public int compareTo(Character chara) {

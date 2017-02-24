@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import battleSystem.Battle;
+import character.PlayerSummary;
 import itemSystem.Inventory;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -13,28 +14,52 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import viewInterface.Viewable;
 
 
 public class GameGUI extends Application implements Viewable {
+	
 	private Stage primaryStage;
+	private PlayerSummary playerSummary;
+	private static GameEngine ge;
+	
+	@FXML
+	private Button menuButton;
+	@FXML
+	private Canvas playerImage;
+	@FXML
+	private Label playerName;
+	@FXML
+	private ProgressBar playerHealthBar;
+	
+	public static void setGameEngine(GameEngine g){
+		ge = g;
+	}
+	@Override
+	public void init(){
+		ge.setView(this);
+	}
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			displayGeneralView();
-			primaryStage.getScene().getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
+			ge.run();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public static void main(String[] args) {
-		launch(args);
+		GameEngine g = GameEngine.loadGame();
+		GameGUI.setGameEngine(g);
+		launch();
+		
 	}
 
 	@Override
@@ -49,6 +74,8 @@ public class GameGUI extends Application implements Viewable {
 		System.out.println("Pause Button Clicked!");
 	}
 
+
+	
 	@Override
 	public void displayBattleView(Battle b) {
 		// TODO Auto-generated method stub
@@ -58,6 +85,8 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
+			playerName.setText(b.getPlayerSummary().playerName);
+			playerHealthBar.progressProperty().bind(playerSummary.hpProperty.divide(playerSummary.maxHPProperty.doubleValue()));
 			primaryStage.setScene(new Scene(p));
 			primaryStage.show();
 		} catch (IOException e) {
@@ -66,8 +95,7 @@ public class GameGUI extends Application implements Viewable {
 		
 	}
 	
-	@FXML
-	private Button menuButton;
+
 	@Override
 	public void displayGeneralView() {
 		// TODO Auto-generated method stub
@@ -75,16 +103,20 @@ public class GameGUI extends Application implements Viewable {
 		
 		loader.setController(this);
 		try {
-			Parent p = loader.load(Files.newInputStream(Paths.get("src/GeneralView.fxml")));
+			Parent parent = loader.load(Files.newInputStream(Paths.get("src/GeneralView.fxml")));
 			menuButton.setOnAction(new EventHandler<ActionEvent>(){
 
 				@Override
 				public void handle(ActionEvent event) {
-					displayBattleView(null);
+					displayPauseMenu();
 				}
 				
 			});
-			primaryStage.setScene(new Scene(p));
+			
+			playerHealthBar.progressProperty().bind(playerSummary.hpProperty.divide(playerSummary.maxHPProperty.doubleValue()));
+			
+			playerName.setText(playerSummary.playerName);
+			primaryStage.setScene(new Scene(parent));
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -108,6 +140,11 @@ public class GameGUI extends Application implements Viewable {
 	public void displayLootManager() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void setPlayerSummary(PlayerSummary playerSummary){
+		this.playerSummary = playerSummary;
 	}
 
 

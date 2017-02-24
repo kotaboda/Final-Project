@@ -7,8 +7,10 @@ import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
+import character.PlayerSummary;
 import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
+import javafx.scene.control.Label;
 
 public class Battle implements Subscribable<Battle>{
 	protected Player player;
@@ -68,6 +70,10 @@ public class Battle implements Subscribable<Battle>{
 		for(Listener<Battle> sub : subscribers) {
 			sub.update(null);
 		}
+	}
+
+	public PlayerSummary getPlayerSummary() {
+		return new PlayerSummary(player);
 	}
 	
 }

@@ -14,7 +14,7 @@ public class Player extends Character {
 	 */
 	private static final long serialVersionUID = -3349758486478712145L;
 
-	private final Image IMAGE = new Image("images/Player");
+//	private final Image IMAGE = new Image("images/Player");
 	
 	private final int COLUMNS = 5;
 	private final int COUNT = 10;
@@ -25,12 +25,17 @@ public class Player extends Character {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public PlayerSummary getPlayerSummary(){
+		return new PlayerSummary(this);
+	}
 
 	@Override
 	public int takeDmg(int dmg) {
 		// TODO Come up with final implementation
 		hitPoints -= dmg;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
+		hpProperty.set(hitPoints);
 		return dmg;
 	}
 
@@ -53,14 +58,12 @@ public class Player extends Character {
 	}
 	
 	public void move() {
-		 final ImageView imageView = new ImageView(IMAGE);
-	        imageView.setViewport(new Rectangle2D(WIDTH, HEIGHT, WIDTH, HEIGHT));
+//		 final ImageView imageView = new ImageView(IMAGE);
+//	        imageView.setViewport(new Rectangle2D(WIDTH, HEIGHT, WIDTH, HEIGHT));
 
 	}
 
-	@Override
-	public void addSubscriber(Listener<Character> sub) {
-		// TODO Auto-generated method stub
-		
-	}
+
+
+
 }
