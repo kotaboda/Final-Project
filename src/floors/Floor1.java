@@ -1,17 +1,27 @@
 package floors;
 
+import character.Boss;
 import character.Enemy;
+import character.Player;
 import tiles.TileManager;
 
 public class Floor1 extends Floor {
 	
 	public Floor1() {
+		genTiles();
+		setBoss(new Boss("Life"){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			
+		});
+		setPlayer(new Player("Joe"));
 		getBoss().getCoordinates().setCoordinates(9, 1);
 		getPlayer().getCoordinates().setCoordinates(9, 12);
 		setEnemies(new Enemy[5]);
 		genEnemies();
-		
-		genTiles();
 	}
 	
 	public void genTiles() {

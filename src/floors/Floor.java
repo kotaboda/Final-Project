@@ -9,7 +9,6 @@ import character.Enemy;
 import character.Player;
 import drawinterfaces.Paintable;
 import javafx.scene.image.Image;
-import models.Coordinates;
 import tileinterfaces.Collidable;
 import tiles.Tile;
 
@@ -70,10 +69,34 @@ public abstract class Floor implements Paintable{
 		return boss;
 	}
 	
+	public void setBoss(Boss boss) {
+		this.boss = boss;
+	}
+	
 	public Player getPlayer() {
 		return player;
 	}
 	
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	public BossBattle getBossBattle() {
+		return bossBattle;
+	}
+
+	public void setBossBattle(BossBattle bossBattle) {
+		this.bossBattle = bossBattle;
+	}
+
+	public Battle[] getBattles() {
+		return battles;
+	}
+
+	public void setBattles(Battle[] battles) {
+		this.battles = battles;
+	}
+
 	@Override
 	public Image getWorldImage() {
 		//TODO implement
