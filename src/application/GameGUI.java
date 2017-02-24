@@ -3,7 +3,6 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import battleSystem.Battle;
 import character.PlayerSummary;
 import itemSystem.Inventory;
