@@ -5,7 +5,6 @@ import character.Player;
 import floors.Floor;
 import itemSystem.Item;
 import itemSystem.Usable;
-import viewInterface.Viewable;
 
 public class Game {
 

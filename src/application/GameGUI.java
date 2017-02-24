@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import battleSystem.Battle;
 import character.PlayerSummary;
 import floors.Floor;
@@ -15,10 +16,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
+import tiles.TileManager;
 import viewInterface.Viewable;
 
 
@@ -41,6 +45,8 @@ public class GameGUI extends Application implements Viewable {
 	private Label playerName;
 	@FXML
 	private ProgressBar playerHealthBar;
+	@FXML
+	private Canvas canvas;
 	
 	@Override
 	public void init(){
@@ -129,6 +135,12 @@ public class GameGUI extends Application implements Viewable {
 			playerHealthBar.progressProperty().bind(playerSummary.hpProperty.divide(playerSummary.maxHPProperty.doubleValue()));
 			
 			playerName.setText(playerSummary.playerName);
+			
+			
+			//Drawing testing
+			GraphicsContext gc = canvas.getGraphicsContext2D();
+			WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
+			gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
 			primaryStage.setScene(new Scene(parent));
 			primaryStage.show();
 		} catch (IOException e) {

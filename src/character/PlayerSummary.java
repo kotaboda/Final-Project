@@ -1,6 +1,7 @@
 package character;
 
 import javafx.beans.property.IntegerProperty;
+import models.Coordinates;
 
 public class PlayerSummary {
 	
@@ -9,6 +10,7 @@ public class PlayerSummary {
 	public final String playerName;
 	public final IntegerProperty hpProperty;
 	public final IntegerProperty maxHPProperty;
+	public final Coordinates coordinates;
 
 	
 	public PlayerSummary(Player p){
@@ -17,6 +19,6 @@ public class PlayerSummary {
 		maxHealth = p.getMaxHealth();
 		hpProperty = p.hpProperty;
 		maxHPProperty = p.maxHPProperty;
-		
+		coordinates = p.getCoordinates();
 	}
 }
