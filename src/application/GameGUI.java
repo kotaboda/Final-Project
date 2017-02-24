@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import battleSystem.Battle;
 import character.PlayerSummary;
 import floors.Floor;
+import floors.Floor1;
 import itemSystem.Inventory;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -57,7 +58,8 @@ public class GameGUI extends Application implements Viewable {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			displayMainMenu();
+			//displayMainMenu();
+			displayGeneralView(new Floor1());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

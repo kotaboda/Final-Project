@@ -1,7 +1,10 @@
 package floors;
 
+import java.util.Random;
+
 import character.Enemy;
 import tiles.TileManager;
+import tileinterfaces.Collidable;
 
 public class Floor1 extends Floor {
 	
@@ -9,7 +12,27 @@ public class Floor1 extends Floor {
 		getBoss().getCoordinates().setCoordinates(9, 1);
 		getPlayer().getCoordinates().setCoordinates(9, 12);
 		setEnemies(new Enemy[5]);
-		genEnemies();
+		
+		Random xD = new Random();
+		int mapBorderX = 7;
+		int mapBorderY = 12;
+		for(int i = 0 ; i < getEnemies().length ; i++) {
+			boolean notValidPlace = false;
+			int x = 0;
+			int y = 0;
+			
+			do {
+				x = xD.nextInt(mapBorderX)+1;
+				y = xD.nextInt(mapBorderY)+1;
+				if(getTiles()[x][y] instanceof Collidable) {
+					notValidPlace = false;
+				} else {
+					notValidPlace = true;
+				}
+			}while(notValidPlace);
+			
+			getEnemies()[i].getCoordinates().setCoordinates(x, y);
+		}
 		
 		genTiles();
 	}
