@@ -20,16 +20,14 @@ public class GameEngine {
 
 	public GameEngine(Player player, Viewable view, Floor[] floors) {
 		this.player = player;
+		this.player = new Player("Jeffrey");
 		this.view = view;
 		this.floors = floors;
 	}
 
-	void init() {
-	}
-
-	public static void run() {
+	public void run() {
 		
-		
+		view.displayGeneralView();
 
 	}
 	
@@ -49,7 +47,7 @@ public class GameEngine {
 	}
 
 	public static GameEngine loadGame() {
-		GameEngine ge = null;
+		GameEngine ge = new GameEngine(new Player("Jeffrey"), null, null);
 
 		if (Files.exists(Paths.get("src/saves/savedGame.neu"))) {
 			try (ObjectInputStream ois = new ObjectInputStream(
@@ -69,5 +67,10 @@ public class GameEngine {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void setView(Viewable view) {
+		this.view = view;
+		view.setPlayerSummary(player.getPlayerSummary());
 	}
 }

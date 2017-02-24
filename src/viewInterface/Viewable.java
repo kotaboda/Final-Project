@@ -1,6 +1,7 @@
 package viewInterface;
 
 import battleSystem.Battle;
+import character.PlayerSummary;
 import itemSystem.Inventory;
 
 public interface Viewable {
@@ -13,5 +14,6 @@ public interface Viewable {
 	public void displayInventoryView(Inventory inv);
 	public void displayCharacterManager();
 	public void displayLootManager();
+	public void setPlayerSummary(PlayerSummary playerSummary);
 	
 }
