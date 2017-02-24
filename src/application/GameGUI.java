@@ -57,7 +57,7 @@ public class GameGUI extends Application implements Viewable {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			GameEngine.run();
+			displayMainMenu();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -77,7 +77,27 @@ public class GameGUI extends Application implements Viewable {
 		
 		try{
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
+			newGameButton.setOnAction(new EventHandler<ActionEvent>(){
+
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					GameEngine.setGame(new Game(null, null));
+					GameEngine.run();
+				}
+				
+			});
 			
+			loadGameButton.setOnAction(new EventHandler<ActionEvent>(){
+
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					GameEngine.setGame(GameEngine.loadGame());
+					GameEngine.run();
+				}
+				
+			});
 			primaryStage.setScene(new Scene(p));
 			primaryStage.show();
 			
@@ -131,7 +151,6 @@ public class GameGUI extends Application implements Viewable {
 				}
 				
 			});
-			
 			playerHealthBar.progressProperty().bind(playerSummary.hpProperty.divide(playerSummary.maxHPProperty.doubleValue()));
 			
 			playerName.setText(playerSummary.playerName);
