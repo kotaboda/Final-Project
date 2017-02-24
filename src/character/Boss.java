@@ -9,6 +9,10 @@ public abstract class Boss extends Character {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Boss() {
+		super();
+	}
+	
 	public boolean isDefeated() {
 		return isDefeated;
 	}

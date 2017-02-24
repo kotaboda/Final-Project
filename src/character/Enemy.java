@@ -11,7 +11,10 @@ public class Enemy extends Character {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public Enemy() {
+		super();
+	}
 	@Override
 	public int takeDmg(int dmg) {
 		// TODO Auto-generated method stub

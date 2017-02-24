@@ -26,6 +26,10 @@ public class Player extends Character {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Player() {
+		super();
+	}
+	
 	public PlayerSummary getPlayerSummary(){
 		return new PlayerSummary(this);
 	}

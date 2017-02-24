@@ -36,15 +36,15 @@ public abstract class Floor implements Paintable{
 			int y = 0;
 			
 			do {
-				x = xD.nextInt(mapBorderX)+1;
-				y = xD.nextInt(mapBorderY)+1;
+				x = xD.nextInt(mapBorderY)+1;
+				y = xD.nextInt(mapBorderX)+1;
 				if(getTiles()[x][y] instanceof Collidable) {
 					notValidPlace = false;
 				} else {
 					notValidPlace = true;
 				}
 			}while(notValidPlace);
-			
+			getEnemies()[i] = new Enemy();
 			getEnemies()[i].getCoordinates().setCoordinates(x, y);
 		}
 	}

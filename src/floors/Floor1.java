@@ -10,7 +10,7 @@ public class Floor1 extends Floor {
 	
 	public Floor1() {
 		genTiles();
-		setBoss(new Boss("Life"){
+		setBoss(new Boss(){
 
 			/**
 			 * 
@@ -18,11 +18,9 @@ public class Floor1 extends Floor {
 			private static final long serialVersionUID = 1L;
 			
 		});
-		setPlayer(new Player("Joe"));
-		//getBoss().getCoordinates().setCoordinates(9, 1);
-		//getPlayer().getCoordinates().setCoordinates(9, 12);
+		setPlayer(new Player());
 		setEnemies(new Enemy[5]);
-//		genEnemies();
+		genEnemies();
 		
 		genTiles();
 	}
