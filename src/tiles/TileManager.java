@@ -21,15 +21,15 @@ public class TileManager {
 	
 	public Tile createTile(int tileSheetNum){
 		Tile tile = null;
-		if(tileSheetNum >= 0 && tileSheetNum < 20){
+		if(tileSheetNum >= 0 && tileSheetNum < TILESHEET_TILES_WIDE){
 			tile = new GroundTile(tileSheetNum);
-		}else if(tileSheetNum >= 20 && tileSheetNum < 40){
+		}else if(tileSheetNum >= TILESHEET_TILES_WIDE && tileSheetNum < (TILESHEET_TILES_WIDE * 2)){
 			tile = new Chest(tileSheetNum);
-		}else if(tileSheetNum >= 40 && tileSheetNum < 60){
+		}else if(tileSheetNum >= (TILESHEET_TILES_WIDE * 2) && tileSheetNum < (TILESHEET_TILES_WIDE * 3)){
 			tile = new FloorMessage(tileSheetNum);
-		}else if(tileSheetNum >= 60 && tileSheetNum < 80){
+		}else if(tileSheetNum >= (TILESHEET_TILES_WIDE * 3) && tileSheetNum < (TILESHEET_TILES_WIDE * 4)){
 			tile = new WallMessage(tileSheetNum);
-		}else if(tileSheetNum >= 80 && tileSheetNum < 100){
+		}else if(tileSheetNum >= (TILESHEET_TILES_WIDE * 4)&& tileSheetNum < (TILESHEET_TILES_WIDE * 5)){
 			tile = new Wall(tileSheetNum);
 		}
 		return tile;

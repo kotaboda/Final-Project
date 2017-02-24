@@ -15,52 +15,33 @@ import viewInterface.Viewable;
 
 public class GameEngine {
 	private static Viewable view;
-	private static Player player;
-	private static Floor[] floors;
+	private static Game game;
 
-	public GameEngine(Player player, Viewable view, Floor[] floors) {
-		this.player = player;
-		this.player = new Player("Jeffrey");
-		this.view = view;
-		this.floors = floors;
-	}
-
-	public void run() {
-		
-		view.displayGeneralView();
+	public static void run() {
+		//NOTE(andrew): This can be changed later, if it isn't done how we want it to be done
+		int floorNum = game.getPlayer().getFloorNum();
+		Floor[] floors = game.getFloors();
+		view.displayGeneralView(floors[floorNum - 1]);
 
 	}
 	
-	public static Character pickTarget() {
-		//when use picks an enemy, tell the battle class which enemy it is
-		return null;
-	}
 	
-	public static void useItem(Item item) {
-		//when the user chooses an item to use, let the player know which item they chose
-		Item[] items = player.getInventoryContents();
-		for(Item thing : items) {
-			if(item == thing && item instanceof Usable) {
-				((Usable) item).use(player);
-			}
-		}
-	}
 
-	public static GameEngine loadGame() {
-		GameEngine ge = new GameEngine(new Player("Jeffrey"), null, null);
+	public static Game loadGame() {
+		Game g = new Game(new Player("Jeffrey"), null);
 
 		if (Files.exists(Paths.get("src/saves/savedGame.neu"))) {
 			try (ObjectInputStream ois = new ObjectInputStream(
 					Files.newInputStream(Paths.get("src/saves/savedGame.neu")))) {
-				ge = (GameEngine) ois.readObject();
+				g = (Game) ois.readObject();
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
-		return ge;
+		return g;
 	}
 	
-	public void saveGame(GameEngine state) {
+	public static void saveGame(Game state) {
 		try(ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get("src/saves/savedGame.neu")))){
 			oos.writeObject(state);
 		} catch (IOException e) {
@@ -68,9 +49,11 @@ public class GameEngine {
 			e.printStackTrace();
 		}
 	}
-
-	public void setView(Viewable view) {
-		this.view = view;
-		view.setPlayerSummary(player.getPlayerSummary());
+	
+	public static void setView(Viewable newView) {
+		view = newView;
+		view.setPlayerSummary(game.getPlayer().getPlayerSummary());
 	}
+
+	
 }

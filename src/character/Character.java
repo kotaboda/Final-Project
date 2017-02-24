@@ -163,9 +163,13 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	}
 	
 	public int getMaxHealth(){
-		return maxHitPoints ;
+		return maxHitPoints;
 	}
 
+	public int getFloorNum(){
+		return floorNum;
+	}
+	
 	public int compareTo(Character chara) {
 		int num = 0;
 		if(this.getStat(Stats.WIT) > chara.getStat(Stats.WIT)) {

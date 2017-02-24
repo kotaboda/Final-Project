@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 
 import battleSystem.Battle;
 import character.PlayerSummary;
+import floors.Floor;
 import itemSystem.Inventory;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -26,7 +27,6 @@ public class GameGUI extends Application implements Viewable {
 	
 	private Stage primaryStage;
 	private PlayerSummary playerSummary;
-	private static GameEngine ge;
 	
 	@FXML
 	private Button menuButton;
@@ -37,27 +37,22 @@ public class GameGUI extends Application implements Viewable {
 	@FXML
 	private ProgressBar playerHealthBar;
 	
-	public static void setGameEngine(GameEngine g){
-		ge = g;
-	}
 	@Override
 	public void init(){
-		ge.setView(this);
+		GameEngine.setView(this);
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			ge.run();
+			GameEngine.run();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public static void main(String[] args) {
-		GameEngine g = GameEngine.loadGame();
-		GameGUI.setGameEngine(g);
 		launch();
 		
 	}
@@ -97,7 +92,7 @@ public class GameGUI extends Application implements Viewable {
 	
 
 	@Override
-	public void displayGeneralView() {
+	public void displayGeneralView(Floor currentFloor) {
 		// TODO Auto-generated method stub
 		FXMLLoader loader = new FXMLLoader();
 		
