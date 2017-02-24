@@ -5,11 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import character.Character;
+
 import character.Player;
 import floors.Floor;
-import itemSystem.Item;
-import itemSystem.Usable;
 import viewInterface.Viewable;
 
 public class GameEngine {
@@ -20,7 +18,8 @@ public class GameEngine {
 		//NOTE(andrew): This can be changed later, if it isn't done how we want it to be done
 		int floorNum = game.getPlayer().getFloorNum();
 		Floor[] floors = game.getFloors();
-		view.displayGeneralView(floors[floorNum - 1]);
+		view.setPlayerSummary(new Player("Jeffrey").getPlayerSummary());
+		view.displayGeneralView(/*floors[floorNum - 1]*/null);
 
 	}
 	
@@ -51,7 +50,10 @@ public class GameEngine {
 	
 	public static void setView(Viewable newView) {
 		view = newView;
-		view.setPlayerSummary(game.getPlayer().getPlayerSummary());
+	}
+	
+	public static void setGame(Game g){
+		game = g;
 	}
 
 	
