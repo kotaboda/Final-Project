@@ -1,10 +1,7 @@
 package floors;
 
-import java.util.Random;
-
 import character.Enemy;
 import tiles.TileManager;
-import tileinterfaces.Collidable;
 
 public class Floor1 extends Floor {
 	
