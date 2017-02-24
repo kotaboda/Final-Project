@@ -22,12 +22,9 @@ public class GameEngine {
 		this.player = player;
 		this.view = view;
 		this.floors = floors;
-		init();
 	}
 
-	private void init() {
-		// TODO Auto-generated method stub
-		
+	void init() {
 	}
 
 	public static void run() {
@@ -66,6 +63,11 @@ public class GameEngine {
 	}
 	
 	public void saveGame(GameEngine state) {
-		
+		try(ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get("src/saves/savedGame.neu")))){
+			oos.writeObject(state);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
