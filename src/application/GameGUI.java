@@ -51,6 +51,11 @@ public class GameGUI extends Application implements Viewable {
 	@FXML
 	private Canvas canvas;
 	
+	public static void main(String[] args) {
+		launch();
+	}
+
+	
 	@Override
 	public void init(){
 		GameEngine.setView(this);
@@ -67,10 +72,6 @@ public class GameGUI extends Application implements Viewable {
 		}
 	}
 	
-	public static void main(String[] args) {
-		launch();
-		
-	}
 
 	@Override
 	public void displayMainMenu() {
@@ -89,7 +90,6 @@ public class GameGUI extends Application implements Viewable {
 					GameEngine.setGame(new Game(null, null));
 					GameEngine.run();
 				}
-				
 			});
 			
 			loadGameButton.setOnAction(new EventHandler<ActionEvent>(){
