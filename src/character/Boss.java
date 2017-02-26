@@ -4,8 +4,8 @@ public abstract class Boss extends Character {
 	
 	private boolean isDefeated = false;
 
-	public Boss(String name) {
-		super(name);
+	public Boss(String name, int tileSheetNum) {
+		super(name, tileSheetNum);
 		// TODO Auto-generated constructor stub
 	}
 	

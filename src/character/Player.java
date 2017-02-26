@@ -21,8 +21,8 @@ public class Player extends Character {
     private final int WIDTH = 32;
     private final int HEIGHT = 32;
 
-	public Player(String name) {
-		super(name);
+	public Player(String name, int tileSheetNum) {
+		super(name, tileSheetNum);
 		// TODO Auto-generated constructor stub
 	}
 	

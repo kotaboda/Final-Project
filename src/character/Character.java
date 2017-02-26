@@ -15,8 +15,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
 import publisherSubscriberInterfaces.Subscribable;
+import tileinterfaces.Collidable;
+import tiles.Tile;
 
-public abstract class Character implements Subscribable<Character>, Serializable {
+public abstract class Character extends Tile implements Subscribable<Character>, Serializable, Collidable {
 
 	/**
 	 * 
@@ -39,7 +41,8 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
 	private int maxHitPoints = hitPoints;
 
-	public Character(String name) {
+	public Character(String name, int tileSheetNum) {
+		super(tileSheetNum);
 		if (name == null) {
 			throw new IllegalArgumentException("Name cannot be null.");
 		} else if (name.isEmpty()) {
@@ -61,6 +64,7 @@ public abstract class Character implements Subscribable<Character>, Serializable
 	}
 	
 	public Character() {
+		super(1);
 		this.name = "test";
 		floorNum = 1;
 		inv = new Inventory();

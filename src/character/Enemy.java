@@ -7,8 +7,8 @@ public class Enemy extends Character {
 	 */
 	private static final long serialVersionUID = 4495778022214568163L;
 
-	public Enemy(String name) {
-		super(name);
+	public Enemy(String name, int tileSheetNum) {
+		super(name, tileSheetNum);
 		// TODO Auto-generated constructor stub
 	}
 	

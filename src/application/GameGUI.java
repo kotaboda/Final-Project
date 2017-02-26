@@ -3,7 +3,6 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import battleSystem.Battle;
 import character.Player;
 import character.PlayerSummary;
@@ -173,7 +172,8 @@ public class GameGUI extends Application implements Viewable {
 					case D:
 						playerCoordinates.setX(playerCoordinates.getX() + 1);
 						drawToGeneralCanvas(currentFloor);
-
+						break;
+					default:
 						break;
 					}
 				}
