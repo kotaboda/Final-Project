@@ -13,7 +13,7 @@ public class Game {
 	
 	public Game(Player player, Floor[] floors) {
 		this.player = player;
-		this.player = new Player("Jeffrey");
+		this.player = new Player("Jeffrey", 0);
 		this.floors = floors;
 	}
 	

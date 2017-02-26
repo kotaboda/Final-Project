@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import characterEnums.InventoryAction;
 import characterEnums.ModifiableFields;
 import characterEnums.Stats;

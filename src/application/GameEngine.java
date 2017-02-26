@@ -18,14 +18,14 @@ public class GameEngine {
 		// it to be done
 		int floorNum = game.getPlayer().getFloorNum();
 		Floor[] floors = game.getFloors();
-		view.setPlayerSummary(new Player("Jeffrey").getPlayerSummary());
+		view.setPlayerSummary(new Player("Jeffrey", 0).getPlayerSummary());
 		view.displayGeneralView(/* floors[floorNum - 1] */null);
 
 
 	}
 
 	public static Game loadGame() {
-		Game g = new Game(new Player("Jeffrey"), null);
+		Game g = new Game(new Player("Jeffrey", 0), null);
 
 		if (Files.exists(Paths.get("src/saves/savedGame.neu"))) {
 			try (ObjectInputStream ois = new ObjectInputStream(

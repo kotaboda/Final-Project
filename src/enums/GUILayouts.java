@@ -7,6 +7,8 @@ public enum GUILayouts {
 	LOOT_MANAGER,
 	MAIN_MENU,
 	PLAYER_MENU,
-	DIALOG
+	DIALOG,
+	PAUSE,
+	INVENTORY
 
 }
