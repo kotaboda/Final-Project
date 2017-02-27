@@ -3,18 +3,18 @@ package battleSystem;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
 import character.PlayerSummary;
 import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
-import javafx.scene.control.Label;
+import models.Coordinates;
 
 public class Battle implements Subscribable<Battle>{
 	protected Player player;
 	protected Enemy[] enemies;
+	private Coordinates place = new Coordinates(0,0);
 	protected ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
 	
 	public Battle(Player player, Enemy...enemies) {
@@ -38,6 +38,18 @@ public class Battle implements Subscribable<Battle>{
 //				}
 //			}
 //		}while(battleOngoing);
+	}
+	
+	public Enemy[] getEnemies() {
+		return enemies;
+	}
+	
+	public void setEnemies(Enemy...enemies) {
+		this.enemies = enemies;
+	}
+	
+	public Coordinates getCoordinates() {
+		return place;
 	}
 	
 	private Character[] createTurnList() {
