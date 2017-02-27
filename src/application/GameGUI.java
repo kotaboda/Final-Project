@@ -194,10 +194,11 @@ public class GameGUI extends Application implements Viewable {
 			playerName.setText(playerSummary.playerName);
 
 			// Drawing testing
-			GraphicsContext gc = canvas.getGraphicsContext2D();
-			WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
-					currentFloor.getPlayer().getCoordinates());
-			gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
+//			GraphicsContext gc = canvas.getGraphicsContext2D();
+//			WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
+//					currentFloor.getPlayer().getCoordinates());
+//			gc.drawImage(image, -32, -32, image.getWidth(), image.getHeight());
+			drawToGeneralCanvas(currentFloor);
 			primaryStage.setScene(new Scene(parent));
 			primaryStage.show();
 		} catch (IOException e) {
@@ -211,7 +212,7 @@ public class GameGUI extends Application implements Viewable {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
-		gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
+		gc.drawImage(image, -32, -32, image.getWidth() * 2, image.getHeight() * 2);
 	}
 
 	@Override
