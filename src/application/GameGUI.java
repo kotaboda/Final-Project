@@ -135,7 +135,7 @@ public class GameGUI extends Application implements Viewable {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
 			playerName.setText(b.getPlayerSummary().playerName);
 			playerHealthBar.progressProperty()
-					.bind(playerSummary.hpProperty.divide(playerSummary.maxHPProperty.doubleValue()));
+					.bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm(); 
 			scene.getStylesheets().add(css);

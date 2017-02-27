@@ -35,7 +35,7 @@
                   <Button id="menuButton" fx:id="menuButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Menu" />
                </children>
             </VBox>
-            <Canvas fx:id="canvas" height="500.0" width="500.0" />
+            <Canvas fx:id="canvas" height="512.0" width="512.0" />
          </items>
       </SplitPane>
    </children>
