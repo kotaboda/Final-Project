@@ -42,4 +42,11 @@ public class Coordinates implements Serializable{
 		return "Coordinates [x=" + x + ", y=" + y + "]";
 	}
 
+	public boolean equals(Coordinates c){
+		if(getX() == c.getX() && getY() == c.getY()){
+			return true;
+		}
+		return false;
+	}
+
 }

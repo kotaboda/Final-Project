@@ -6,9 +6,9 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import battleSystem.Battle;
 import character.Player;
 import floors.Floor;
-import floors.Floor1;
 import models.Coordinates;
 import viewInterface.Viewable;
 
@@ -65,6 +65,20 @@ public class GameEngine {
 		Coordinates c = game.getPlayer().getCoordinates();
 		c.setX(c.getX() + x);
 		c.setY(c.getY() + y);
+	}
+	
+	public static Battle checkForBattle(Floor currentFloor){
+		Coordinates playerC = game.getPlayer().getCoordinates();
+		Battle[] battlesC = currentFloor.getBattles();
+		Battle battle = null;
+		for(int i = 0; i < battlesC.length; i++){
+			Coordinates currentC = battlesC[i].getCoordinates();
+			if(playerC.equals(currentC)){
+				battle = battlesC[i];
+			}
+		}
+		
+		return battle;	
 	}
 	
 }
