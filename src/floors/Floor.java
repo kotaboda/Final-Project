@@ -16,7 +16,6 @@ public abstract class Floor implements Paintable{
 	
 	protected Tile[][] tiles;
 	private Boss boss;
-	private Enemy[] enemies;
 	private BossBattle bossBattle;
 	private Battle[] battles;
 	private Player player;
@@ -26,11 +25,11 @@ public abstract class Floor implements Paintable{
 		return this.tiles;
 	}
 	
-	public void genEnemies() {
+	public void genBattles() {
 		Random xD = new Random();
 		int mapBorderX = getTiles()[0].length - 2;
 		int mapBorderY = getTiles().length - 2;
-		for(int i = 0 ; i < getEnemies().length ; i++) {
+		for(int i = 0 ; i < getBattles().length ; i++) {
 			boolean notValidPlace = false;
 			int x = 0;
 			int y = 0;
@@ -44,8 +43,10 @@ public abstract class Floor implements Paintable{
 					notValidPlace = true;
 				}
 			}while(notValidPlace);
-			getEnemies()[i] = new Enemy();
-			getEnemies()[i].getCoordinates().setCoordinates(x, y);
+			
+			Enemy[] enemies = new Enemy[xD.nextInt(3)+1];
+			getBattles()[i] = new Battle(getPlayer(), enemies);
+			getBattles()[i].getCoordinates().setCoordinates(x, y);
 		}
 	}
 
@@ -55,14 +56,6 @@ public abstract class Floor implements Paintable{
 	
 	public void startBossBattle(Player p){
 		
-	}
-	
-	public Enemy[] getEnemies() {
-		return enemies;
-	}
-	
-	public void setEnemies(Enemy...enemies) {
-		this.enemies = enemies;
 	}
 	
 	public Boss getBoss() {

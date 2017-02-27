@@ -1,7 +1,7 @@
 package floors;
 
+import battleSystem.Battle;
 import character.Boss;
-import character.Enemy;
 import character.Player;
 import tiles.Tile;
 import tiles.TileManager;
@@ -19,10 +19,8 @@ public class Floor1 extends Floor {
 			
 		});
 		setPlayer(player);
-		//TODO(andrew) is this supposed to be declared here?
-		setEnemies(new Enemy[5]);
-		genEnemies();
-		
+		setBattles(new Battle[5]);
+		genBattles();
 		genTiles();
 	}
 	
