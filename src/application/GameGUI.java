@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import battleSystem.Battle;
 import character.Player;
 import character.PlayerSummary;
@@ -102,7 +103,9 @@ public class GameGUI extends Application implements Viewable {
 				}
 
 			});
-			primaryStage.setScene(new Scene(p));
+			Scene scene = new Scene(p); 
+			scene.getStylesheets().add("application.css");
+			primaryStage.setScene(scene);
 			primaryStage.show();
 
 		} catch (IOException e) {
@@ -130,7 +133,10 @@ public class GameGUI extends Application implements Viewable {
 			playerName.setText(b.getPlayerSummary().playerName);
 			playerHealthBar.progressProperty()
 					.bind(playerSummary.hpProperty.divide(playerSummary.maxHPProperty.doubleValue()));
-			primaryStage.setScene(new Scene(p));
+			Scene scene = new Scene(p);
+			String css = this.getClass().getResource("application.css").toExternalForm(); 
+			scene.getStylesheets().add(css);
+			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -198,7 +204,10 @@ public class GameGUI extends Application implements Viewable {
 			WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 					currentFloor.getPlayer().getCoordinates());
 			gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
-			primaryStage.setScene(new Scene(parent));
+			Scene scene = new Scene(parent);
+			String css = this.getClass().getResource("application.css").toExternalForm(); 
+			scene.getStylesheets().add(css);
+			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
