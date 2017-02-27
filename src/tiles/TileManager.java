@@ -12,8 +12,8 @@ public class TileManager {
 
 	//NOTE(andrew): This number is the bound for how many tiles are drawn squared
 		//This number must be > 0 and <= tiles.length
-	private final static byte TILES_WIDE_TO_DRAW = 7;
-	private final static byte TILES_HIGH_TO_DRAW = 5;
+	private final static byte TILES_WIDE_TO_DRAW = 10;
+	private final static byte TILES_HIGH_TO_DRAW = 10;
 	private final static byte TILE_WIDTH = 32;
 	//TODO(andrew): add in the file path for the tile sheet when we have it
 	public static Image tileSheet = new Image("file:../../images/tileset.png");

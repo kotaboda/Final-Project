@@ -1,23 +1,10 @@
-/models/
-/enums/
+<<<<<<< Updated upstream
 /application/
-/character/
-/itemSystem/
 /tiles/
-/drawinterfaces/
+=======
+/character/
 /floors/
-/tileinterfaces/
-/publisherSubscriberInterfaces/
-/characterEnums/
-/characterInterfaces/
-/abilities/
-/abilityInterfaces/
+/tiles/
+/application/
+>>>>>>> Stashed changes
 /viewInterface/
-/battle/
-/battleSystem/
-/BattleView.fxml
-/General.fxml
-/GeneralView.fxml
-/MainMenuView.fxml
-/keyListener/
-/PauseView.fxml
