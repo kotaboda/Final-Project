@@ -168,20 +168,22 @@ public class GameGUI extends Application implements Viewable {
 						case W:
 							GameEngine.updatePlayerPosition(0, -1);
 							drawToGeneralCanvas(currentFloor);
+							GameEngine.checkForBattle(currentFloor);
 							break;
 						case S:
 							GameEngine.updatePlayerPosition(0, 1);
 							drawToGeneralCanvas(currentFloor);
-
+							GameEngine.checkForBattle(currentFloor);
 							break;
 						case A:
 							GameEngine.updatePlayerPosition(-1, 0);
 							drawToGeneralCanvas(currentFloor);
-
+							GameEngine.checkForBattle(currentFloor);
 							break;
 						case D:
 							GameEngine.updatePlayerPosition(1, 0);
 							drawToGeneralCanvas(currentFloor);
+							GameEngine.checkForBattle(currentFloor);
 							break;
 						default:
 							break;
