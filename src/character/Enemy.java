@@ -1,5 +1,7 @@
 package character;
 
+import characterEnums.Stats;
+
 public class Enemy extends Character {
 
 	/**
@@ -17,14 +19,17 @@ public class Enemy extends Character {
 	}
 	@Override
 	public int takeDmg(int dmg) {
-		// TODO Auto-generated method stub
-		return 0;
+		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
+		hitPoints = hitPoints < 0 ? 0 : hitPoints;
+		hpProperty.set(hitPoints);
+		return dmg;
 	}
 
 	@Override
-	public int attack(Character target) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int attack() {
+		int damage = 0;
+		damage = getStat(Stats.INTELLIGIENCE);
+		return damage;
 	}
 
 }
