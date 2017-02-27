@@ -191,7 +191,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	}
 	public abstract int takeDmg(int dmg);
 
-	public abstract int attack(Character target);
+	public abstract int attack();
 
 	@Override
 	public String toString() {

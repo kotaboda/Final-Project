@@ -3,6 +3,7 @@ package character;
 import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
+import characterEnums.Stats;
 import characterInterfaces.Listener;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -36,21 +37,20 @@ public class Player extends Character {
 
 	@Override
 	public int takeDmg(int dmg) {
-		// TODO Come up with final implementation
-		hitPoints -= dmg;
+		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
 		return dmg;
 	}
 
 	@Override
-	public int attack(Character target) {
-		// TODO Come up with final implementation
-		return 10;
+	public int attack() {
+		int damage = 0;
+		damage = getStat(Stats.INTELLIGIENCE);
+		return damage;
 	}
 
 	public void ability(Ability ability, Character... targets) {
-
 		if (ability instanceof AttackAbility) {
 			for (int i = 0; i < targets.length; i++) {
 				ability.use(targets[i]);
