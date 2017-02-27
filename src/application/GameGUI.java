@@ -11,6 +11,8 @@ import enums.GUILayouts;
 import floors.Floor;
 import floors.Floor1;
 import itemSystem.Inventory;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,6 +29,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import models.Coordinates;
 import tiles.TileManager;
 import viewInterface.Viewable;
@@ -34,8 +37,8 @@ import viewInterface.Viewable;
 public class GameGUI extends Application implements Viewable {
 
 	private Stage primaryStage;
-	private PlayerSummary playerSummary = new PlayerSummary(new Player("Test", 0));
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
+	private final Game TESTINGGAME = GameEngine.getGame();
 
 	@FXML
 	private Button newGameButton;
@@ -68,7 +71,7 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			this.primaryStage = primaryStage;
 			// displayMainMenu();
-			displayGeneralView(new Floor1());
+			displayGeneralView(TESTINGGAME.getFloors()[0]);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,7 +91,7 @@ public class GameGUI extends Application implements Viewable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					GameEngine.setGame(new Game(null, null));
+					GameEngine.setGame(new Game(null));
 					GameEngine.run();
 				}
 			});
@@ -163,21 +166,21 @@ public class GameGUI extends Application implements Viewable {
 
 						switch (keyEvent) {
 						case W:
-							playerCoordinates.setY(playerCoordinates.getY() - 1);
+							GameEngine.updatePlayerPosition(0, -1);
 							drawToGeneralCanvas(currentFloor);
 							break;
 						case S:
-							playerCoordinates.setY(playerCoordinates.getY() + 1);
+							GameEngine.updatePlayerPosition(0, 1);
 							drawToGeneralCanvas(currentFloor);
 
 							break;
 						case A:
-							playerCoordinates.setX(playerCoordinates.getX() - 1);
+							GameEngine.updatePlayerPosition(-1, 0);
 							drawToGeneralCanvas(currentFloor);
 
 							break;
 						case D:
-							playerCoordinates.setX(playerCoordinates.getX() + 1);
+							GameEngine.updatePlayerPosition(1, 0);
 							drawToGeneralCanvas(currentFloor);
 							break;
 						default:
@@ -195,15 +198,63 @@ public class GameGUI extends Application implements Viewable {
 
 			});
 			playerHealthBar.progressProperty()
-					.bind(playerSummary.hpProperty.divide(playerSummary.maxHPProperty.doubleValue()));
+				.bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
 
-			playerName.setText(playerSummary.playerName);
-
-			// Drawing testing
+			playerName.setText(TESTINGGAME.getPlayer().name);
+			
+			
+			//Drawing testing
 			GraphicsContext gc = canvas.getGraphicsContext2D();
-			WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
-					currentFloor.getPlayer().getCoordinates());
-			gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
+			drawToGeneralCanvas(currentFloor);
+			//WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
+			//gc.drawImage(image, 0, 0, image.getWidth() * 2, image.getHeight() * 2);
+			//Animation testing
+//			Timeline gameLoop = new Timeline();
+//	        gameLoop.setCycleCount( 64 );
+//	        
+//	        KeyFrame kf = new KeyFrame(
+//	            Duration.seconds(0.01666667),                // 60 FPS
+//	            new EventHandler<ActionEvent>()
+//	            {
+//	            	int x = 0;
+//	                public void handle(ActionEvent ae)
+//	                {
+//	                	x -= 1;
+//			        	int tempX = x % 64;
+//			        	gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+//			        	if(tempX == 0){
+//			        		playerSummary.coordinates.setX(playerSummary.coordinates.getX() + 1);
+//			        		x = 0;
+//			        	}
+//			        	WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
+//			        	System.out.println(x);
+//			        	gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2, image.getHeight() * 2);
+//	                }
+//	            });
+//	        
+//	        gameLoop.getKeyFrames().add( kf );
+//	        gameLoop.play();
+//	        gameLoop.getKeyFrames().add( kf );
+//	        gameLoop.play();
+			//split
+//			new AnimationTimer()
+//		    {
+//				int x = 0;
+//		        public void handle(long currentNanoTime)
+//		        {
+//		        	x -= 1;
+//		        	int tempX = x % 64;
+//		        	gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+//		        	if(tempX == 0){
+//		        		playerSummary.coordinates.setX(playerSummary.coordinates.getX() + 1);
+//		        		x = 0;
+//		        	}
+//		        	WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
+//		        	gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2, image.getHeight() * 2);
+//		        	
+//		        	
+//		        }
+//		    }.start();
 			Scene scene = new Scene(parent);
 			String css = this.getClass().getResource("application.css").toExternalForm(); 
 			scene.getStylesheets().add(css);
@@ -220,7 +271,7 @@ public class GameGUI extends Application implements Viewable {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
-		gc.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
+		gc.drawImage(image, -64, -64, image.getWidth() * 2, image.getHeight() * 2);
 	}
 
 	@Override
@@ -244,9 +295,6 @@ public class GameGUI extends Application implements Viewable {
 
 	}
 
-	@Override
-	public void setPlayerSummary(PlayerSummary playerSummary) {
-		this.playerSummary = playerSummary;
-	}
+	
 
 }

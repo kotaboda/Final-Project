@@ -8,7 +8,7 @@ import tiles.TileManager;
 
 public class Floor1 extends Floor {
 	
-	public Floor1() {
+	public Floor1(Player player) {
 		genTiles();
 		setBoss(new Boss(){
 
@@ -18,7 +18,8 @@ public class Floor1 extends Floor {
 			private static final long serialVersionUID = 1L;
 			
 		});
-		setPlayer(new Player());
+		setPlayer(player);
+		//TODO(andrew) is this supposed to be declared here?
 		setEnemies(new Enemy[5]);
 		genEnemies();
 		
