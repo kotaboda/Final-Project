@@ -32,7 +32,7 @@
                         <Separator prefWidth="200.0" />
                      </children>
                   </VBox>
-                  <Button id="menuButton" fx:id="menuButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="22.0" prefWidth="100.0" text="Menu" />
+                  <Button fx:id="menuButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="22.0" prefWidth="100.0" text="Menu" />
                </children>
             </VBox>
             <Canvas fx:id="canvas" height="512.0" width="512.0" />

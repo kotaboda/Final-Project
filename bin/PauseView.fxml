@@ -8,18 +8,18 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane minHeight="500.0" minWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+<AnchorPane minHeight="500.0" minWidth="625.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
    <children>
-      <BorderPane prefHeight="500.0" prefWidth="500.0">
+      <BorderPane prefHeight="500.0" prefWidth="625.0">
          <top>
-            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="61.0" prefWidth="500.0" text="Neu Beginnings" BorderPane.alignment="CENTER">
+            <Label id="title" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="61.0" prefWidth="625.0" text="Neu Beginnings" BorderPane.alignment="CENTER">
                <font>
                   <Font size="37.0" />
                </font>
             </Label>
          </top>
          <center>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox id="main" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
                   <Button fx:id="mainMenuButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Main Menu" />
                   <Button fx:id="saveGameButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Save Game" />
