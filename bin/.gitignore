@@ -1,13 +1,9 @@
-<<<<<<< Updated upstream
-/application/
-/tiles/
-=======
 /character/
 /floors/
 /tiles/
 /application/
->>>>>>> Stashed changes
 /viewInterface/
+/models/
 /battleSystem/
 /abilities/
 /abilityInterfaces/

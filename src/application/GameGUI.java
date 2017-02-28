@@ -53,6 +53,9 @@ public class GameGUI extends Application implements Viewable {
 	private Pane rightBattleVBox;
 	@FXML
 	private ListView<String> leftActionList;
+	//
+	ListView<Ability> abilityList;
+	//
 	@FXML
 	private Button submitButton;
 	@FXML
@@ -199,7 +202,9 @@ public class GameGUI extends Application implements Viewable {
 
 				enemies.getChildren().add(child);
 			}
-
+			//
+			submitButton.setDisable(true);
+			//
 			leftActionList.setItems(FXCollections.observableArrayList("Attack", "Abilities", "Items"));
 			leftActionList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -212,10 +217,21 @@ public class GameGUI extends Application implements Viewable {
 						case 0:
 							middleBattleVBox.getChildren().clear();
 							rightBattleVBox.getChildren().clear();
+							//
+							if(isPlayersTurn){
+								submitButton.setDisable(false);
+								abilityList = null;
+							}
+							//
 							break;
 						case 1:
+							//
+							if(isPlayersTurn){
+								submitButton.setDisable(true);
+							}
+							//
 							middleBattleVBox.getChildren().clear();
-							ListView<Ability> abilityList = new ListView<>(TESTINGGAME.getPlayer().getAbilities());
+							abilityList = new ListView<>(TESTINGGAME.getPlayer().getAbilities());
 							middleBattleVBox.getChildren().add(abilityList);
 							abilityList.getSelectionModel().selectedItemProperty()
 									.addListener(new ChangeListener<Ability>() {
@@ -229,12 +245,24 @@ public class GameGUI extends Application implements Viewable {
 														.getSelectedItem().getDescription());
 												abilityDescription.wrapTextProperty().set(true);
 												rightBattleVBox.getChildren().add(abilityDescription);
+												//
+												if(isPlayersTurn){
+													submitButton.setDisable(false);
+												}
+												//
 											}
 										}
 									});
 							abilityList.getSelectionModel().selectFirst();
 							break;
 						case 2:
+							//
+							if(isPlayersTurn){
+								submitButton.setDisable(true);
+								abilityList = null;
+							}
+							
+							//
 							middleBattleVBox.getChildren().clear();
 							rightBattleVBox.getChildren().clear();
 							ListView<Item> itemList = new ListView<Item>(FXCollections.observableArrayList(TESTINGGAME.getPlayer().getInventoryContents()));
@@ -250,7 +278,7 @@ public class GameGUI extends Application implements Viewable {
 
 			});
 
-			submitButton.setDisable(true);
+			//submitButton.setDisable(true);
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -258,6 +286,7 @@ public class GameGUI extends Application implements Viewable {
 					// Ability a =
 					// abilityList.getSelectionModel().getSelectedItem();
 					// Tell Game Engine about selections here.
+					isPlayersTurn = false;
 				}
 
 			});
@@ -271,6 +300,17 @@ public class GameGUI extends Application implements Viewable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	//TODO(andrew): these are for an example of something that could be done to wait for the submit button to be clicked. Could also be accomplished by getting the
+		//battle loop thread to pause somehow, not entirely sure how.
+	private boolean isPlayersTurn = false;
+	public void waitForPlayerSelection(Battle battle){
+		isPlayersTurn = true;
+		do{
+			
+		}while(isPlayersTurn);
+		
+		
 	}
 
 	@Override
@@ -291,24 +331,23 @@ public class GameGUI extends Application implements Viewable {
 						switch (keyEvent) {
 						case W:
 							GameEngine.updatePlayerPosition(0, -1);
-							drawToGeneralCanvas(currentFloor);
 							break;
 						case S:
 							GameEngine.updatePlayerPosition(0, 1);
-							drawToGeneralCanvas(currentFloor);
-
 							break;
 						case A:
 							GameEngine.updatePlayerPosition(-1, 0);
-							drawToGeneralCanvas(currentFloor);
-
 							break;
 						case D:
 							GameEngine.updatePlayerPosition(1, 0);
-							drawToGeneralCanvas(currentFloor);
 							break;
 						default:
 							break;
+						}
+						drawToGeneralCanvas(currentFloor);
+						Battle b = GameEngine.checkForBattle(currentFloor);
+						if(b != null){
+							displayBattleView(b);
 						}
 					}
 				}
