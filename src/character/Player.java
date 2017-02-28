@@ -1,13 +1,14 @@
 package character;
 
+import java.util.ArrayList;
+
+import abilities.PullAnAllNighter;
 import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
 import characterEnums.Stats;
-import characterInterfaces.Listener;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 public class Player extends Character {
 	
 	/**
@@ -16,7 +17,7 @@ public class Player extends Character {
 	private static final long serialVersionUID = -3349758486478712145L;
 
 //	private final Image IMAGE = new Image("images/Player");
-	
+	private final ArrayList<Ability> ABILITIES = new ArrayList<>();
 	private final int COLUMNS = 5;
 	private final int COUNT = 10;
     private final int WIDTH = 32;
@@ -29,6 +30,7 @@ public class Player extends Character {
 	
 	public Player() {
 		super();
+		ABILITIES.add(new PullAnAllNighter());
 	}
 	
 	public PlayerSummary getPlayerSummary(){
@@ -37,7 +39,8 @@ public class Player extends Character {
 
 	@Override
 	public int takeDmg(int dmg) {
-		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
+//		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
+		hitPoints -= dmg;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
 		return dmg;
@@ -65,6 +68,13 @@ public class Player extends Character {
 //		 final ImageView imageView = new ImageView(IMAGE);
 //	        imageView.setViewport(new Rectangle2D(WIDTH, HEIGHT, WIDTH, HEIGHT));
 
+	}
+
+	public ObservableList<Ability> getAbilities() {
+		ObservableList<Ability> abilities = FXCollections.observableArrayList();
+		abilities.addAll(this.ABILITIES);
+		
+		return abilities;
 	}
 
 

@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import battleSystem.Battle;
 import character.Player;
 import floors.Floor;
@@ -21,7 +20,7 @@ public class GameEngine {
 		// it to be done
 		int floorNum = game.getPlayer().getFloorNum();
 		Floor[] floors = game.getFloors();
-		view.displayGeneralView(/* floors[floorNum - 1] */null);
+		view.displayGeneralView(/* floors[floorNum - 1] */floors[0]);
 
 
 	}
