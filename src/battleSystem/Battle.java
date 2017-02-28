@@ -3,6 +3,9 @@ package battleSystem;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import abilityInterfaces.Ability;
+import abilityInterfaces.AttackAbility;
+import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
@@ -16,6 +19,8 @@ public class Battle implements Subscribable<Battle>{
 	protected Enemy[] enemies;
 	private Coordinates place = new Coordinates(0,0);
 	protected ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
+	private Ability playerNextAbility = null;
+	private Character playerTarget = null;
 	
 	public Battle(Player player, Enemy...enemies) {
 		this.enemies = enemies;
@@ -23,21 +28,25 @@ public class Battle implements Subscribable<Battle>{
 	}
 	
 	public void start() {
-//		Character[] turnList = createTurnList();
-//		
-//		boolean battleOngoing = false;
-//		do {
-//			for(int i = 0 ; i < turnList.length ; i++) {
-//				if(turnList[i] instanceof Player) {
-//					Character target = GameEngine.pickTarget();
-//					int dmg = turnList[i].attack(target);
-//					target.takeDmg(dmg);
-//				} else {
-//					int dmg = turnList[i].attack(player);
-//					player.takeDmg(dmg);
-//				}
-//			}
-//		}while(battleOngoing);
+		//TODO(andrew): loop based on turn list, and get data using a Listener interface talking to the game engine or GUI, then use that data to do the battle
+		//NOTE(andrew): add an listener interface that will take a battle as a parameter in the update method, and then change variables up at the top
+		Character[] turnList = createTurnList();
+		
+		boolean battleOngoing = false;
+		do {
+			for(int i = 0 ; i < turnList.length ; i++) {
+				if(turnList[i] instanceof Player) {
+					GameEngine.playerBattleInput(this);
+					if(playerTarget != null && playerNextAbility instanceof AttackAbility){
+						playerNextAbility.use(playerTarget);
+					}else{
+						//TODO(andrew): do we need to add a use method that takes in no target for buff abilities?
+					}
+				} else {
+					player.takeDmg(turnList[i].attack());
+				}
+			}
+		}while(battleOngoing);
 	}
 	
 	public Enemy[] getEnemies() {
@@ -52,11 +61,19 @@ public class Battle implements Subscribable<Battle>{
 		return place;
 	}
 	
+	public void setPlayerNextAbility(Ability playerNextAbility) {
+		this.playerNextAbility = playerNextAbility;
+	}
+
+	public void setPlayerTarget(Character playerTarget) {
+		this.playerTarget = playerTarget;
+	}
+
 	private Character[] createTurnList() {
 		int playerCount = 1;
 		Character[] turnList = new Character[playerCount+enemies.length];
 		
-		Arrays.sort(turnList, Character::compareWit);
+		Arrays.sort(turnList);
 		
 		return turnList;
 	}

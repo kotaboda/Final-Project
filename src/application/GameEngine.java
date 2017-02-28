@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import battleSystem.Battle;
 import character.Player;
 import floors.Floor;
 import models.Coordinates;
@@ -63,6 +64,24 @@ public class GameEngine {
 		Coordinates c = game.getPlayer().getCoordinates();
 		c.setX(c.getX() + x);
 		c.setY(c.getY() + y);
+	}
+	
+	public static Battle checkForBattle(Floor currentFloor){
+		Coordinates playerC = game.getPlayer().getCoordinates();
+		Battle[] battlesC = currentFloor.getBattles();
+		Battle battle = null;
+		for(int i = 0; i < battlesC.length; i++){
+			Coordinates currentC = battlesC[i].getCoordinates();
+			if(playerC.equals(currentC)){
+				battle = battlesC[i];
+			}
+		}
+		
+		return battle;	
+	}
+	
+	public static void playerBattleInput(Battle battle){
+		//TODO(andrew): This should take the selected options from the view, but I am not sure on how to get that data from the view
 	}
 	
 }
