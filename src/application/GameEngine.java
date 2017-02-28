@@ -19,7 +19,7 @@ public class GameEngine {
 		// it to be done
 		int floorNum = game.getPlayer().getFloorNum();
 		Floor[] floors = game.getFloors();
-		view.displayGeneralView(/* floors[floorNum - 1] */null);
+		view.displayGeneralView(/* floors[floorNum - 1] */floors[0]);
 
 
 	}

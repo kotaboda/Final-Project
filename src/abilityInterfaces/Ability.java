@@ -10,6 +10,7 @@ public abstract class Ability {
 	}
 	
 	public abstract void use(Character targets);
+	public abstract String getDescription();
 	
 	@Override
 	public String toString(){

@@ -14,4 +14,9 @@ public class PullAnAllNighter extends AttackAbility {
 		
 	}
 
+	@Override
+	public String getDescription() {
+		return "Ultimate attack that will drain all energy but inflict massive damage.";
+	}
+
 }
