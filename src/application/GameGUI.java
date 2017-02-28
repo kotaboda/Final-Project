@@ -171,16 +171,10 @@ public class GameGUI extends Application implements Viewable {
 				}
 
 			});
-//<<<<<<< HEAD
-			
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm(); 
 			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
-//=======
-//
-//			primaryStage.setScene(new Scene(p));
-//>>>>>>> Jeffrey
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
