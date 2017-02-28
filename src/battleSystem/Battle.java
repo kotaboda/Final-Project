@@ -23,21 +23,21 @@ public class Battle implements Subscribable<Battle>{
 	}
 	
 	public void start() {
-		Character[] turnList = createTurnList();
-		
-		boolean battleOngoing = false;
-		do {
-			for(int i = 0 ; i < turnList.length ; i++) {
-				if(turnList[i] instanceof Player) {
-					Character target = GameEngine.pickTarget();
-					int dmg = turnList[i].attack(target);
-					target.takeDmg(dmg);
-				} else {
-					int dmg = turnList[i].attack(player);
-					player.takeDmg(dmg);
-				}
-			}
-		}while(battleOngoing);
+//		Character[] turnList = createTurnList();
+//		
+//		boolean battleOngoing = false;
+//		do {
+//			for(int i = 0 ; i < turnList.length ; i++) {
+//				if(turnList[i] instanceof Player) {
+//					Character target = GameEngine.pickTarget();
+//					int dmg = turnList[i].attack(target);
+//					target.takeDmg(dmg);
+//				} else {
+//					int dmg = turnList[i].attack(player);
+//					player.takeDmg(dmg);
+//				}
+//			}
+//		}while(battleOngoing);
 	}
 	
 	public Enemy[] getEnemies() {

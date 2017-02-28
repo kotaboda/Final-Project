@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
@@ -10,13 +11,13 @@ import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.NodeOrientation;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -31,6 +32,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -83,8 +85,8 @@ public class GameGUI extends Application implements Viewable {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			// displayMainMenu();
-			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy(), new Enemy()));
+			 displayMainMenu();
+//			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy(), new Enemy()));
 			// displayGeneralView(TESTINGGAME.getFloors()[0]);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,7 +107,7 @@ public class GameGUI extends Application implements Viewable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					GameEngine.setGame(new Game(null));
+					GameEngine.setGame(TESTINGGAME);
 					GameEngine.run();
 				}
 			});
@@ -115,13 +117,22 @@ public class GameGUI extends Application implements Viewable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					GameEngine.setGame(GameEngine.loadGame());
+					GameEngine.setGame(TESTINGGAME);
 					GameEngine.run();
 				}
 
 			});
+			
+			exitButton.setOnAction(new EventHandler<ActionEvent>(){
+
+				@Override
+				public void handle(ActionEvent event) {
+					Platform.exit();
+				}
+				
+			});
 			Scene scene = new Scene(p);
-			scene.getStylesheets().add("application.css");
+			scene.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
@@ -139,6 +150,16 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
+			
+			exitButton.setOnAction(new EventHandler<ActionEvent>(){
+
+				@Override
+				public void handle(ActionEvent event) {
+					displayGeneralView(TESTINGGAME.getFloors()[0]);
+				}
+				
+			});
+			
 			primaryStage.setScene(new Scene(p));
 			primaryStage.show();
 		} catch (IOException e) {
@@ -148,7 +169,7 @@ public class GameGUI extends Application implements Viewable {
 
 	@Override
 	public void displayBattleView(Battle b) {
-		// TODO Auto-generated method stub
+		
 		this.currentLayout = GUILayouts.BATTLE;
 		FXMLLoader loader = new FXMLLoader();
 
@@ -156,10 +177,11 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
 			playerName.setText(TESTINGGAME.getPlayer().name);
-			enemies.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+			enemies.setAlignment(Pos.CENTER);
 			for (int i = 0; i < b.getEnemies().length; i++) {
 				Label enemyName = new Label(b.getEnemies()[i].name);
-				Node child = new Group(new VBox(new Canvas(200, 200), enemyName, new ProgressBar(1)));
+				Node child = new Group(new VBox(new Canvas(100,100), enemyName, new ProgressBar(1)));
+				
 				enemies.getChildren().add(child);
 			}
 
@@ -222,7 +244,6 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 		try {
 			Parent parent = loader.load(Files.newInputStream(Paths.get("src/GeneralView.fxml")));
-			currentFloor.getPlayer().getCoordinates().setCoordinates(0, 0);
 			parent.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 				@Override
