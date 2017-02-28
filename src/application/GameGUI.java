@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import enums.GUILayouts;
@@ -13,6 +14,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -24,8 +27,9 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import models.Coordinates;
 import tiles.TileManager;
 import viewInterface.Viewable;
 
@@ -35,6 +39,9 @@ public class GameGUI extends Application implements Viewable {
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
 
+	
+	@FXML
+	private HBox enemies;
 	@FXML
 	private ListView<Ability> abilityList;
 	@FXML
@@ -119,7 +126,6 @@ public class GameGUI extends Application implements Viewable {
 
 	@Override
 	public void displayPauseMenu() {
-		System.out.println("alsdknfasdk");
 		// TODO Auto-generated method stub
 		this.currentLayout = GUILayouts.PAUSE;
 		FXMLLoader loader = new FXMLLoader();
@@ -143,6 +149,12 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
 			playerName.setText(TESTINGGAME.getPlayer().name);
+			
+			for(int i = 0; i < b.getEnemies().length; i++){
+				Node child = new Group(new VBox(new Canvas(), new Label(b.getEnemies()[i].name), new ProgressBar()));
+				enemies.getChildren().add(child);
+			}
+			
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm(); 
@@ -153,7 +165,6 @@ public class GameGUI extends Application implements Viewable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -201,7 +212,6 @@ public class GameGUI extends Application implements Viewable {
 
 				@Override
 				public void handle(ActionEvent event) {
-					System.out.println("alksdjf");
 					displayPauseMenu();
 				}
 
