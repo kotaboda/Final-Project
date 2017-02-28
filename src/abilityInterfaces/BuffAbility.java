@@ -1,6 +1,6 @@
 package abilityInterfaces;
 
-public interface BuffAbility extends Ability {
+public abstract class BuffAbility extends Ability {
 
 	
 }

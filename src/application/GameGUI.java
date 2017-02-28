@@ -3,16 +3,11 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+import abilityInterfaces.Ability;
 import battleSystem.Battle;
-import character.Player;
-import character.PlayerSummary;
 import enums.GUILayouts;
 import floors.Floor;
-import floors.Floor1;
 import itemSystem.Inventory;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,12 +19,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import models.Coordinates;
 import tiles.TileManager;
 import viewInterface.Viewable;
@@ -40,6 +35,10 @@ public class GameGUI extends Application implements Viewable {
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
 
+	@FXML
+	private ListView<Ability> abilityList;
+	@FXML
+	private Label battleTextLabel;
 	@FXML
 	private Button newGameButton;
 	@FXML
@@ -71,6 +70,7 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			this.primaryStage = primaryStage;
 			// displayMainMenu();
+//			displayBattleView(new Battle(TESTINGGAME.getPlayer()));
 			displayGeneralView(TESTINGGAME.getFloors()[0]);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,9 +119,18 @@ public class GameGUI extends Application implements Viewable {
 
 	@Override
 	public void displayPauseMenu() {
+		System.out.println("alsdknfasdk");
 		// TODO Auto-generated method stub
 		this.currentLayout = GUILayouts.PAUSE;
 		FXMLLoader loader = new FXMLLoader();
+		loader.setController(this);
+		try{
+			Parent p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
+			primaryStage.setScene(new Scene(p));
+			primaryStage.show();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -133,12 +142,12 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
-			playerName.setText(b.getPlayerSummary().playerName);
-			playerHealthBar.progressProperty()
-					.bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
+			playerName.setText(TESTINGGAME.getPlayer().name);
+			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm(); 
 			scene.getStylesheets().add(css);
+			abilityList.setItems(TESTINGGAME.getPlayer().getAbilities());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
@@ -162,7 +171,6 @@ public class GameGUI extends Application implements Viewable {
 				public void handle(KeyEvent event) {
 					if (currentLayout == GUILayouts.GENERAL) {
 						KeyCode keyEvent = event.getCode();
-						Coordinates playerCoordinates = currentFloor.getPlayer().getCoordinates();
 
 						switch (keyEvent) {
 						case W:
@@ -193,13 +201,13 @@ public class GameGUI extends Application implements Viewable {
 
 				@Override
 				public void handle(ActionEvent event) {
+					System.out.println("alksdjf");
 					displayPauseMenu();
 				}
 
 			});
 			playerHealthBar.progressProperty()
 				.bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
-
 			playerName.setText(TESTINGGAME.getPlayer().name);
 			
 			
