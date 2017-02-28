@@ -3,17 +3,20 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
+import character.Enemy;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -27,6 +30,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -39,7 +43,10 @@ public class GameGUI extends Application implements Viewable {
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
 
-	
+	@FXML
+	private ListView<String> leftActionList;
+	@FXML
+	private Button submitButton;
 	@FXML
 	private HBox enemies;
 	@FXML
@@ -77,8 +84,8 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			this.primaryStage = primaryStage;
 			// displayMainMenu();
-//			displayBattleView(new Battle(TESTINGGAME.getPlayer()));
-			displayGeneralView(TESTINGGAME.getFloors()[0]);
+			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy(), new Enemy()));
+			// displayGeneralView(TESTINGGAME.getFloors()[0]);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,7 +120,7 @@ public class GameGUI extends Application implements Viewable {
 				}
 
 			});
-			Scene scene = new Scene(p); 
+			Scene scene = new Scene(p);
 			scene.getStylesheets().add("application.css");
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -130,11 +137,11 @@ public class GameGUI extends Application implements Viewable {
 		this.currentLayout = GUILayouts.PAUSE;
 		FXMLLoader loader = new FXMLLoader();
 		loader.setController(this);
-		try{
+		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
 			primaryStage.setScene(new Scene(p));
 			primaryStage.show();
-		}catch(IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -149,17 +156,57 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
 			playerName.setText(TESTINGGAME.getPlayer().name);
-			
-			for(int i = 0; i < b.getEnemies().length; i++){
-				Node child = new Group(new VBox(new Canvas(), new Label(b.getEnemies()[i].name), new ProgressBar()));
+			enemies.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+			for (int i = 0; i < b.getEnemies().length; i++) {
+				Label enemyName = new Label(b.getEnemies()[i].name);
+				Node child = new Group(new VBox(new Canvas(200, 200), enemyName, new ProgressBar(1)));
 				enemies.getChildren().add(child);
 			}
-			
-			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
+
+			leftActionList.setItems(FXCollections.observableArrayList("Attack", "Abilities", "Items"));
+			leftActionList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent event) {
+					MouseButton b = event.getButton();
+					switch (b) {
+					case PRIMARY:
+						switch (leftActionList.getSelectionModel().getSelectedIndex()) {
+						case 0:
+							abilityList.setItems(null);
+							break;
+						case 1:
+							abilityList.setItems(TESTINGGAME.getPlayer().getAbilities());
+							break;
+						case 2:
+							abilityList.setItems(null);
+							break;
+						}
+						break;
+					default:
+						break;
+					}
+
+				}
+
+			});
+
+			submitButton.setDisable(true);
+			submitButton.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					// Ability a =
+					// abilityList.getSelectionModel().getSelectedItem();
+					// Tell Game Engine about selections here.
+				}
+
+			});
+			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
+					.divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
 			Scene scene = new Scene(p);
-			String css = this.getClass().getResource("application.css").toExternalForm(); 
+			String css = this.getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
-			abilityList.setItems(TESTINGGAME.getPlayer().getAbilities());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
@@ -216,65 +263,75 @@ public class GameGUI extends Application implements Viewable {
 				}
 
 			});
-			playerHealthBar.progressProperty()
-				.bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
+			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
+					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
 			playerName.setText(TESTINGGAME.getPlayer().name);
-			
-			
-			//Drawing testing
+
+			// Drawing testing
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			drawToGeneralCanvas(currentFloor);
-			//WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
-			//gc.drawImage(image, 0, 0, image.getWidth() * 2, image.getHeight() * 2);
-			//Animation testing
-//			Timeline gameLoop = new Timeline();
-//	        gameLoop.setCycleCount( 64 );
-//	        
-//	        KeyFrame kf = new KeyFrame(
-//	            Duration.seconds(0.01666667),                // 60 FPS
-//	            new EventHandler<ActionEvent>()
-//	            {
-//	            	int x = 0;
-//	                public void handle(ActionEvent ae)
-//	                {
-//	                	x -= 1;
-//			        	int tempX = x % 64;
-//			        	gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//			        	if(tempX == 0){
-//			        		playerSummary.coordinates.setX(playerSummary.coordinates.getX() + 1);
-//			        		x = 0;
-//			        	}
-//			        	WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
-//			        	System.out.println(x);
-//			        	gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2, image.getHeight() * 2);
-//	                }
-//	            });
-//	        
-//	        gameLoop.getKeyFrames().add( kf );
-//	        gameLoop.play();
-//	        gameLoop.getKeyFrames().add( kf );
-//	        gameLoop.play();
-			//split
-//			new AnimationTimer()
-//		    {
-//				int x = 0;
-//		        public void handle(long currentNanoTime)
-//		        {
-//		        	x -= 1;
-//		        	int tempX = x % 64;
-//		        	gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//		        	if(tempX == 0){
-//		        		playerSummary.coordinates.setX(playerSummary.coordinates.getX() + 1);
-//		        		x = 0;
-//		        	}
-//		        	WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(), playerSummary.coordinates);
-//		        	gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2, image.getHeight() * 2);
-//		        	
-//		        	
-//		        }
-//		    }.start();
+			// WritableImage image =
+			// TileManager.getImageToDraw(currentFloor.getTiles(),
+			// playerSummary.coordinates);
+			// gc.drawImage(image, 0, 0, image.getWidth() * 2, image.getHeight()
+			// * 2);
+			// Animation testing
+			// Timeline gameLoop = new Timeline();
+			// gameLoop.setCycleCount( 64 );
+			//
+			// KeyFrame kf = new KeyFrame(
+			// Duration.seconds(0.01666667), // 60 FPS
+			// new EventHandler<ActionEvent>()
+			// {
+			// int x = 0;
+			// public void handle(ActionEvent ae)
+			// {
+			// x -= 1;
+			// int tempX = x % 64;
+			// gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+			// if(tempX == 0){
+			// playerSummary.coordinates.setX(playerSummary.coordinates.getX() +
+			// 1);
+			// x = 0;
+			// }
+			// WritableImage image =
+			// TileManager.getImageToDraw(currentFloor.getTiles(),
+			// playerSummary.coordinates);
+			// System.out.println(x);
+			// gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2,
+			// image.getHeight() * 2);
+			// }
+			// });
+			//
+			// gameLoop.getKeyFrames().add( kf );
+			// gameLoop.play();
+			// gameLoop.getKeyFrames().add( kf );
+			// gameLoop.play();
+			// split
+			// new AnimationTimer()
+			// {
+			// int x = 0;
+			// public void handle(long currentNanoTime)
+			// {
+			// x -= 1;
+			// int tempX = x % 64;
+			// gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+			// if(tempX == 0){
+			// playerSummary.coordinates.setX(playerSummary.coordinates.getX() +
+			// 1);
+			// x = 0;
+			// }
+			// WritableImage image =
+			// TileManager.getImageToDraw(currentFloor.getTiles(),
+			// playerSummary.coordinates);
+			// gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2,
+			// image.getHeight() * 2);
+			//
+			//
+			// }
+			// }.start();
 			Scene scene = new Scene(parent);
-			String css = this.getClass().getResource("application.css").toExternalForm(); 
+			String css = this.getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -312,7 +369,5 @@ public class GameGUI extends Application implements Viewable {
 		currentLayout = GUILayouts.LOOT_MANAGER;
 
 	}
-
-	
 
 }
