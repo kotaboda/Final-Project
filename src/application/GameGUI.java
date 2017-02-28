@@ -92,7 +92,7 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			this.primaryStage = primaryStage;
 //			 displayMainMenu();
-			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy(), new Enemy()));
+//			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy()));
 //			 displayGeneralView(TESTINGGAME.getFloors()[0]);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,8 +138,7 @@ public class GameGUI extends Application implements Viewable {
 
 			});
 			Scene scene = new Scene(p);
-			String css = this.getClass().getResource("application.css").toExternalForm(); 
-			scene.getStylesheets().add(css);
+			scene.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 

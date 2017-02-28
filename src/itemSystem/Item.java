@@ -13,4 +13,9 @@ public abstract class Item implements Serializable{
 	public Item(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }
