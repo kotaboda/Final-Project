@@ -61,6 +61,14 @@ public class Battle implements Subscribable<Battle>{
 		return place;
 	}
 	
+	public void setPlayerNextAbility(Ability playerNextAbility) {
+		this.playerNextAbility = playerNextAbility;
+	}
+
+	public void setPlayerTarget(Character playerTarget) {
+		this.playerTarget = playerTarget;
+	}
+
 	private Character[] createTurnList() {
 		int playerCount = 1;
 		Character[] turnList = new Character[playerCount+enemies.length];
