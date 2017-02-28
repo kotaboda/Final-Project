@@ -68,3 +68,6 @@
 #xp > .track {
 	-fx-background-color: rgb(0,0,0);
 }
+.VBox {
+	-fx-font-family: "Orbitron-Bold";
+}
