@@ -1,5 +1,5 @@
 package abilityInterfaces;
 
-public interface AttackAbility extends Ability {
+public abstract class AttackAbility extends Ability {
 
 }

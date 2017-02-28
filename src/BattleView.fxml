@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -28,6 +27,7 @@
                            <children>
                               <Canvas fx:id="enemyImage" height="200.0" width="200.0" />
                               <Label fx:id="enemyName" alignment="CENTER" prefHeight="37.0" prefWidth="200.0" text="Enemy Name" />
+                              <ProgressBar prefWidth="200.0" progress="0.0" />
                            </children>
                         </VBox>
                      </children>
@@ -45,17 +45,15 @@
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
                         <Pane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <ListView prefHeight="100.0" prefWidth="171.0" />
-                              <ScrollBar orientation="VERTICAL" />
+                              <ListView fx:id="abilityList" prefHeight="100.0" prefWidth="171.0" />
                            </children>
                         </Pane>
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <Pane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <VBox prefHeight="100.0" prefWidth="100.0" />
-                              <VBox prefHeight="200.0" prefWidth="100.0" />
+                              <Label fx:id="battleTextLabel" alignment="TOP_LEFT" layoutX="3.0" prefHeight="101.0" prefWidth="160.0" text="Label" />
                            </children>
-                        </HBox>
+                        </Pane>
                      </children>
                   </HBox>
                </children>

@@ -5,10 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import character.Player;
 import floors.Floor;
-import floors.Floor1;
 import models.Coordinates;
 import viewInterface.Viewable;
 

@@ -48,6 +48,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
 		this.name = name;
+		
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		
@@ -68,6 +69,8 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		floorNum = 1;
 		inv = new Inventory();
 		coordinates = new Coordinates(5,5);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 	}
 
 	protected void levelUp(int level) {
@@ -180,7 +183,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		return floorNum;
 	}
 	
-	public int compareTo(Character chara) {
+	public int compareWit(Character chara) {
 		int num = 0;
 		if(this.getStat(Stats.WIT) > chara.getStat(Stats.WIT)) {
 			num = 1;
