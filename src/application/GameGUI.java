@@ -39,6 +39,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tiles.TileManager;
 import viewInterface.Viewable;
@@ -82,6 +83,7 @@ public class GameGUI extends Application implements Viewable {
 	private Canvas canvas;
 
 	public static void main(String[] args) {
+		Font.loadFont((new Object()).getClass().getResourceAsStream("Orbitron-Bold.ttf"), 16);
 		launch();
 	}
 
