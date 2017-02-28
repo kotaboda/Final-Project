@@ -4,7 +4,7 @@
 	-fx-padding: 5px;
 	-fx-font-size: 16px;
 	}
-#menuButton {
+.button {
 	-fx-text-fill:rgb(0,0,0);
 	-fx-background-color: rgb(247,189,70);
 	-fx-border-radius: 5px;
@@ -12,6 +12,22 @@
 	-fx-border-insets: 5px;
     -fx-background-insets: 5px;
 	}
+.button:hover {
+	-fx-text-fill:rgb(0,0,0);
+	-fx-background-color: rgb(248,201,103);
+	-fx-border-radius: 5px;
+	-fx-padding: 10px;
+	-fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+.button:pressed {
+	-fx-text-fill:rgb(0,0,0);
+	-fx-background-color: rgb(209,145,10);
+	-fx-border-radius: 5px;
+	-fx-padding: 10px;
+	-fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
 .split-pane-divider {
    -fx-background-color: transparent;
    -fx-padding: 0 0 0 0;
