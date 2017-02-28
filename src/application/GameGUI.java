@@ -6,12 +6,14 @@ import java.nio.file.Paths;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
-import character.Enemy;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
+import itemSystem.Item;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,6 +36,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tiles.TileManager;
@@ -46,13 +49,15 @@ public class GameGUI extends Application implements Viewable {
 	private final Game TESTINGGAME = GameEngine.getGame();
 
 	@FXML
+	private Pane rightBattleVBox;
+	@FXML
 	private ListView<String> leftActionList;
 	@FXML
 	private Button submitButton;
 	@FXML
 	private HBox enemies;
 	@FXML
-	private ListView<Ability> abilityList;
+	private VBox middleBattleVBox;
 	@FXML
 	private Label battleTextLabel;
 	@FXML
@@ -87,7 +92,7 @@ public class GameGUI extends Application implements Viewable {
 			this.primaryStage = primaryStage;
 			 displayMainMenu();
 //			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy(), new Enemy()));
-			// displayGeneralView(TESTINGGAME.getFloors()[0]);
+//			 displayGeneralView(TESTINGGAME.getFloors()[0]);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -122,14 +127,14 @@ public class GameGUI extends Application implements Viewable {
 				}
 
 			});
-			
-			exitButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			exitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
 					Platform.exit();
 				}
-				
+
 			});
 			Scene scene = new Scene(p);
 			scene.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
@@ -150,16 +155,16 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 		try {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
-			
-			exitButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			exitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
 					displayGeneralView(TESTINGGAME.getFloors()[0]);
 				}
-				
+
 			});
-			
+
 			primaryStage.setScene(new Scene(p));
 			primaryStage.show();
 		} catch (IOException e) {
@@ -169,7 +174,7 @@ public class GameGUI extends Application implements Viewable {
 
 	@Override
 	public void displayBattleView(Battle b) {
-		
+
 		this.currentLayout = GUILayouts.BATTLE;
 		FXMLLoader loader = new FXMLLoader();
 
@@ -180,8 +185,8 @@ public class GameGUI extends Application implements Viewable {
 			enemies.setAlignment(Pos.CENTER);
 			for (int i = 0; i < b.getEnemies().length; i++) {
 				Label enemyName = new Label(b.getEnemies()[i].name);
-				Node child = new Group(new VBox(new Canvas(100,100), enemyName, new ProgressBar(1)));
-				
+				Node child = new Group(new VBox(new Canvas(100, 100), enemyName, new ProgressBar(1)));
+
 				enemies.getChildren().add(child);
 			}
 
@@ -195,13 +200,35 @@ public class GameGUI extends Application implements Viewable {
 					case PRIMARY:
 						switch (leftActionList.getSelectionModel().getSelectedIndex()) {
 						case 0:
-							abilityList.setItems(null);
+							middleBattleVBox.getChildren().clear();
+							rightBattleVBox.getChildren().clear();
 							break;
 						case 1:
-							abilityList.setItems(TESTINGGAME.getPlayer().getAbilities());
+							middleBattleVBox.getChildren().clear();
+							ListView<Ability> abilityList = new ListView<>(TESTINGGAME.getPlayer().getAbilities());
+							middleBattleVBox.getChildren().add(abilityList);
+							abilityList.getSelectionModel().selectedItemProperty()
+									.addListener(new ChangeListener<Ability>() {
+
+										@Override
+										public void changed(ObservableValue<? extends Ability> observable,
+												Ability oldValue, Ability newValue) {
+											rightBattleVBox.getChildren().clear();
+											if (abilityList.getSelectionModel().getSelectedItem() != null) {
+												Label abilityDescription = new Label(abilityList.getSelectionModel()
+														.getSelectedItem().getDescription());
+												abilityDescription.wrapTextProperty().set(true);
+												rightBattleVBox.getChildren().add(abilityDescription);
+											}
+										}
+									});
+							abilityList.getSelectionModel().selectFirst();
 							break;
 						case 2:
-							abilityList.setItems(null);
+							middleBattleVBox.getChildren().clear();
+							rightBattleVBox.getChildren().clear();
+							ListView<Item> itemList = new ListView<Item>(FXCollections.observableArrayList(TESTINGGAME.getPlayer().getInventoryContents()));
+							middleBattleVBox.getChildren().add(itemList);
 							break;
 						}
 						break;
@@ -289,7 +316,7 @@ public class GameGUI extends Application implements Viewable {
 			playerName.setText(TESTINGGAME.getPlayer().name);
 
 			// Drawing testing
-			GraphicsContext gc = canvas.getGraphicsContext2D();
+//			GraphicsContext gc = canvas.getGraphicsContext2D();
 			drawToGeneralCanvas(currentFloor);
 			// WritableImage image =
 			// TileManager.getImageToDraw(currentFloor.getTiles(),
@@ -374,7 +401,6 @@ public class GameGUI extends Application implements Viewable {
 	public void displayInventoryView(Inventory inv) {
 		// TODO Auto-generated method stub
 		this.currentLayout = GUILayouts.INVENTORY;
-
 	}
 
 	@Override
