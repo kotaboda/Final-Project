@@ -106,8 +106,9 @@ public class GameGUI extends Application implements Viewable {
 				}
 
 			});
-			Scene scene = new Scene(p); 
-			scene.getStylesheets().add("application.css");
+			Scene scene = new Scene(p);
+			String css = this.getClass().getResource("application.css").toExternalForm(); 
+			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
@@ -126,7 +127,10 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 		try{
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
-			primaryStage.setScene(new Scene(p));
+			Scene scene = new Scene(p);
+			String css = this.getClass().getResource("application.css").toExternalForm(); 
+			scene.getStylesheets().add(css);
+			primaryStage.setScene(scene);
 			primaryStage.show();
 		}catch(IOException e){
 			e.printStackTrace();
