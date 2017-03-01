@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import enums.GUILayouts;
@@ -39,6 +40,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import tiles.TileManager;
 import viewInterface.Viewable;
@@ -48,7 +50,8 @@ public class GameGUI extends Application implements Viewable {
 	private Stage primaryStage;
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
-
+	private Object lock = new Object();
+	
 	@FXML
 	private Pane rightBattleVBox;
 	@FXML
@@ -82,6 +85,7 @@ public class GameGUI extends Application implements Viewable {
 	private Canvas canvas;
 
 	public static void main(String[] args) {
+		Font.loadFont((new Object()).getClass().getResourceAsStream("Orbitron-Bold.ttf"), 16);
 		launch();
 	}
 
@@ -95,8 +99,7 @@ public class GameGUI extends Application implements Viewable {
 		try {
 			this.primaryStage = primaryStage;
 			 displayMainMenu();
-//			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy()));
-//			 displayGeneralView(TESTINGGAME.getFloors()[0]);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -109,27 +112,13 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 
 		try {
+			 
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
 			newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
-					Service<Void> s = new Service<Void>(){
-						@Override
-						protected Task<Void> createTask() {
-							return new Task<Void>(){
-								@Override
-								protected Void call() throws Exception {
-									GameEngine.setGame(TESTINGGAME);
-									GameEngine.run();
-									return null;
-								}
-							};
-						}
-						
-					};
-					s.start();
+					GameEngine.run();
 				}
 			});
 
@@ -137,7 +126,6 @@ public class GameGUI extends Application implements Viewable {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					Service<Void> s = new Service<Void>(){
 						@Override
 						protected Task<Void> createTask() {
@@ -193,16 +181,10 @@ public class GameGUI extends Application implements Viewable {
 				}
 
 			});
-//<<<<<<< HEAD
-			
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm(); 
 			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
-//=======
-//
-//			primaryStage.setScene(new Scene(p));
-//>>>>>>> Jeffrey
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -310,7 +292,14 @@ public class GameGUI extends Application implements Viewable {
 					// Ability a =
 					// abilityList.getSelectionModel().getSelectedItem();
 					// Tell Game Engine about selections here.
-					isPlayersTurn = false;
+					
+					submitButton.setDisable(true);
+					synchronized(lock){
+						isPlayersTurn = false;
+						lock.notifyAll();
+						System.out.println(Thread.currentThread().getName());
+					}
+					
 				}
 
 			});
@@ -319,6 +308,7 @@ public class GameGUI extends Application implements Viewable {
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
+			
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
@@ -330,10 +320,38 @@ public class GameGUI extends Application implements Viewable {
 	private boolean isPlayersTurn = false;
 	public void waitForPlayerSelection(Battle battle){
 		isPlayersTurn = true;
-		do{
-			
-		}while(isPlayersTurn);
+		try {
+			synchronized(lock){
+				while(isPlayersTurn){
+					System.out.println(Thread.currentThread().getName());
+					lock.wait();
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
+		switch(leftActionList.getSelectionModel().getSelectedIndex()){
+		case 0:
+			//attack
+			battle.setPlayerNextAbility(null);
+			//then set the targets here
+			break;
+			
+		case 1:
+			//ability
+			battle.setPlayerNextAbility(abilityList.getSelectionModel().getSelectedItem());
+			//then set the targets here
+			break;
+			
+		case 2:
+			//items
+			
+			break;
+			
+		default:
+			break;
+		}
 		
 	}
 

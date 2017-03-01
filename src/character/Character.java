@@ -38,7 +38,8 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	protected BufferedImage worldImage;
 	protected BufferedImage battleImage;
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
-	private int maxHitPoints = hitPoints;
+	private int maxHitPoints = 100;
+	private int maxEnergy = 100;
 
 	public Character(String name, int tileSheetNum) {
 		super(tileSheetNum);
@@ -71,6 +72,11 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		coordinates = new Coordinates(5,5);
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
+		this.stats.put(Stats.MOTIVATION, 1);
+		this.stats.put(Stats.INTELLIGIENCE, 1);
+		this.stats.put(Stats.WIT, 1);
+		this.stats.put(Stats.ENDURANCE, 1);
+		this.stats.put(Stats.STAMINA, 1);
 	}
 
 	protected void levelUp(int level) {
@@ -173,6 +179,10 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	
 	public int getCurrentHealth(){
 		return hitPoints;
+	}
+	
+	public int getMaxEnergy() {
+		return maxEnergy;
 	}
 	
 	public int getMaxHealth(){
