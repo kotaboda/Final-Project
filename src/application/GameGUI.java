@@ -278,9 +278,7 @@ public class GameGUI extends Application implements Viewable {
 											}
 										}
 										//
-									}
-								}
-							});
+									});
 							abilityList.getSelectionModel().selectFirst();
 							break;
 						case 2:
