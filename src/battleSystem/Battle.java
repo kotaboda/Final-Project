@@ -37,11 +37,14 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	public void start() {
 		//TODO(andrew): loop based on turn list, and get data using a Listener interface talking to the game engine or GUI, then use that data to do the battle
 		//NOTE(andrew): add an listener interface that will take a battle as a parameter in the update method, and then change variables up at the top
+		//TODO(andrew): the createTurnList() method is probably not working correctly, it needs to not put dead enemies into the 
 		Character[] turnList = createTurnList();
 		
 		boolean battleOngoing = true;
+		boolean allEnemiesDead = false;
 		do {
 			for(int i = 0 ; i < turnList.length ; i++) {
+				allEnemiesDead = true;
 				if(turnList[i] instanceof Player) {
 					GameEngine.playerBattleInput(this);
 					if(playerNextAbility != null){
@@ -56,9 +59,21 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				} else {
 					player.takeDmg(turnList[i].attack());
 				}
-				
+				if(player.getHPProperty().get() <= 0){
+					battleOngoing = false;
+				}
+				for(int j = 0; j < enemies.length; j++){
+					if(enemies[j].getHPProperty().get() > 0){
+						allEnemiesDead = false;
+					}
+				}
+				if(allEnemiesDead){
+					battleOngoing = false;
+				}
 			}
 		}while(battleOngoing);
+		System.out.println(Thread.currentThread().getName());
+		GameEngine.displayEndBattle(this);
 	}
 	
 	public Enemy[] getEnemies() {
@@ -117,8 +132,8 @@ public class Battle implements Subscribable<Battle>, Serializable{
 		}
 	}
 
-	public PlayerSummary getPlayerSummary() {
-		return new PlayerSummary(player);
+	public Player getPlayer() {
+		return player;
 	}
 	
 }

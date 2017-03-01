@@ -1,13 +1,12 @@
 package application;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
+import character.Player;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
@@ -39,9 +38,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tiles.TileManager;
 
@@ -52,7 +53,7 @@ public class GameGUI extends Application {
 	private final Game TESTINGGAME = GameEngine.getGame();
 	private boolean isPlayersTurn = false;
 	private Object lock = new Object();
-
+	private Parent p;
 	@FXML
 	private Pane rightBattleVBox;
 	@FXML
@@ -114,6 +115,7 @@ public class GameGUI extends Application {
 		try {
 
 			Parent p = loader.load();
+
 			newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -172,6 +174,7 @@ public class GameGUI extends Application {
 		try {
 			Parent p = loader.load();
 
+
 			exitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -198,6 +201,7 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			Parent p = loader.load();
+			
 			playerName.setText(TESTINGGAME.getPlayer().name);
 			enemies.setAlignment(Pos.CENTER);
 			ArrayList<Label> enemyNames = new ArrayList<Label>();
@@ -299,9 +303,7 @@ public class GameGUI extends Application {
 					default:
 						break;
 					}
-
 				}
-
 			});
 
 			// submitButton.setDisable(true);
@@ -316,9 +318,7 @@ public class GameGUI extends Application {
 					synchronized (lock) {
 						isPlayersTurn = false;
 						lock.notifyAll();
-						leftActionList.getSelectionModel().clearSelection();
-						middleBattleVBox.getChildren().clear();
-						rightBattleVBox.getChildren().clear();
+						
 					}
 
 				}
@@ -353,18 +353,17 @@ public class GameGUI extends Application {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		System.out.println(leftActionList.getSelectionModel().getSelectedIndex());
 		switch (leftActionList.getSelectionModel().getSelectedIndex()) {
 		case 0:
 			// attack
 			battle.setPlayerNextAbility(null);
-			// then set the targets here
+			//NOTE(andrew): targets are set in the enemy onclick method
 			break;
 
 		case 1:
 			// ability
 			battle.setPlayerNextAbility(abilityList.getSelectionModel().getSelectedItem());
-			// then set the targets here
 			break;
 
 		case 2:
@@ -375,7 +374,16 @@ public class GameGUI extends Application {
 		default:
 			break;
 		}
+		Platform.runLater(new Runnable(){
 
+			@Override
+			public void run() {
+				leftActionList.getSelectionModel().clearSelection();
+				middleBattleVBox.getChildren().clear();
+				rightBattleVBox.getChildren().clear();
+			}
+			
+		});
 	}
 	//TODO(dakota): I'm not sure how to do the whole canvas drawing thing so it's just an overlay over the map
 	//or if we just want the messsage to take up the whole screen
@@ -391,6 +399,7 @@ public class GameGUI extends Application {
 		try {
 			Parent parent = loader.load();
 			parent.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
 
 				@Override
 				public void handle(KeyEvent event) {
@@ -418,12 +427,14 @@ public class GameGUI extends Application {
 						}
 						drawToGeneralCanvas(currentFloor);
 						Battle b = GameEngine.checkForBattle(currentFloor);
-						String message = GameEngine.checkNote();
+						//String message = GameEngine.checkNote();
+						//TODO(andrew): add a boolean check here so this only checks when a movement key is pressed
 						if (b != null) {
 							displayBattleView(b);
 							GameEngine.startBattle(b);
-						} else if(message != null) {
-							displayMessageView(message);
+							//FIXME(andrew): commented out until the exceptions are resolved
+//						} else if(message != null) {
+//							displayMessageView(message);
 						}
 					}
 				}
@@ -512,6 +523,28 @@ public class GameGUI extends Application {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void displayEndBattle(Battle b){
+		Player player = b.getPlayer();
+		Enemy[] enemiesArray = b.getEnemies();
+		if(player.getHPProperty().get() > 0){
+			//TODO(andrew): pop a text view displaying loot and exp/level gain stats
+			Text display = new Text(100, 100, "You beat the dudes mango im real prouda you goodjob");
+			System.out.println("Is this working my dude");
+			
+			//TODO(andrew): This is called when they quit out of the 
+			Platform.runLater(new Runnable(){
+				@Override
+				public void run() {
+					((AnchorPane)primaryStage.getScene().getRoot()).getChildren().add(display);
+					displayGeneralView(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+				}
+				
+			});
+		}else{
+			//TODO(andrew): pop a text view displaying "YOU SUCK" or something along those lines.
+		}
 	}
 
 	private void drawToGeneralCanvas(Floor currentFloor) {
