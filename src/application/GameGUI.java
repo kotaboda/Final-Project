@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
-import character.Player;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
@@ -44,7 +43,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.Coordinates;
 import tiles.TileManager;
+import viewInterface.Viewable;
 
 public class GameGUI extends Application {
 
@@ -179,7 +180,7 @@ public class GameGUI extends Application {
 
 				@Override
 				public void handle(ActionEvent event) {
-					displayGeneralView(TESTINGGAME.getFloors()[0]);
+					displayGeneralView();
 				}
 
 			});
@@ -211,23 +212,25 @@ public class GameGUI extends Application {
 				Label enemyName = new Label(currentEnemy.name);
 				enemyNames.add(enemyName);
 				ProgressBar enemyHealth = new ProgressBar();
-				enemyHealth.progressProperty().bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
+				enemyHealth.progressProperty()
+						.bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
 				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
 				Node child = new Group(mainContainer);
 				enemies.getChildren().add(child);
-				child.setOnMouseClicked(new EventHandler<MouseEvent>() {				
+				child.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
 						b.setPlayerTarget(currentEnemy);
 						System.out.println(enemyNum);
-						for(Label name : enemyNames){
+						for (Label name : enemyNames) {
 							name.styleProperty().setValue("");
 						}
 						enemyName.setStyle("-fx-background-color : blue;");
 					};
 				});
-				if(i == 0){
-					child.getOnMouseClicked().handle(null);;
+				if (i == 0) {
+					child.getOnMouseClicked().handle(null);
+					;
 				}
 			}
 			//
@@ -264,24 +267,24 @@ public class GameGUI extends Application {
 							abilityList.getSelectionModel().selectedItemProperty()
 									.addListener(new ChangeListener<Ability>() {
 
-										@Override
-										public void changed(ObservableValue<? extends Ability> observable,
-												Ability oldValue, Ability newValue) {
-											rightBattleVBox.getChildren().clear();
-											if (abilityList.getSelectionModel().getSelectedItem() != null) {
-												Label abilityDescription = new Label(abilityList.getSelectionModel()
-														.getSelectedItem().getDescription());
-												abilityDescription.wrapTextProperty().set(true);
-												rightBattleVBox.getChildren().add(abilityDescription);
-												//
-												if (isPlayersTurn) {
-													submitButton.setDisable(false);
-												}
-												//
-											}
+								@Override
+								public void changed(ObservableValue<? extends Ability> observable, Ability oldValue,
+										Ability newValue) {
+									rightBattleVBox.getChildren().clear();
+									if (abilityList.getSelectionModel().getSelectedItem() != null) {
+										Label abilityDescription = new Label(
+												abilityList.getSelectionModel().getSelectedItem().getDescription());
+										abilityDescription.wrapTextProperty().set(true);
+										rightBattleVBox.getChildren().add(abilityDescription);
+										//
+										if (isPlayersTurn) {
+											submitButton.setDisable(false);
 										}
 										//
-									});
+									}
+								}
+								//
+							});
 							abilityList.getSelectionModel().selectFirst();
 							break;
 						case 2:
@@ -385,13 +388,15 @@ public class GameGUI extends Application {
 			
 		});
 	}
-	//TODO(dakota): I'm not sure how to do the whole canvas drawing thing so it's just an overlay over the map
-	//or if we just want the messsage to take up the whole screen
+
+	// TODO(dakota): I'm not sure how to do the whole canvas drawing thing so
+	// it's just an overlay over the map
+	// or if we just want the messsage to take up the whole screen
 	public void displayMessageView(String message) {
-		
+
 	}
 
-	public void displayGeneralView(Floor currentFloor) {
+	public void displayGeneralView() {
 		this.currentLayout = GUILayouts.GENERAL;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/GeneralView.fxml"));
 
@@ -425,16 +430,28 @@ public class GameGUI extends Application {
 						default:
 							break;
 						}
-						drawToGeneralCanvas(currentFloor);
-						Battle b = GameEngine.checkForBattle(currentFloor);
+						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+						Battle b = GameEngine
+								.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 						//String message = GameEngine.checkNote();
 						//TODO(andrew): add a boolean check here so this only checks when a movement key is pressed
+						Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
+						System.out.println("tile" + TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
+								.getTiles()[playerCoord.getX()][playerCoord.getY()].getTileSheetNum());
 						if (b != null) {
 							displayBattleView(b);
 							GameEngine.startBattle(b);
 							//FIXME(andrew): commented out until the exceptions are resolved
 //						} else if(message != null) {
 //							displayMessageView(message);
+						} else if (TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
+								.getTiles()[playerCoord.getX()][playerCoord.getY()].getTileSheetNum() == 58) {
+							TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+							TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
+									TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
+											.getX(),
+									TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
+											.getY());
 						}
 					}
 				}
@@ -453,7 +470,7 @@ public class GameGUI extends Application {
 
 			// Drawing testing
 			// GraphicsContext gc = canvas.getGraphicsContext2D();
-			drawToGeneralCanvas(currentFloor);
+			drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 			// WritableImage image =
 			// TileManager.getImageToDraw(currentFloor.getTiles(),
 			// playerSummary.coordinates);
@@ -552,7 +569,8 @@ public class GameGUI extends Application {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
-		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()), image.getHeight() * (canvas.getHeight() / image.getHeight()));
+		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()),
+				image.getHeight() * (canvas.getHeight() / image.getHeight()));
 	}
 
 	public void displayInventoryView(Inventory inv) {

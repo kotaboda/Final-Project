@@ -19,7 +19,9 @@ public class Floor1 extends Floor {
 			private static final long serialVersionUID = 1L;
 			
 		});
+		getBoss().getCoordinates().setCoordinates(9, 1);
 		setPlayer(player);
+		getPlayer().getCoordinates().setCoordinates(9, 12);
 		setBattles(new Battle[5]);
 		genBattles();
 
