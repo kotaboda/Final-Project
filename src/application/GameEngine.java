@@ -9,6 +9,9 @@ import battleSystem.Battle;
 import character.Player;
 import floors.Floor;
 import models.Coordinates;
+import tiles.FloorMessage;
+import tiles.Tile;
+import tiles.WallMessage;
 import viewInterface.Viewable;
 
 public class GameEngine {
@@ -78,6 +81,19 @@ public class GameEngine {
 		}
 		
 		return battle;	
+	}
+	
+	public static String checkNote() {
+		Player p = GameEngine.getGame().getPlayer();
+		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum()].getTiles()[p.getCoordinates().getX()][p.getCoordinates()
+		                                                                                 				.getY()];
+		if (t instanceof FloorMessage || t instanceof WallMessage) {
+			// retreive the notes at those coordinates in order to display it
+			String message = GameEngine.getGame().getFloors()[p.getFloorNum()].getNotes().get(p.getCoordinates()).getMessage();
+			return message;
+		} else {
+			return null;
+		}
 	}
 	
 	public static void playerBattleInput(Battle battle){
