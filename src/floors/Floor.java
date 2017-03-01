@@ -30,7 +30,7 @@ public abstract class Floor implements Paintable{
 		int mapBorderX = getTiles()[0].length - 2;
 		int mapBorderY = getTiles().length - 2;
 		for(int i = 0 ; i < getBattles().length ; i++) {
-			boolean notValidPlace = false;
+			boolean validPlace = false;
 			int x = 0;
 			int y = 0;
 			
@@ -38,13 +38,17 @@ public abstract class Floor implements Paintable{
 				x = xD.nextInt(mapBorderY)+1;
 				y = xD.nextInt(mapBorderX)+1;
 				if(getTiles()[x][y] instanceof Collidable) {
-					notValidPlace = false;
+					validPlace = true;
 				} else {
-					notValidPlace = true;
+					validPlace = false;
 				}
-			}while(notValidPlace);
+			}while(!validPlace);
 			
 			Enemy[] enemies = new Enemy[xD.nextInt(3)+1];
+			for (int j = 0; j < enemies.length; j++) {
+				//TODO Dress up enemy generation here.
+				enemies[j] = new Enemy();
+			}
 			getBattles()[i] = new Battle(getPlayer(), enemies);
 			getBattles()[i].getCoordinates().setCoordinates(x, y);
 		}

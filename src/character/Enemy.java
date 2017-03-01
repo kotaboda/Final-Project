@@ -19,7 +19,7 @@ public class Enemy extends Character {
 	}
 	@Override
 	public int takeDmg(int dmg) {
-		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
+		hitPoints -= (dmg-getStat(Stats.ENDURANCE) + 2);
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
 		return dmg;
@@ -31,5 +31,8 @@ public class Enemy extends Character {
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
 	}
+
+	
+	
 
 }

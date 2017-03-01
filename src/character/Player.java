@@ -77,6 +77,10 @@ public class Player extends Character {
 		return abilities;
 	}
 
+	public void setFloorNum(int i) {
+		this.floorNum = i;
+	}
+
 
 
 

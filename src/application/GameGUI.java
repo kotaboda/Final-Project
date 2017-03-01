@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
+import character.Enemy;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
@@ -51,7 +52,7 @@ public class GameGUI extends Application implements Viewable {
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
 	private Object lock = new Object();
-	
+
 	@FXML
 	private Pane rightBattleVBox;
 	@FXML
@@ -98,7 +99,7 @@ public class GameGUI extends Application implements Viewable {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-			 displayMainMenu();
+			displayMainMenu();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,7 +113,7 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 
 		try {
-			 
+
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
 			newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -126,10 +127,10 @@ public class GameGUI extends Application implements Viewable {
 
 				@Override
 				public void handle(ActionEvent event) {
-					Service<Void> s = new Service<Void>(){
+					Service<Void> s = new Service<Void>() {
 						@Override
 						protected Task<Void> createTask() {
-							return new Task<Void>(){
+							return new Task<Void>() {
 								@Override
 								protected Void call() throws Exception {
 									GameEngine.setGame(TESTINGGAME);
@@ -138,7 +139,7 @@ public class GameGUI extends Application implements Viewable {
 								}
 							};
 						}
-						
+
 					};
 					s.start();
 				}
@@ -182,7 +183,7 @@ public class GameGUI extends Application implements Viewable {
 
 			});
 			Scene scene = new Scene(p);
-			String css = this.getClass().getResource("application.css").toExternalForm(); 
+			String css = this.getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -203,10 +204,24 @@ public class GameGUI extends Application implements Viewable {
 			playerName.setText(TESTINGGAME.getPlayer().name);
 			enemies.setAlignment(Pos.CENTER);
 			for (int i = 0; i < b.getEnemies().length; i++) {
-				Label enemyName = new Label(b.getEnemies()[i].name);
-				Node child = new Group(new VBox(new Canvas(100, 100), enemyName, new ProgressBar(1)));
-
+				int enemyNum = i + 1;
+				Enemy currentEnemy = b.getEnemies()[i];
+				Label enemyName = new Label(currentEnemy.name);
+				ProgressBar enemyHealth = new ProgressBar();
+				enemyHealth.progressProperty().bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
+				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
+				Node child = new Group(mainContainer);
 				enemies.getChildren().add(child);
+				child.setOnMouseClicked(new EventHandler<MouseEvent>() {				
+					@Override
+					public void handle(MouseEvent event) {
+						b.setPlayerTarget(currentEnemy);
+						System.out.println(enemyNum);
+					};
+				});
+				if(i == 0){
+					child.getOnMouseClicked().handle(null);;
+				}
 			}
 			//
 			submitButton.setDisable(true);
@@ -224,7 +239,7 @@ public class GameGUI extends Application implements Viewable {
 							middleBattleVBox.getChildren().clear();
 							rightBattleVBox.getChildren().clear();
 							//
-							if(isPlayersTurn){
+							if (isPlayersTurn) {
 								submitButton.setDisable(false);
 								abilityList = null;
 							}
@@ -232,7 +247,7 @@ public class GameGUI extends Application implements Viewable {
 							break;
 						case 1:
 							//
-							if(isPlayersTurn){
+							if (isPlayersTurn) {
 								submitButton.setDisable(true);
 							}
 							//
@@ -252,7 +267,7 @@ public class GameGUI extends Application implements Viewable {
 												abilityDescription.wrapTextProperty().set(true);
 												rightBattleVBox.getChildren().add(abilityDescription);
 												//
-												if(isPlayersTurn){
+												if (isPlayersTurn) {
 													submitButton.setDisable(false);
 												}
 												//
@@ -263,15 +278,16 @@ public class GameGUI extends Application implements Viewable {
 							break;
 						case 2:
 							//
-							if(isPlayersTurn){
+							if (isPlayersTurn) {
 								submitButton.setDisable(true);
 								abilityList = null;
 							}
-							
+
 							//
 							middleBattleVBox.getChildren().clear();
 							rightBattleVBox.getChildren().clear();
-							ListView<Item> itemList = new ListView<Item>(FXCollections.observableArrayList(TESTINGGAME.getPlayer().getInventoryContents()));
+							ListView<Item> itemList = new ListView<Item>(
+									FXCollections.observableArrayList(TESTINGGAME.getPlayer().getInventoryContents()));
 							middleBattleVBox.getChildren().add(itemList);
 							break;
 						}
@@ -284,7 +300,7 @@ public class GameGUI extends Application implements Viewable {
 
 			});
 
-			//submitButton.setDisable(true);
+			// submitButton.setDisable(true);
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -292,14 +308,13 @@ public class GameGUI extends Application implements Viewable {
 					// Ability a =
 					// abilityList.getSelectionModel().getSelectedItem();
 					// Tell Game Engine about selections here.
-					
+
 					submitButton.setDisable(true);
-					synchronized(lock){
+					synchronized (lock) {
 						isPlayersTurn = false;
 						lock.notifyAll();
-						System.out.println(Thread.currentThread().getName());
 					}
-					
+
 				}
 
 			});
@@ -308,51 +323,54 @@ public class GameGUI extends Application implements Viewable {
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
-			
+
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	//TODO(andrew): these are for an example of something that could be done to wait for the submit button to be clicked. Could also be accomplished by getting the
-		//battle loop thread to pause somehow, not entirely sure how.
+
+	// TODO(andrew): these are for an example of something that could be done to
+	// wait for the submit button to be clicked. Could also be accomplished by
+	// getting the
+	// battle loop thread to pause somehow, not entirely sure how.
 	private boolean isPlayersTurn = false;
-	public void waitForPlayerSelection(Battle battle){
+
+	public void waitForPlayerSelection(Battle battle) {
 		isPlayersTurn = true;
 		try {
-			synchronized(lock){
-				while(isPlayersTurn){
-					System.out.println(Thread.currentThread().getName());
+			synchronized (lock) {
+				while (isPlayersTurn) {
 					lock.wait();
 				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		switch(leftActionList.getSelectionModel().getSelectedIndex()){
+
+		switch (leftActionList.getSelectionModel().getSelectedIndex()) {
 		case 0:
-			//attack
+			// attack
 			battle.setPlayerNextAbility(null);
-			//then set the targets here
+			// then set the targets here
 			break;
-			
+
 		case 1:
-			//ability
+			// ability
 			battle.setPlayerNextAbility(abilityList.getSelectionModel().getSelectedItem());
-			//then set the targets here
+			// then set the targets here
 			break;
-			
+
 		case 2:
-			//items
-			
+			// items
+
 			break;
-			
+
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
@@ -388,8 +406,9 @@ public class GameGUI extends Application implements Viewable {
 						}
 						drawToGeneralCanvas(currentFloor);
 						Battle b = GameEngine.checkForBattle(currentFloor);
-						if(b != null){
+						if (b != null) {
 							displayBattleView(b);
+							GameEngine.startBattle(b);
 						}
 					}
 				}
@@ -407,7 +426,7 @@ public class GameGUI extends Application implements Viewable {
 			playerName.setText(TESTINGGAME.getPlayer().name);
 
 			// Drawing testing
-//			GraphicsContext gc = canvas.getGraphicsContext2D();
+			// GraphicsContext gc = canvas.getGraphicsContext2D();
 			drawToGeneralCanvas(currentFloor);
 			// WritableImage image =
 			// TileManager.getImageToDraw(currentFloor.getTiles(),
@@ -485,7 +504,9 @@ public class GameGUI extends Application implements Viewable {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
-		gc.drawImage(image, -64, -64, image.getWidth() * 2, image.getHeight() * 2);
+		System.out.println(canvas.getWidth());
+		System.out.println(image.getWidth() * 1.6);
+		gc.drawImage(image, 0, 0, image.getWidth() * 1.6, image.getHeight() * 1.6);
 	}
 
 	@Override

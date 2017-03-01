@@ -7,38 +7,22 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import battleSystem.Battle;
-import character.Enemy;
 import character.Player;
 import floors.Floor;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import models.Coordinates;
+import tileinterfaces.Collidable;
 
 public class GameEngine {
 	private static GameGUI view;
 	private static Game game = new Game(new Player());
-	private static Service<Void> battleService;
 
 	public static void run() {
 		// NOTE(andrew): This can be changed later, if it isn't done how we want
 		// it to be done
-		Battle thisGameSucks = new Battle(game.getPlayer(), new Enemy(), new Enemy(), new Enemy());
-		battleService = new Service<Void>() {
-			@Override
-			protected Task<Void> createTask() {
-				return new Task<Void>() {
-					@Override
-					protected Void call() throws Exception {
-						thisGameSucks.start();
-						return null;
-					}
-				};
-			}
+		view.displayGeneralView(game.getFloors()[game.getPlayer().getFloorNum() - 1]);
 
-		};
-
-		battleService.start();
-		view.displayBattleView(thisGameSucks);
 	}
 
 	public static Game loadGame() {
@@ -79,8 +63,16 @@ public class GameEngine {
 
 	public static void updatePlayerPosition(int x, int y) {
 		Coordinates c = game.getPlayer().getCoordinates();
+		// if (!(game.getFloors()[game.getPlayer().getFloorNum() -
+		// 1].getTiles()[c.getX() + x][c.getY()
+		// + y] instanceof Collidable)) {
 		c.setX(c.getX() + x);
 		c.setY(c.getY() + y);
+		// }else{
+		System.out
+				.println("Tile: " + game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[c.getX()][c.getY()]
+						.getClass().getTypeName().substring(6));
+		// }
 	}
 
 	public static Battle checkForBattle(Floor currentFloor) {
@@ -102,6 +94,24 @@ public class GameEngine {
 		// but I am not sure on how to get that data from the view
 
 		view.waitForPlayerSelection(battle);
+	}
+
+	public static void startBattle(Battle b) {
+		Service<Void> battleService = new Service<Void>() {
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						b.start();
+						return null;
+					}
+				};
+			}
+
+		};
+
+		battleService.start();
 	}
 
 }

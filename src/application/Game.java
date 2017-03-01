@@ -16,6 +16,7 @@ public class Game {
 	
 	public Game(Player player) {
 		this.player = player;
+		this.player.setFloorNum(1);
 		this.floors = new Floor[] {new Floor1(player), new Floor2(), new Floor3()};
 	}
 	
