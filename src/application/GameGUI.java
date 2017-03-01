@@ -3,10 +3,8 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
-import character.Enemy;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
@@ -16,6 +14,8 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -54,7 +54,7 @@ public class GameGUI extends Application implements Viewable {
 	@FXML
 	private ListView<String> leftActionList;
 	//
-	ListView<Ability> abilityList;
+	private ListView<Ability> abilityList;
 	//
 	@FXML
 	private Button submitButton;
@@ -94,7 +94,7 @@ public class GameGUI extends Application implements Viewable {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-//			 displayMainMenu();
+			 displayMainMenu();
 //			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy()));
 //			 displayGeneralView(TESTINGGAME.getFloors()[0]);
 		} catch (Exception e) {
@@ -104,7 +104,6 @@ public class GameGUI extends Application implements Viewable {
 
 	@Override
 	public void displayMainMenu() {
-		// TODO Auto-generated method stub
 		FXMLLoader loader = new FXMLLoader();
 
 		loader.setController(this);
@@ -116,8 +115,21 @@ public class GameGUI extends Application implements Viewable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					GameEngine.setGame(TESTINGGAME);
-					GameEngine.run();
+					Service<Void> s = new Service<Void>(){
+						@Override
+						protected Task<Void> createTask() {
+							return new Task<Void>(){
+								@Override
+								protected Void call() throws Exception {
+									GameEngine.setGame(TESTINGGAME);
+									GameEngine.run();
+									return null;
+								}
+							};
+						}
+						
+					};
+					s.start();
 				}
 			});
 
@@ -126,8 +138,21 @@ public class GameGUI extends Application implements Viewable {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					GameEngine.setGame(TESTINGGAME);
-					GameEngine.run();
+					Service<Void> s = new Service<Void>(){
+						@Override
+						protected Task<Void> createTask() {
+							return new Task<Void>(){
+								@Override
+								protected Void call() throws Exception {
+									GameEngine.setGame(TESTINGGAME);
+									GameEngine.run();
+									return null;
+								}
+							};
+						}
+						
+					};
+					s.start();
 				}
 
 			});
