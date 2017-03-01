@@ -3,6 +3,7 @@ package floors;
 import battleSystem.Battle;
 import character.Boss;
 import character.Player;
+import models.Coordinates;
 import tiles.Tile;
 import tiles.TileManager;
 
@@ -21,6 +22,17 @@ public class Floor1 extends Floor {
 		setPlayer(player);
 		setBattles(new Battle[5]);
 		genBattles();
+
+		genTiles();
+		Note[] notesTemp = new Note[5];
+		notesTemp[0] = new Note("Shopping list: More ramen(Really keeps me motivated to finish homework)", new Coordinates(5,3));
+		notesTemp[1] = new Note("Man, this school is crazy hard! Five of my friends dropped out in the first week!", new Coordinates(12,7));
+		notesTemp[2] = new Note("I need more coffee.....My project is due tonight and I need the energy!", new Coordinates(8,8));
+		notesTemp[3] = new Note("I can't believe I spent 5 hours trying to fix my code when the problem was just a missing semi-colon.", new Coordinates(6,4));
+		notesTemp[4] = new Note("I heard you can't even get to class on the second floor without getting past the security guard...", new Coordinates(10,2));
+		for(Note note : notesTemp) {
+			getNotes().put(note.getCoord(), note);
+		}
 	}
 	
 	public void genTiles() {

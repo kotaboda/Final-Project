@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
+import character.Player;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
@@ -44,7 +45,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import tiles.FloorMessage;
+import tiles.Tile;
 import tiles.TileManager;
+import tiles.WallMessage;
 import viewInterface.Viewable;
 
 public class GameGUI extends Application implements Viewable {
@@ -280,6 +284,7 @@ public class GameGUI extends Application implements Viewable {
 												//
 											}
 										}
+										//
 									});
 							abilityList.getSelectionModel().selectFirst();
 							break;
@@ -379,6 +384,11 @@ public class GameGUI extends Application implements Viewable {
 		}
 
 	}
+	//TODO(dakota): I'm not sure how to do the whole canvas drawing thing so it's just an overlay over the map
+	//or if we just want the messsage to take up the whole screen
+	public void displayMessageView(String message) {
+		
+	}
 
 	@Override
 	public void displayGeneralView(Floor currentFloor) {
@@ -408,14 +418,20 @@ public class GameGUI extends Application implements Viewable {
 						case D:
 							GameEngine.updatePlayerPosition(1, 0);
 							break;
+						case ESCAPE:
+							displayPauseMenu();
+							break;
 						default:
 							break;
 						}
 						drawToGeneralCanvas(currentFloor);
 						Battle b = GameEngine.checkForBattle(currentFloor);
+						String message = GameEngine.checkNote();
 						if (b != null) {
 							displayBattleView(b);
 							GameEngine.startBattle(b);
+						} else if(message != null) {
+							displayMessageView(message);
 						}
 					}
 				}

@@ -1,5 +1,6 @@
 package floors;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import battleSystem.Battle;
@@ -9,6 +10,7 @@ import character.Enemy;
 import character.Player;
 import drawinterfaces.Paintable;
 import javafx.scene.image.Image;
+import models.Coordinates;
 import tileinterfaces.Collidable;
 import tiles.Tile;
 
@@ -19,6 +21,7 @@ public abstract class Floor implements Paintable{
 	private BossBattle bossBattle;
 	private Battle[] battles;
 	private Player player;
+	private HashMap<Coordinates, Note> notes = new HashMap<>();
 	
 
 	public Tile[][] getTiles(){
@@ -92,6 +95,10 @@ public abstract class Floor implements Paintable{
 
 	public void setBattles(Battle[] battles) {
 		this.battles = battles;
+	}
+
+	public HashMap<Coordinates, Note> getNotes() {
+		return notes;
 	}
 
 	@Override

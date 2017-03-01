@@ -13,6 +13,9 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import models.Coordinates;
 import tileinterfaces.Collidable;
+import tiles.FloorMessage;
+import tiles.Tile;
+import tiles.WallMessage;
 
 public class GameEngine {
 	private static GameGUI view;
@@ -63,7 +66,7 @@ public class GameEngine {
 
 	public static void updatePlayerPosition(int x, int y) {
 		Coordinates c = game.getPlayer().getCoordinates();
-		if (((c.getX() + x) >= 0 && (c.getX() + x) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[0].length)
+		if (((c.getX() + x)	 >= 0 && (c.getX() + x) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[0].length)
 				&& ((c.getY() + y) >= 0 && (c.getY() + y) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles().length)
 				&& !(game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[c.getY() + y][c.getX()
 						+ x] instanceof Collidable)) {
@@ -87,6 +90,20 @@ public class GameEngine {
 
 		return battle;
 	}
+	
+	public static String checkNote() {
+		Player p = GameEngine.getGame().getPlayer();
+		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum()].getTiles()[p.getCoordinates().getX()][p.getCoordinates()
+		                                                                                 				.getY()];
+		if (t instanceof FloorMessage || t instanceof WallMessage) {
+			// retreive the notes at those coordinates in order to display it
+			String message = GameEngine.getGame().getFloors()[p.getFloorNum()].getNotes().get(p.getCoordinates()).getMessage();
+			return message;
+		} else {
+			return null;
+		}
+	}
+	
 
 	public static void playerBattleInput(Battle battle) {
 		// TODO(andrew): This should take the selected options from the view,
