@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.concurrent.CountDownLatch;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
@@ -16,6 +17,8 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -49,13 +52,14 @@ public class GameGUI extends Application implements Viewable {
 	private Stage primaryStage;
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
-
+	private Object lock = new Object();
+	
 	@FXML
 	private Pane rightBattleVBox;
 	@FXML
 	private ListView<String> leftActionList;
 	//
-	ListView<Ability> abilityList;
+	private ListView<Ability> abilityList;
 	//
 	@FXML
 	private Button submitButton;
@@ -96,9 +100,20 @@ public class GameGUI extends Application implements Viewable {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-//			 displayMainMenu();
-			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy(), new Enemy()));
+			 displayMainMenu();
+//			displayBattleView(new Battle(TESTINGGAME.getPlayer(), new Enemy(), new Enemy(), new Enemy()));
 //			 displayGeneralView(TESTINGGAME.getFloors()[0]);
+//			new Thread(new Runnable(){
+//				
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					GameEngine.run();
+//					
+//				}
+//				
+//			}).start();
+//			GameEngine.run();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -112,14 +127,26 @@ public class GameGUI extends Application implements Viewable {
 		loader.setController(this);
 
 		try {
+			 
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
 			newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					GameEngine.setGame(TESTINGGAME);
+					
 					GameEngine.run();
+//					new Thread(new Runnable(){
+//
+//						@Override
+//						public void run() {
+//							// TODO Auto-generated method stub
+//							GameEngine.run();
+//							
+//						}
+//						
+//					}).start();
+					
 				}
 			});
 
@@ -282,7 +309,14 @@ public class GameGUI extends Application implements Viewable {
 					// Ability a =
 					// abilityList.getSelectionModel().getSelectedItem();
 					// Tell Game Engine about selections here.
-					isPlayersTurn = false;
+					
+					submitButton.setDisable(true);
+					synchronized(lock){
+						isPlayersTurn = false;
+						lock.notifyAll();
+						System.out.println(Thread.currentThread().getName());
+					}
+					
 				}
 
 			});
@@ -291,6 +325,7 @@ public class GameGUI extends Application implements Viewable {
 			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
+			
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
@@ -302,10 +337,38 @@ public class GameGUI extends Application implements Viewable {
 	private boolean isPlayersTurn = false;
 	public void waitForPlayerSelection(Battle battle){
 		isPlayersTurn = true;
-		do{
-			
-		}while(isPlayersTurn);
+		try {
+			synchronized(lock){
+				while(isPlayersTurn){
+					System.out.println(Thread.currentThread().getName());
+					lock.wait();
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
+		switch(leftActionList.getSelectionModel().getSelectedIndex()){
+		case 0:
+			//attack
+			battle.setPlayerNextAbility(null);
+			//then set the targets here
+			break;
+			
+		case 1:
+			//ability
+			battle.setPlayerNextAbility(abilityList.getSelectionModel().getSelectedItem());
+			//then set the targets here
+			break;
+			
+		case 2:
+			//items
+			
+			break;
+			
+		default:
+			break;
+		}
 		
 	}
 
