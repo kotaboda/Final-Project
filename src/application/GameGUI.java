@@ -50,6 +50,7 @@ public class GameGUI extends Application {
 	private Stage primaryStage;
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
+	private boolean isPlayersTurn = false;
 	private Object lock = new Object();
 
 	@FXML
@@ -311,11 +312,13 @@ public class GameGUI extends Application {
 					// Ability a =
 					// abilityList.getSelectionModel().getSelectedItem();
 					// Tell Game Engine about selections here.
-
 					submitButton.setDisable(true);
 					synchronized (lock) {
 						isPlayersTurn = false;
 						lock.notifyAll();
+						leftActionList.getSelectionModel().clearSelection();
+						middleBattleVBox.getChildren().clear();
+						rightBattleVBox.getChildren().clear();
 					}
 
 				}
@@ -338,7 +341,6 @@ public class GameGUI extends Application {
 	// wait for the submit button to be clicked. Could also be accomplished by
 	// getting the
 	// battle loop thread to pause somehow, not entirely sure how.
-	private boolean isPlayersTurn = false;
 
 	public void waitForPlayerSelection(Battle battle) {
 		isPlayersTurn = true;

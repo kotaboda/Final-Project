@@ -106,8 +106,7 @@ public class GameEngine {
 	
 
 	public static void playerBattleInput(Battle battle) {
-		// TODO(andrew): This should take the selected options from the view,
-		// but I am not sure on how to get that data from the view
+		
 
 		view.waitForPlayerSelection(battle);
 	}

@@ -1,13 +1,6 @@
+/application/
 /character/
-/characterEnums/
-/characterInterfaces/
-/drawinterfaces/
-/enums/
 /floors/
-/itemSystem/
-/models/
-/publisherSubscriberInterfaces/
-/tileinterfaces/
 /tiles/
 /viewInterface/
 /fxmls/
