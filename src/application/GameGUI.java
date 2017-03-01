@@ -50,6 +50,7 @@ public class GameGUI extends Application implements Viewable {
 	private Stage primaryStage;
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private final Game TESTINGGAME = GameEngine.getGame();
+	private boolean isPlayersTurn = false;
 	private Object lock = new Object();
 	
 	@FXML
@@ -292,12 +293,13 @@ public class GameGUI extends Application implements Viewable {
 					// Ability a =
 					// abilityList.getSelectionModel().getSelectedItem();
 					// Tell Game Engine about selections here.
-					
 					submitButton.setDisable(true);
 					synchronized(lock){
 						isPlayersTurn = false;
 						lock.notifyAll();
-						System.out.println(Thread.currentThread().getName());
+						leftActionList.getSelectionModel().clearSelection();
+						middleBattleVBox.getChildren().clear();
+						rightBattleVBox.getChildren().clear();
 					}
 					
 				}
@@ -315,15 +317,11 @@ public class GameGUI extends Application implements Viewable {
 			e.printStackTrace();
 		}
 	}
-	//TODO(andrew): these are for an example of something that could be done to wait for the submit button to be clicked. Could also be accomplished by getting the
-		//battle loop thread to pause somehow, not entirely sure how.
-	private boolean isPlayersTurn = false;
 	public void waitForPlayerSelection(Battle battle){
 		isPlayersTurn = true;
 		try {
 			synchronized(lock){
 				while(isPlayersTurn){
-					System.out.println(Thread.currentThread().getName());
 					lock.wait();
 				}
 			}
