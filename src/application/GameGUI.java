@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
@@ -203,10 +204,12 @@ public class GameGUI extends Application implements Viewable {
 			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
 			playerName.setText(TESTINGGAME.getPlayer().name);
 			enemies.setAlignment(Pos.CENTER);
+			ArrayList<Label> enemyNames = new ArrayList<Label>();
 			for (int i = 0; i < b.getEnemies().length; i++) {
 				int enemyNum = i + 1;
 				Enemy currentEnemy = b.getEnemies()[i];
 				Label enemyName = new Label(currentEnemy.name);
+				enemyNames.add(enemyName);
 				ProgressBar enemyHealth = new ProgressBar();
 				enemyHealth.progressProperty().bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
 				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
@@ -217,6 +220,10 @@ public class GameGUI extends Application implements Viewable {
 					public void handle(MouseEvent event) {
 						b.setPlayerTarget(currentEnemy);
 						System.out.println(enemyNum);
+						for(Label name : enemyNames){
+							name.styleProperty().setValue("");
+						}
+						enemyName.setStyle("-fx-background-color : blue;");
 					};
 				});
 				if(i == 0){
@@ -504,29 +511,22 @@ public class GameGUI extends Application implements Viewable {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
-		System.out.println(canvas.getWidth());
-		System.out.println(image.getWidth() * 1.6);
-		gc.drawImage(image, 0, 0, image.getWidth() * 1.6, image.getHeight() * 1.6);
+		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()), image.getHeight() * (canvas.getHeight() / image.getHeight()));
 	}
 
 	@Override
 	public void displayInventoryView(Inventory inv) {
-		// TODO Auto-generated method stub
 		this.currentLayout = GUILayouts.INVENTORY;
 	}
 
 	@Override
 	public void displayCharacterManager() {
-		// TODO Auto-generated method stub
 		currentLayout = GUILayouts.PLAYER_MENU;
-
 	}
 
 	@Override
 	public void displayLootManager() {
-		// TODO Auto-generated method stub
 		currentLayout = GUILayouts.LOOT_MANAGER;
-
 	}
 
 }

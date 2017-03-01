@@ -21,7 +21,6 @@ public class Floor1 extends Floor {
 		setPlayer(player);
 		setBattles(new Battle[5]);
 		genBattles();
-		genTiles();
 	}
 	
 	public void genTiles() {

@@ -63,16 +63,15 @@ public class GameEngine {
 
 	public static void updatePlayerPosition(int x, int y) {
 		Coordinates c = game.getPlayer().getCoordinates();
-		// if (!(game.getFloors()[game.getPlayer().getFloorNum() -
-		// 1].getTiles()[c.getX() + x][c.getY()
-		// + y] instanceof Collidable)) {
-		c.setX(c.getX() + x);
-		c.setY(c.getY() + y);
-		// }else{
-		System.out
-				.println("Tile: " + game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[c.getX()][c.getY()]
-						.getClass().getTypeName().substring(6));
-		// }
+		if (((c.getX() + x) >= 0 && (c.getX() + x) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[0].length)
+				&& ((c.getY() + y) >= 0 && (c.getY() + y) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles().length)
+				&& !(game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[c.getY() + y][c.getX()
+						+ x] instanceof Collidable)) {
+			c.setX(c.getX() + x);
+			c.setY(c.getY() + y);
+			System.out.println(c.getX());
+			System.out.println(c.getY());
+		}
 	}
 
 	public static Battle checkForBattle(Floor currentFloor) {

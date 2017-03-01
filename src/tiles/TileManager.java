@@ -116,7 +116,6 @@ public class TileManager {
 				pw.setColor(j, i + (row * TILE_WIDTH), color);
 				//NOTE(andrew): tick up the counters that represent the pixel we are currently at
 				x++;
-				
 			}
 			//NOTE(andrew): again, we need to make sure that this is set to -1 and not 0
 			tileCounter = -1;
