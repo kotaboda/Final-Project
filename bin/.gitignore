@@ -1,11 +1,3 @@
-/BattleView.fxml
-/GeneralView.fxml
-/MainMenuView.fxml
-/PauseView.fxml
-/abilities/
-/abilityInterfaces/
-/application/
-/battleSystem/
 /character/
 /characterEnums/
 /characterInterfaces/
@@ -18,11 +10,9 @@
 /tileinterfaces/
 /tiles/
 /viewInterface/
-<<<<<<< HEAD
-/models/
-/battleSystem/
-/abilities/
-/abilityInterfaces/
-/itemSystem/
-=======
->>>>>>> master
+/fxmls/
+/application/
+/BattleView.fxml
+/GeneralView.fxml
+/MainMenuView.fxml
+/PauseView.fxml

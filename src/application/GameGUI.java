@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
-import character.Player;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
@@ -43,15 +42,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import tiles.FloorMessage;
-import tiles.Tile;
 import tiles.TileManager;
-import tiles.WallMessage;
-import viewInterface.Viewable;
 
-public class GameGUI extends Application implements Viewable {
+public class GameGUI extends Application {
 
 	private Stage primaryStage;
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
@@ -91,7 +85,7 @@ public class GameGUI extends Application implements Viewable {
 	private Canvas canvas;
 
 	public static void main(String[] args) {
-		Font.loadFont((new Object()).getClass().getResourceAsStream("Orbitron-Bold.ttf"), 16);
+//		Font.loadFont((new Object()).getClass().getResourceAsStream("Orbitron-Bold.ttf"), 16);
 		launch();
 	}
 
@@ -111,15 +105,14 @@ public class GameGUI extends Application implements Viewable {
 		}
 	}
 
-	@Override
 	public void displayMainMenu() {
-		FXMLLoader loader = new FXMLLoader();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainMenuView.fxml"));
 
 		loader.setController(this);
 
 		try {
 
-			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
+			Parent p = loader.load();
 			newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -160,7 +153,7 @@ public class GameGUI extends Application implements Viewable {
 
 			});
 			Scene scene = new Scene(p);
-			scene.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
@@ -170,14 +163,13 @@ public class GameGUI extends Application implements Viewable {
 
 	}
 
-	@Override
 	public void displayPauseMenu() {
 		// TODO Auto-generated method stub
 		this.currentLayout = GUILayouts.PAUSE;
-		FXMLLoader loader = new FXMLLoader();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/PauseView.fxml"));
 		loader.setController(this);
 		try {
-			Parent p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
+			Parent p = loader.load();
 
 			exitButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -188,7 +180,7 @@ public class GameGUI extends Application implements Viewable {
 
 			});
 			Scene scene = new Scene(p);
-			String css = this.getClass().getResource("application.css").toExternalForm();
+			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -197,15 +189,14 @@ public class GameGUI extends Application implements Viewable {
 		}
 	}
 
-	@Override
 	public void displayBattleView(Battle b) {
 
 		this.currentLayout = GUILayouts.BATTLE;
-		FXMLLoader loader = new FXMLLoader();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/BattleView.fxml"));
 
 		loader.setController(this);
 		try {
-			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
+			Parent p = loader.load();
 			playerName.setText(TESTINGGAME.getPlayer().name);
 			enemies.setAlignment(Pos.CENTER);
 			ArrayList<Label> enemyNames = new ArrayList<Label>();
@@ -333,7 +324,7 @@ public class GameGUI extends Application implements Viewable {
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
 					.divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
 			Scene scene = new Scene(p);
-			String css = this.getClass().getResource("application.css").toExternalForm();
+			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
 
 			primaryStage.setScene(scene);
@@ -390,14 +381,13 @@ public class GameGUI extends Application implements Viewable {
 		
 	}
 
-	@Override
 	public void displayGeneralView(Floor currentFloor) {
 		this.currentLayout = GUILayouts.GENERAL;
-		FXMLLoader loader = new FXMLLoader();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/GeneralView.fxml"));
 
 		loader.setController(this);
 		try {
-			Parent parent = loader.load(Files.newInputStream(Paths.get("src/GeneralView.fxml")));
+			Parent parent = loader.load();
 			parent.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 				@Override
@@ -512,7 +502,7 @@ public class GameGUI extends Application implements Viewable {
 			// }
 			// }.start();
 			Scene scene = new Scene(parent);
-			String css = this.getClass().getResource("application.css").toExternalForm();
+			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -530,17 +520,14 @@ public class GameGUI extends Application implements Viewable {
 		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()), image.getHeight() * (canvas.getHeight() / image.getHeight()));
 	}
 
-	@Override
 	public void displayInventoryView(Inventory inv) {
 		this.currentLayout = GUILayouts.INVENTORY;
 	}
 
-	@Override
 	public void displayCharacterManager() {
 		currentLayout = GUILayouts.PLAYER_MENU;
 	}
 
-	@Override
 	public void displayLootManager() {
 		currentLayout = GUILayouts.LOOT_MANAGER;
 	}

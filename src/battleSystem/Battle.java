@@ -1,5 +1,6 @@
 package battleSystem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,7 +15,11 @@ import characterInterfaces.Subscribable;
 import itemSystem.Usable;
 import models.Coordinates;
 
-public class Battle implements Subscribable<Battle>{
+public class Battle implements Subscribable<Battle>, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3115042468203904551L;
 	protected Player player;
 	protected Enemy[] enemies;
 	private Coordinates place = new Coordinates(0,0);

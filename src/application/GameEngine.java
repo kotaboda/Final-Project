@@ -93,15 +93,15 @@ public class GameEngine {
 	
 	public static String checkNote() {
 		Player p = GameEngine.getGame().getPlayer();
-		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum()].getTiles()[p.getCoordinates().getX()][p.getCoordinates()
-		                                                                                 				.getY()];
-		if (t instanceof FloorMessage || t instanceof WallMessage) {
-			// retreive the notes at those coordinates in order to display it
-			String message = GameEngine.getGame().getFloors()[p.getFloorNum()].getNotes().get(p.getCoordinates()).getMessage();
-			return message;
-		} else {
+//		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum()].getTiles()[p.getCoordinates().getX()][p.getCoordinates()
+//		                                                                                 				.getY()];
+//		if (t instanceof FloorMessage || t instanceof WallMessage) {
+//			// retreive the notes at those coordinates in order to display it
+//			String message = GameEngine.getGame().getFloors()[p.getFloorNum()].getNotes().get(p.getCoordinates()).getMessage();
+//			return message;
+//		} else {
 			return null;
-		}
+//		}
 	}
 	
 
