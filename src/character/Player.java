@@ -31,6 +31,7 @@ public class Player extends Character {
 	public Player() {
 		super();
 		ABILITIES.add(new PullAnAllNighter());
+		this.stats.put(Stats.INTELLIGIENCE, 100);
 	}
 	
 	public PlayerSummary getPlayerSummary(){

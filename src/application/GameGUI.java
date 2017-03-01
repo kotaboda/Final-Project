@@ -40,15 +40,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import tiles.FloorMessage;
-import tiles.Tile;
 import tiles.TileManager;
-import tiles.WallMessage;
 import viewInterface.Viewable;
 
 public class GameGUI extends Application implements Viewable {
@@ -58,7 +57,7 @@ public class GameGUI extends Application implements Viewable {
 	private final Game TESTINGGAME = GameEngine.getGame();
 	private boolean isPlayersTurn = false;
 	private Object lock = new Object();
-
+	private Parent p;
 	@FXML
 	private Pane rightBattleVBox;
 	@FXML
@@ -120,7 +119,7 @@ public class GameGUI extends Application implements Viewable {
 
 		try {
 
-			Parent p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
+			p = loader.load(Files.newInputStream(Paths.get("src/MainMenuView.fxml")));
 			newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
@@ -178,7 +177,7 @@ public class GameGUI extends Application implements Viewable {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setController(this);
 		try {
-			Parent p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
+			p = loader.load(Files.newInputStream(Paths.get("src/PauseView.fxml")));
 
 			exitButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -206,7 +205,7 @@ public class GameGUI extends Application implements Viewable {
 
 		loader.setController(this);
 		try {
-			Parent p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
+			p = loader.load(Files.newInputStream(Paths.get("src/BattleView.fxml")));
 			playerName.setText(TESTINGGAME.getPlayer().name);
 			enemies.setAlignment(Pos.CENTER);
 			ArrayList<Label> enemyNames = new ArrayList<Label>();
@@ -325,9 +324,7 @@ public class GameGUI extends Application implements Viewable {
 					synchronized (lock) {
 						isPlayersTurn = false;
 						lock.notifyAll();
-						leftActionList.getSelectionModel().clearSelection();
-						middleBattleVBox.getChildren().clear();
-						rightBattleVBox.getChildren().clear();
+						
 					}
 
 				}
@@ -362,18 +359,17 @@ public class GameGUI extends Application implements Viewable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		System.out.println(leftActionList.getSelectionModel().getSelectedIndex());
 		switch (leftActionList.getSelectionModel().getSelectedIndex()) {
 		case 0:
 			// attack
 			battle.setPlayerNextAbility(null);
-			// then set the targets here
+			//NOTE(andrew): targets are set in the enemy onclick method
 			break;
 
 		case 1:
 			// ability
 			battle.setPlayerNextAbility(abilityList.getSelectionModel().getSelectedItem());
-			// then set the targets here
 			break;
 
 		case 2:
@@ -384,7 +380,16 @@ public class GameGUI extends Application implements Viewable {
 		default:
 			break;
 		}
+		Platform.runLater(new Runnable(){
 
+			@Override
+			public void run() {
+				leftActionList.getSelectionModel().clearSelection();
+				middleBattleVBox.getChildren().clear();
+				rightBattleVBox.getChildren().clear();
+			}
+			
+		});
 	}
 	//TODO(dakota): I'm not sure how to do the whole canvas drawing thing so it's just an overlay over the map
 	//or if we just want the messsage to take up the whole screen
@@ -399,8 +404,8 @@ public class GameGUI extends Application implements Viewable {
 
 		loader.setController(this);
 		try {
-			Parent parent = loader.load(Files.newInputStream(Paths.get("src/GeneralView.fxml")));
-			parent.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			p = loader.load(Files.newInputStream(Paths.get("src/GeneralView.fxml")));
+			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 				@Override
 				public void handle(KeyEvent event) {
@@ -428,12 +433,14 @@ public class GameGUI extends Application implements Viewable {
 						}
 						drawToGeneralCanvas(currentFloor);
 						Battle b = GameEngine.checkForBattle(currentFloor);
-						String message = GameEngine.checkNote();
+						//String message = GameEngine.checkNote();
+						//TODO(andrew): add a boolean check here so this only checks when a movement key is pressed
 						if (b != null) {
 							displayBattleView(b);
 							GameEngine.startBattle(b);
-						} else if(message != null) {
-							displayMessageView(message);
+							//FIXME(andrew): commented out until the exceptions are resolved
+//						} else if(message != null) {
+//							displayMessageView(message);
 						}
 					}
 				}
@@ -513,7 +520,7 @@ public class GameGUI extends Application implements Viewable {
 			//
 			// }
 			// }.start();
-			Scene scene = new Scene(parent);
+			Scene scene = new Scene(p);
 			String css = this.getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
 			primaryStage.setScene(scene);
@@ -522,6 +529,28 @@ public class GameGUI extends Application implements Viewable {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void displayEndBattle(Battle b){
+		Player player = b.getPlayer();
+		Enemy[] enemiesArray = b.getEnemies();
+		if(player.getHPProperty().get() > 0){
+			//TODO(andrew): pop a text view displaying loot and exp/level gain stats
+			Text display = new Text(100, 100, "You beat the dudes mango im real prouda you goodjob");
+			System.out.println("Is this working my dude");
+			
+			//TODO(andrew): This is called when they quit out of the 
+			Platform.runLater(new Runnable(){
+				@Override
+				public void run() {
+					((AnchorPane)primaryStage.getScene().getRoot()).getChildren().add(display);
+					displayGeneralView(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+				}
+				
+			});
+		}else{
+			//TODO(andrew): pop a text view displaying "YOU SUCK" or something along those lines.
+		}
 	}
 
 	private void drawToGeneralCanvas(Floor currentFloor) {

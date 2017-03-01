@@ -129,4 +129,8 @@ public class GameEngine {
 		battleService.start();
 	}
 
+	public static void displayEndBattle(Battle b){
+		view.displayEndBattle(b);
+	}
+	
 }

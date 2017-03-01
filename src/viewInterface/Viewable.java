@@ -15,5 +15,5 @@ public interface Viewable {
 	public void displayInventoryView(Inventory inv);
 	public void displayCharacterManager();
 	public void displayLootManager();
-	
+	public void displayEndBattle(Battle b);
 }
