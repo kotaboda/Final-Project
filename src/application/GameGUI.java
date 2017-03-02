@@ -646,8 +646,10 @@ public class GameGUI extends Application {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
+		Image playerImg = new Image(getClass().getResourceAsStream("/hero.jpg"));
 		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()),
 				image.getHeight() * (canvas.getHeight() / image.getHeight()));
+		gc.drawImage(playerImg, (canvas.getWidth()/2) - 16, (canvas.getHeight()/2) - 16, 32, 32);
 
 	}
 
@@ -679,6 +681,9 @@ public class GameGUI extends Application {
 			}
 
 			// TODO Figure out if items are going to have graphic or just text
+			for(int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++){
+				
+			}
 
 			Scene scene = new Scene(p);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
