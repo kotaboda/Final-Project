@@ -1,7 +1,6 @@
 package viewInterface;
 
 import battleSystem.Battle;
-import character.PlayerSummary;
 import floors.Floor;
 import itemSystem.Inventory;
 

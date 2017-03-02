@@ -47,7 +47,7 @@ public abstract class Boss extends Character {
 
 	@Override
 	public String toString() {
-		return "Boss [isDefeated=" + isDefeated + ", name=" + name + ", inv=" + inv + ", hitPoints=" + hitPoints
+		return "Boss [isDefeated=" + isDefeated + ", name=" + NAME + ", inv=" + inv + ", hitPoints=" + hitPoints
 				+ ", energy=" + energy + ", level=" + level + ", floorNum=" + floorNum + "]";
 	}
 }

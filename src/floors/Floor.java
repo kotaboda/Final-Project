@@ -33,6 +33,7 @@ public abstract class Floor implements Paintable, Serializable{
 		return this.tiles;
 	}
 	
+	
 	public void genBattles() {
 		Random xD = new Random();
 		int mapBorderX = getTiles()[0].length - 2;

@@ -8,6 +8,11 @@ import tileinterfaces.Interactable;
 
 public class Chest extends Tile implements Interactable, Collidable, Lootable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6248188691328046026L;
+	
 	private Item[] loot;
 	
 	public Chest(int tileSheetNum){

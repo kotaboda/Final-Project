@@ -9,7 +9,6 @@ import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
-import character.PlayerSummary;
 import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
 import itemSystem.Usable;
@@ -30,6 +29,9 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	private Character playerTarget = null;
 	
 	public Battle(Player player, Enemy...enemies) {
+		if(enemies.length == 0){
+			throw new IllegalArgumentException("Battle must have at least 1 enemy.");
+		}
 		this.enemies = enemies;
 		this.player = player;
 	}
@@ -72,7 +74,6 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				}
 			}
 		}while(battleOngoing);
-		System.out.println(Thread.currentThread().getName());
 		GameEngine.displayEndBattle(this);
 	}
 	

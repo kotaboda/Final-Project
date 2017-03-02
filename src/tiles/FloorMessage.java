@@ -5,8 +5,12 @@ import tileinterfaces.Interactable;
 
 public class FloorMessage extends Tile implements Interactable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 19751879742944256L;
 	//TODO(andrew): set message sometime
-	private String message;
+//	private String message;
 	
 	public FloorMessage(int tileSheetNum) {
 		super(tileSheetNum);

@@ -1,9 +1,13 @@
 package character;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import characterEnums.InventoryAction;
 import characterEnums.ModifiableFields;
 import characterEnums.Stats;
@@ -23,11 +27,11 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	 * 
 	 */
 	private static final long serialVersionUID = -888637062240963044L;
-	public final String name;
+	public final String NAME;
 	protected Inventory inv;
 	protected int hitPoints = 100;
-	protected IntegerProperty hpProperty = new SimpleIntegerProperty();
-	protected IntegerProperty maxHPProperty = new SimpleIntegerProperty();
+	protected transient IntegerProperty hpProperty = new SimpleIntegerProperty(hitPoints);
+	protected transient IntegerProperty maxHPProperty = new SimpleIntegerProperty(hitPoints);
 	protected int energy = 100;
 	protected int level = 1;
 	protected Coordinates coordinates;
@@ -40,6 +44,9 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
 	private int maxHitPoints = 100;
 	private int maxEnergy = 100;
+	protected transient IntegerProperty maxEnergyProperty = new SimpleIntegerProperty(energy);
+	protected transient IntegerProperty energyProperty = new SimpleIntegerProperty(energy);
+
 
 	public Character(String name, int tileSheetNum) {
 		super(tileSheetNum);
@@ -48,7 +55,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		} else if (name.isEmpty()) {
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
-		this.name = name;
+		this.NAME = name;
 		
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
@@ -66,7 +73,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	
 	public Character() {
 		super(1);
-		this.name = "test";
+		this.NAME = "test";
 		floorNum = 1;
 		inv = new Inventory();
 		coordinates = new Coordinates(5,5);
@@ -112,6 +119,12 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	
 	public IntegerProperty getMaxHPProperty(){
 		return maxHPProperty;
+	}
+	public IntegerProperty getMaxEnergyProperty() {
+		return maxEnergyProperty;
+	}
+	public IntegerProperty getEnergyProperty() {
+		return energyProperty;
 	}
 	
 	public int getNumOfCredits(){
@@ -208,8 +221,28 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 
 	@Override
 	public String toString() {
-		return "Character [name=" + name + ", hitPoints=" + hitPoints + ", energy=" + energy + ", level=" + level
+		return "Character [name=" + NAME + ", hitPoints=" + hitPoints + ", energy=" + energy + ", level=" + level
 				+ ", floorNum=" + floorNum + "]";
 	}
+	
+	private void writeObject(ObjectOutputStream out) throws IOException{
+		out.defaultWriteObject();
+		
+	}
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+		in.defaultReadObject();
+		hpProperty = new SimpleIntegerProperty(this.hitPoints);
+		maxHPProperty = new SimpleIntegerProperty(maxHitPoints);
+		energyProperty = new SimpleIntegerProperty(energy);
+		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
