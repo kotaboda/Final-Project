@@ -26,9 +26,13 @@ public abstract class Floor implements Paintable, Serializable{
 	private BossBattle bossBattle;
 	private Battle[] battles;
 	private Player player;
+	protected Coordinates playerStart;
 	private HashMap<Coordinates, Note> notes = new HashMap<>();
 	
-
+	public Coordinates getPlayerStart() {
+		return playerStart;
+	}
+	
 	public Tile[][] getTiles(){
 		return this.tiles;
 	}
@@ -46,7 +50,7 @@ public abstract class Floor implements Paintable, Serializable{
 			do {
 				x = xD.nextInt(mapBorderY)+1;
 				y = xD.nextInt(mapBorderX)+1;
-				if(getTiles()[x][y] instanceof Collidable) {
+				if(getTiles()[x][y] instanceof Collidable && getBoss().getCoordinates() != (new Coordinates(x,y))) {
 					validPlace = true;
 				} else {
 					validPlace = false;

@@ -10,6 +10,7 @@ import character.Player;
 import characterEnums.Stats;
 import enums.GUILayouts;
 import floors.Floor;
+import itemSystem.Inventory;
 import itemSystem.Item;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -45,6 +46,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.Coordinates;
 import tiles.TileManager;
 
 //Setup Character screen fxml
@@ -197,7 +199,8 @@ public class GameGUI extends Application {
 
 				@Override
 				public void handle(MouseEvent event) {
-					displayGeneralView(TESTINGGAME.getFloors()[0]);
+					displayGeneralView();
+
 				}
 
 			});
@@ -272,6 +275,7 @@ public class GameGUI extends Application {
 					}
 
 				});
+
 				enemyHealth.progressProperty()
 						.bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
 				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
@@ -281,6 +285,7 @@ public class GameGUI extends Application {
 					@Override
 					public void handle(MouseEvent event) {
 						b.setPlayerTarget(currentEnemy);
+
 						for (Label name : enemyNames) {
 							name.styleProperty().setValue("");
 						}
@@ -326,24 +331,24 @@ public class GameGUI extends Application {
 							abilityList.getSelectionModel().selectedItemProperty()
 									.addListener(new ChangeListener<Ability>() {
 
-										@Override
-										public void changed(ObservableValue<? extends Ability> observable,
-												Ability oldValue, Ability newValue) {
-											rightBattleVBox.getChildren().clear();
-											if (abilityList.getSelectionModel().getSelectedItem() != null) {
-												Label abilityDescription = new Label(abilityList.getSelectionModel()
-														.getSelectedItem().getDescription());
-												abilityDescription.wrapTextProperty().set(true);
-												rightBattleVBox.getChildren().add(abilityDescription);
-												//
-												if (isPlayersTurn) {
-													submitButton.setDisable(false);
-												}
-												//
-											}
+								@Override
+								public void changed(ObservableValue<? extends Ability> observable, Ability oldValue,
+										Ability newValue) {
+									rightBattleVBox.getChildren().clear();
+									if (abilityList.getSelectionModel().getSelectedItem() != null) {
+										Label abilityDescription = new Label(
+												abilityList.getSelectionModel().getSelectedItem().getDescription());
+										abilityDescription.wrapTextProperty().set(true);
+										rightBattleVBox.getChildren().add(abilityDescription);
+										//
+										if (isPlayersTurn) {
+											submitButton.setDisable(false);
 										}
 										//
-									});
+									}
+								}
+								//
+							});
 							abilityList.getSelectionModel().selectFirst();
 							break;
 						case 2:
@@ -460,7 +465,7 @@ public class GameGUI extends Application {
 	@FXML
 	private Button menuButton;
 
-	public void displayGeneralView(Floor currentFloor) {
+	public void displayGeneralView() {
 		this.currentLayout = GUILayouts.GENERAL;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/GeneralView.fxml"));
 
@@ -494,18 +499,29 @@ public class GameGUI extends Application {
 						default:
 							break;
 						}
-						drawToGeneralCanvas(currentFloor);
-						Battle b = GameEngine.checkForBattle(currentFloor);
-						// String message = GameEngine.checkNote();
-						// TODO(andrew): add a boolean check here so this only
-						// checks when a movement key is pressed
+
+						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+						Battle b = GameEngine
+								.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+						//String message = GameEngine.checkNote();
+						//TODO(andrew): add a boolean check here so this only checks when a movement key is pressed
+						Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
+						System.out.println("Tile: " + TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
+								.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum());
 						if (b != null) {
 							displayBattleView(b);
 							GameEngine.startBattle(b);
-							// FIXME(andrew): commented out until the exceptions
-							// are resolved
-							// } else if(message != null) {
-							// displayMessageView(message);
+							//FIXME(andrew): commented out until the exceptions are resolved
+//						} else if(message != null) {
+//							displayMessageView(message);
+						} else if (TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
+								.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum() == 4) {
+							TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+							TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
+									TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
+											.getX(),
+									TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
+											.getY());
 						}
 					}
 				}
@@ -530,7 +546,7 @@ public class GameGUI extends Application {
 
 			// Drawing testing
 			// GraphicsContext gc = canvas.getGraphicsContext2D();
-			drawToGeneralCanvas(currentFloor);
+			drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 			// WritableImage image =
 			// TileManager.getImageToDraw(currentFloor.getTiles(),
 			// playerSummary.coordinates);
@@ -615,7 +631,7 @@ public class GameGUI extends Application {
 				@Override
 				public void run() {
 					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(display);
-					displayGeneralView(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+					displayGeneralView();
 				}
 
 			});
@@ -632,6 +648,11 @@ public class GameGUI extends Application {
 				currentFloor.getPlayer().getCoordinates());
 		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()),
 				image.getHeight() * (canvas.getHeight() / image.getHeight()));
+
+	}
+
+	public void displayInventoryView(Inventory inv) {
+		this.currentLayout = GUILayouts.INVENTORY;
 	}
 
 	public void displayCharacterManager() {
