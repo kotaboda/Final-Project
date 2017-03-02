@@ -8,7 +8,10 @@ import battleSystem.Battle;
 import battleSystem.BossBattle;
 import character.Boss;
 import character.Enemy;
+import character.Exercise;
+import character.Lab;
 import character.Player;
+import character.Project;
 import drawinterfaces.Paintable;
 import javafx.scene.image.Image;
 import models.Coordinates;
@@ -60,7 +63,18 @@ public abstract class Floor implements Paintable, Serializable{
 			Enemy[] enemies = new Enemy[xD.nextInt(3)+1];
 			for (int j = 0; j < enemies.length; j++) {
 				//TODO Dress up enemy generation here.
-				enemies[j] = new Enemy();
+				int e = xD.nextInt(3);
+				switch(e) {
+				case 0:
+					enemies[j] = new Exercise();
+					break;
+				case 1:
+					enemies[j] = new Lab();
+					break;
+				case 2:
+					enemies[j] = new Project();
+					break;
+				}
 			}
 			getBattles()[i] = new Battle(getPlayer(), enemies);
 			getBattles()[i].getCoordinates().setCoordinates(x, y);

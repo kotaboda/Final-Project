@@ -9,8 +9,10 @@ import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
+import characterEnums.InventoryAction;
 import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
+import itemSystem.Item;
 import itemSystem.Usable;
 import models.Coordinates;
 
@@ -71,6 +73,10 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				}
 				if(allEnemiesDead){
 					battleOngoing = false;
+					for(int j = 0 ; j < enemies.length ; j++) {
+						Item[] loot = enemies[j].getInventoryContents();
+						player.modifyInventory(InventoryAction.GIVE, loot);
+					}
 				}
 			}
 		}while(battleOngoing);

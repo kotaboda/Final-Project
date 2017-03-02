@@ -25,7 +25,7 @@ public class Player extends Character {
 
 	public Player(String name, int tileSheetNum) {
 		super(name, tileSheetNum);
-		// TODO Auto-generated constructor stub
+		ABILITIES.add(new PullAnAllNighter());
 	}
 	
 	public Player() {
