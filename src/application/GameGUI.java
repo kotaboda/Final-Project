@@ -439,10 +439,10 @@ public class GameGUI extends Application {
 					}
 				}
 			});
-			menuButton.setOnAction(new EventHandler<ActionEvent>() {
+			menuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 				@Override
-				public void handle(ActionEvent event) {
+				public void handle(MouseEvent event) {
 					displayPauseMenu();
 				}
 
