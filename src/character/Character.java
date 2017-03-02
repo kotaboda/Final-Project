@@ -56,7 +56,8 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
 		this.NAME = name;
-		
+		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
+		this.energy = stats.get(Stats.STAMINA)*10;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		
