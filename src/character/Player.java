@@ -25,13 +25,21 @@ public class Player extends Character {
 
 	public Player(String name, int tileSheetNum) {
 		super(name, tileSheetNum);
-		// TODO Auto-generated constructor stub
+		ABILITIES.add(new PullAnAllNighter());
+		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
+		this.energy = stats.get(Stats.STAMINA)*10;
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 	}
 	
 	public Player() {
 		super();
 		ABILITIES.add(new PullAnAllNighter());
 		this.stats.put(Stats.INTELLIGIENCE, 100);
+		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
+		this.energy = stats.get(Stats.STAMINA)*10;
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 	}
 	
 
@@ -39,7 +47,6 @@ public class Player extends Character {
 	@Override
 	public int takeDmg(int dmg) {
 		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
-		hitPoints -= dmg;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
 		return dmg;

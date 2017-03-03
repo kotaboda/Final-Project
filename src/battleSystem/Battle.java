@@ -9,8 +9,10 @@ import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
+import characterEnums.InventoryAction;
 import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
+import itemSystem.Item;
 import itemSystem.Usable;
 import models.Coordinates;
 
@@ -23,6 +25,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	protected Enemy[] enemies;
 	private Coordinates place = new Coordinates(0,0);
 	protected ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
+	private boolean isDone = false;
 	private Ability playerNextAbility = null;
 	private Usable playerNextItemUse = null;
 	//TODO(andrew): this might need to be an array or array list
@@ -80,11 +83,16 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				}
 				if(allEnemiesDead){
 					battleOngoing = false;
-					break;
+		//System.out.println(Thread.currentThread().getName());
+					for(int j = 0 ; j < enemies.length ; j++) {
+						Item[] loot = enemies[j].getInventoryContents();
+						player.modifyInventory(InventoryAction.GIVE, loot);
+					}
 				}
+				break;
 			}
 		}while(battleOngoing);
-		//System.out.println(Thread.currentThread().getName());
+		isDone = true;
 		GameEngine.displayEndBattle(this);
 	}
 	
@@ -151,6 +159,11 @@ public class Battle implements Subscribable<Battle>, Serializable{
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public boolean isDone() {
+		// TODO Auto-generated method stub
+		return isDone;
 	}
 	
 }

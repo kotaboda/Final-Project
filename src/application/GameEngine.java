@@ -77,7 +77,7 @@ public class GameEngine {
 		Battle battle = null;
 		for (int i = 0; i < battlesC.length; i++) {
 			Coordinates currentC = battlesC[i].getCoordinates();
-			if (playerC.equals(currentC)) {
+			if (playerC.equals(currentC) && !battlesC[i].isDone()) {
 				battle = battlesC[i];
 			}
 		}
@@ -100,8 +100,6 @@ public class GameEngine {
 	
 
 	public static void playerBattleInput(Battle battle) {
-		
-
 		view.waitForPlayerSelection(battle);
 	}
 

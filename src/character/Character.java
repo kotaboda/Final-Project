@@ -55,8 +55,12 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		} else if (name.isEmpty()) {
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
+		this.stats.put(Stats.MOTIVATION, 1);
+		this.stats.put(Stats.INTELLIGIENCE, 1);
+		this.stats.put(Stats.WIT, 1);
+		this.stats.put(Stats.ENDURANCE, 1);
+		this.stats.put(Stats.STAMINA, 1);
 		this.NAME = name;
-		
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		
@@ -225,14 +229,13 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 				+ ", floorNum=" + floorNum + "]";
 	}
 	
-	private void writeObject(ObjectOutputStream out) throws IOException{
+	private void writeObject(ObjectOutputStream out) throws IOException{		
 		out.defaultWriteObject();
-		
 	}
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
-		in.defaultReadObject();
-		hpProperty = new SimpleIntegerProperty(this.hitPoints);
-		maxHPProperty = new SimpleIntegerProperty(maxHitPoints);
+		in.defaultReadObject();		
+		hpProperty = new SimpleIntegerProperty(hitPoints);
+		maxHPProperty = new SimpleIntegerProperty(hitPoints);
 		energyProperty = new SimpleIntegerProperty(energy);
 		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
 	}
