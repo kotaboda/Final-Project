@@ -81,7 +81,9 @@ public class GameEngine {
 				battle = battlesC[i];
 			}
 		}
-
+		if(battle != null && battle.isCompleted()){
+			battle = null;
+		}
 		return battle;
 	}
 	

@@ -28,6 +28,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	private boolean isDone = false;
 	private Ability playerNextAbility = null;
 	private Usable playerNextItemUse = null;
+	private boolean isCompleted = false;
 	//TODO(andrew): this might need to be an array or array list
 	private Character playerTarget = null;
 	
@@ -40,7 +41,6 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	}
 	
 	public void start() {
-		//NOTE(andrew): add an listener interface that will take a battle as a parameter in the update method, and then change variables up at the top
 		Character[] turnList = createTurnList();
 		
 		boolean battleOngoing = true;
@@ -88,12 +88,18 @@ public class Battle implements Subscribable<Battle>, Serializable{
 						Item[] loot = enemies[j].getInventoryContents();
 						player.modifyInventory(InventoryAction.GIVE, loot);
 					}
+					break;
 				}
-				break;
+				
 			}
 		}while(battleOngoing);
-		isDone = true;
+		//System.out.println(Thread.currentThread().getName());
+		isCompleted = true;
 		GameEngine.displayEndBattle(this);
+	}
+	
+	public boolean isCompleted(){
+		return isCompleted;
 	}
 	
 	public Enemy[] getEnemies() {

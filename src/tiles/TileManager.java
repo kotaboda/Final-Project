@@ -8,14 +8,11 @@ import javafx.scene.paint.Color;
 import models.Coordinates;
 
 public class TileManager {
-	//NOTE(andrew): This whole class is subject to change, mostly just test code right now
-
 	//NOTE(andrew): This number is the bound for how many tiles are drawn squared
 		//This number must be > 0 and <= tiles.length
 	private final static byte TILES_WIDE_TO_DRAW = 11;
 	private final static byte TILES_HIGH_TO_DRAW = 11;
 	private final static byte TILE_WIDTH = 32;
-	//TODO(andrew): add in the file path for the tile sheet when we have it
 	public static Image tileSheet = new Image((new Object()).getClass().getResourceAsStream("/images/tileset.png"));
 	private final static int TILESHEET_TILES_WIDE = (int)tileSheet.getWidth() / TILE_WIDTH;
 	
