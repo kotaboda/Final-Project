@@ -7,6 +7,7 @@ import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
 import character.Player;
+import characterEnums.InventoryAction;
 import characterEnums.Stats;
 import enums.GUILayouts;
 import floors.Floor;
@@ -21,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -49,10 +51,9 @@ import javafx.stage.Stage;
 import models.Coordinates;
 import tiles.TileManager;
 
-//Setup Character screen fxml
-//Wire button for pauseView
 public class GameGUI extends Application {
 
+	//Add log area for Battle View
 	private Stage primaryStage;
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private Game TESTINGGAME = GameEngine.getGame();
@@ -78,8 +79,6 @@ public class GameGUI extends Application {
 	private GridPane statGrid;
 
 	public static void main(String[] args) {
-		// Font.loadFont((new
-		// Object()).getClass().getResourceAsStream("Orbitron-Bold.ttf"), 16);
 		launch();
 	}
 
@@ -104,7 +103,7 @@ public class GameGUI extends Application {
 	private Button newGameButton;
 	@FXML
 	private Button loadGameButton;
-	
+
 	public void displayMainMenu() {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainMenuView.fxml"));
 
@@ -167,7 +166,19 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-
+			p.setOnKeyPressed(new EventHandler<KeyEvent>(){
+				@Override
+				public void handle(KeyEvent event) {
+					KeyCode k = event.getCode();
+					switch(k){
+					case ESCAPE:
+						displayGeneralView();
+						break;
+					default:
+						break;
+					}
+				}
+			});
 			mainMenuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 				@Override
@@ -248,9 +259,12 @@ public class GameGUI extends Application {
 				Label enemyName = new Label(currentEnemy.NAME);
 				enemyNames.add(enemyName);
 				ProgressBar enemyHealth = new ProgressBar();
+				enemyHealth.progressProperty()
+				.bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
 				Group child = new Group();
+				enemies.getChildren().add(child);
 				enemyHealth.progressProperty().addListener(new ChangeListener<Number>() {
-
+					
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 							Number newValue) {
@@ -264,7 +278,6 @@ public class GameGUI extends Application {
 									try {
 										n = enemies.getChildren().get(newSelection);
 									} catch (IndexOutOfBoundsException e) {
-
 									}
 									if (n != null) {
 										n.getOnMouseClicked().handle(null);
@@ -273,14 +286,10 @@ public class GameGUI extends Application {
 							}
 						});
 					}
-
+					
 				});
-
-				enemyHealth.progressProperty()
-						.bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
 				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
 				child.getChildren().add(mainContainer);
-				enemies.getChildren().add(child);
 				child.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
@@ -331,24 +340,24 @@ public class GameGUI extends Application {
 							abilityList.getSelectionModel().selectedItemProperty()
 									.addListener(new ChangeListener<Ability>() {
 
-								@Override
-								public void changed(ObservableValue<? extends Ability> observable, Ability oldValue,
-										Ability newValue) {
-									rightBattleVBox.getChildren().clear();
-									if (abilityList.getSelectionModel().getSelectedItem() != null) {
-										Label abilityDescription = new Label(
-												abilityList.getSelectionModel().getSelectedItem().getDescription());
-										abilityDescription.wrapTextProperty().set(true);
-										rightBattleVBox.getChildren().add(abilityDescription);
-										//
-										if (isPlayersTurn) {
-											submitButton.setDisable(false);
+										@Override
+										public void changed(ObservableValue<? extends Ability> observable,
+												Ability oldValue, Ability newValue) {
+											rightBattleVBox.getChildren().clear();
+											if (abilityList.getSelectionModel().getSelectedItem() != null) {
+												Label abilityDescription = new Label(abilityList.getSelectionModel()
+														.getSelectedItem().getDescription());
+												abilityDescription.wrapTextProperty().set(true);
+												rightBattleVBox.getChildren().add(abilityDescription);
+												//
+												if (isPlayersTurn) {
+													submitButton.setDisable(false);
+												}
+												//
+											}
 										}
 										//
-									}
-								}
-								//
-							});
+									});
 							abilityList.getSelectionModel().selectFirst();
 							break;
 						case 2:
@@ -503,17 +512,19 @@ public class GameGUI extends Application {
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 						Battle b = GameEngine
 								.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
-						//String message = GameEngine.checkNote();
-						//TODO(andrew): add a boolean check here so this only checks when a movement key is pressed
+						// String message = GameEngine.checkNote();
+						// TODO(andrew): add a boolean check here so this only
+						// checks when a movement key is pressed
 						Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
 						System.out.println("Tile: " + TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 								.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum());
 						if (b != null) {
 							displayBattleView(b);
 							GameEngine.startBattle(b);
-							//FIXME(andrew): commented out until the exceptions are resolved
-//						} else if(message != null) {
-//							displayMessageView(message);
+							// FIXME(andrew): commented out until the exceptions
+							// are resolved
+							// } else if(message != null) {
+							// displayMessageView(message);
 						} else if (TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 								.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum() == 4) {
 							TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
@@ -620,7 +631,7 @@ public class GameGUI extends Application {
 
 	public void displayEndBattle(Battle b) {
 		Player player = b.getPlayer();
-//		Enemy[] enemiesArray = b.getEnemies();
+		// Enemy[] enemiesArray = b.getEnemies();
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
@@ -649,7 +660,7 @@ public class GameGUI extends Application {
 		Image playerImg = new Image(getClass().getResourceAsStream("/hero.jpg"));
 		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()),
 				image.getHeight() * (canvas.getHeight() / image.getHeight()));
-		gc.drawImage(playerImg, (canvas.getWidth()/2) - 16, (canvas.getHeight()/2) - 16, 32, 32);
+		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16, (canvas.getHeight() / 2) - 16, 32, 32);
 
 	}
 
@@ -664,6 +675,21 @@ public class GameGUI extends Application {
 
 		try {
 			p = loader.load();
+			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+				@Override
+				public void handle(KeyEvent event) {
+					KeyCode k = event.getCode();
+					switch (k) {
+					case ESCAPE:
+						displayPauseMenu();
+						break;
+					default:
+						break;
+					}
+				}
+
+			});
 
 			exitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				@Override
@@ -680,9 +706,11 @@ public class GameGUI extends Application {
 				statGrid.addRow(i, stat, statNum);
 			}
 
-			// TODO Figure out if items are going to have graphic or just text
-			for(int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++){
-				
+			for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
+				Label item = new Label(TESTINGGAME.getPlayer().getInventoryContents()[i].toString() + ": "
+						+ TESTINGGAME.getPlayer().getInventoryContents()[i].getDescription());
+				GridPane.setHalignment(item, HPos.CENTER);
+				inventoryGrid.addRow(i, item);
 			}
 
 			Scene scene = new Scene(p);

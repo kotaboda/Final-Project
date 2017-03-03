@@ -25,6 +25,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	protected Enemy[] enemies;
 	private Coordinates place = new Coordinates(0,0);
 	protected ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
+	private boolean isDone = false;
 	private Ability playerNextAbility = null;
 	private Usable playerNextItemUse = null;
 	//TODO(andrew): this might need to be an array or array list
@@ -80,6 +81,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				}
 			}
 		}while(battleOngoing);
+		isDone = true;
 		GameEngine.displayEndBattle(this);
 	}
 	
@@ -141,6 +143,11 @@ public class Battle implements Subscribable<Battle>, Serializable{
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public boolean isDone() {
+		// TODO Auto-generated method stub
+		return isDone;
 	}
 	
 }

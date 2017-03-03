@@ -39,7 +39,6 @@ public class Player extends Character {
 	@Override
 	public int takeDmg(int dmg) {
 		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
-		hitPoints -= dmg;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
 		return dmg;

@@ -18,5 +18,6 @@ public class Lab extends Enemy {
 		this.stats.put(Stats.WIT, 11);
 		this.stats.put(Stats.ENDURANCE, 11);
 		this.stats.put(Stats.STAMINA, 10);
+	
 	}
 }

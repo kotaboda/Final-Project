@@ -53,10 +53,10 @@ public abstract class Floor implements Paintable, Serializable{
 			do {
 				x = xD.nextInt(mapBorderY)+1;
 				y = xD.nextInt(mapBorderX)+1;
-				if(getTiles()[x][y] instanceof Collidable && getBoss().getCoordinates() != (new Coordinates(x,y))) {
-					validPlace = true;
-				} else {
+				if(getTiles()[x][y] instanceof Collidable && getBoss().getCoordinates().equals(new Coordinates(x,y))) {
 					validPlace = false;
+				} else {
+					validPlace = true;
 				}
 			}while(!validPlace);
 			
@@ -79,14 +79,6 @@ public abstract class Floor implements Paintable, Serializable{
 			getBattles()[i] = new Battle(getPlayer(), enemies);
 			getBattles()[i].getCoordinates().setCoordinates(x, y);
 		}
-	}
-
-	public void startBattle(Enemy e, Player p){
-		
-	}
-	
-	public void startBossBattle(Player p){
-		
 	}
 	
 	public Boss getBoss() {
