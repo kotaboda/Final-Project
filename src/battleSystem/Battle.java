@@ -83,7 +83,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				}
 				if(allEnemiesDead){
 					battleOngoing = false;
-		//System.out.println(Thread.currentThread().getName());
+					//System.out.println(Thread.currentThread().getName());
 					for(int j = 0 ; j < enemies.length ; j++) {
 						Item[] loot = enemies[j].getInventoryContents();
 						player.modifyInventory(InventoryAction.GIVE, loot);

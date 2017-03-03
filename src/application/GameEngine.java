@@ -9,11 +9,14 @@ import java.nio.file.StandardOpenOption;
 
 import battleSystem.Battle;
 import character.Player;
+import characterEnums.Direction;
 import floors.Floor;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import models.Coordinates;
 import tileinterfaces.Collidable;
+import tileinterfaces.Interactable;
+import tiles.Tile;
 
 public class GameEngine {
 	private static GameGUI view;
@@ -60,7 +63,23 @@ public class GameEngine {
 		return game;
 	}
 
-	public static void updatePlayerPosition(int x, int y) {
+	public static void updatePlayerPosition(Direction direction) {
+		int x = 0;
+		int y = 0;
+		switch(direction){
+		case UP:
+			y = -1;
+			break;
+		case RIGHT:
+			x = 1;
+			break;
+		case DOWN:
+			y = 1;
+			break;
+		case LEFT:
+			x = -1;
+			break;
+		}
 		Coordinates c = game.getPlayer().getCoordinates();
 		if (((c.getX() + x)	 >= 0 && (c.getX() + x) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[0].length)
 				&& ((c.getY() + y) >= 0 && (c.getY() + y) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles().length)
@@ -68,7 +87,9 @@ public class GameEngine {
 						+ x] instanceof Collidable)) {
 			c.setX(c.getX() + x);
 			c.setY(c.getY() + y);
+			
 		}
+		game.getPlayer().setDirectionFacing(direction);
 	}
 
 	public static Battle checkForBattle(Floor currentFloor) {
@@ -88,16 +109,32 @@ public class GameEngine {
 	}
 	
 	public static String checkNote() {
-//		Player p = GameEngine.getGame().getPlayer();
-//		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum()].getTiles()[p.getCoordinates().getX()][p.getCoordinates()
-//		                                                                                 				.getY()];
-//		if (t instanceof FloorMessage || t instanceof WallMessage) {
-//			// retreive the notes at those coordinates in order to display it
-//			String message = GameEngine.getGame().getFloors()[p.getFloorNum()].getNotes().get(p.getCoordinates()).getMessage();
-//			return message;
-//		} else {
-			return null;
-//		}
+		Player p = GameEngine.getGame().getPlayer();
+		Direction d = p.getDirectionFacing();
+		int x = 0;
+		int y = 0;
+		switch(d){
+		case UP:
+			y = -1;
+			break;
+		case RIGHT:
+			x = 1;
+			break;
+		case DOWN:
+			y = 1;
+			break;
+		case LEFT:
+			x = -1;
+			break;
+		}
+		
+		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
+		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
+		if (t instanceof Interactable) {
+			// retreive the notes at those coordinates in order to display it
+			view.displayMessage(((Interactable) t));
+		}
+		return null;
 	}
 	
 

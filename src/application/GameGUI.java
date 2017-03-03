@@ -7,7 +7,7 @@ import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
 import character.Player;
-import characterEnums.InventoryAction;
+import characterEnums.Direction;
 import characterEnums.Stats;
 import enums.GUILayouts;
 import floors.Floor;
@@ -47,9 +47,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Coordinates;
+import tileinterfaces.Interactable;
 import tiles.TileManager;
 
 public class GameGUI extends Application {
@@ -62,6 +62,13 @@ public class GameGUI extends Application {
 	private Object lock = new Object();
 	private Parent p;
 	private TextArea displayText = new TextArea("");
+	{
+		displayText.setId("displayText");
+		//displayText.setMouseTransparent(true);
+		displayText.setWrapText(true);
+		displayText.setFocusTraversable(false);
+		displayText.setEditable(false);
+	}
 	
 
 	@FXML
@@ -406,7 +413,7 @@ public class GameGUI extends Application {
 			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
-					.divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
+					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
 			Scene scene = new Scene(p);
 			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
@@ -490,16 +497,23 @@ public class GameGUI extends Application {
 
 						switch (keyEvent) {
 						case W:
-							GameEngine.updatePlayerPosition(0, -1);
+							GameEngine.updatePlayerPosition(Direction.UP);
 							break;
 						case S:
-							GameEngine.updatePlayerPosition(0, 1);
+							GameEngine.updatePlayerPosition(Direction.DOWN);
 							break;
 						case A:
-							GameEngine.updatePlayerPosition(-1, 0);
+							GameEngine.updatePlayerPosition(Direction.LEFT);
 							break;
 						case D:
-							GameEngine.updatePlayerPosition(1, 0);
+							GameEngine.updatePlayerPosition(Direction.RIGHT);
+							break;
+						case E:
+							if(((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+							}else{
+								GameEngine.checkNote();
+							}
 							break;
 						case ESCAPE:
 							displayPauseMenu();
@@ -627,17 +641,36 @@ public class GameGUI extends Application {
 
 	}
 
+	public void displayMessage(Interactable i){
+		displayText.setText(i.getMessage());
+		
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				
+				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+				
+				//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
+					//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
+					//event. Using this filter allows us to read the keycode before it is eaten up.
+				p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
+				    	((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+				    }
+				});
+			}
+
+		});
+	}
+	
 	public void displayEndBattle(Battle b) {
 		Player player = b.getPlayer();
 		// Enemy[] enemiesArray = b.getEnemies();
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
-			displayText = new TextArea("You beat the dudes mango im real prouda you goodjob");
-			displayText.setStyle("-fx-color: rgb(0,228,228)");
-			displayText.setMouseTransparent(true);
-			displayText.setFocusTraversable(false);
-			displayText.setEditable(false);
+			displayText.setText("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+			
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -658,6 +691,24 @@ public class GameGUI extends Application {
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
+			displayText.setText("You real bad at this videogame thign");
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					
+					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+					
+					//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
+						//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
+						//event. Using this filter allows us to read the keycode before it is eaten up.
+					p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+					    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
+					        displayMainMenu();
+					    }
+					});
+				}
+
+			});
 		}
 	}
 

@@ -94,8 +94,14 @@
 
 /*NOTE(andrew): I suck at css but heres my attempt at styling displayed messages */
 #displayText {
-	-fx-background-color: rgb(0,228,228);
+	-fx-control-inner-background: rgb(228,228,228);
 	-fx-border-radius: 5px;
 	-fx-border-color: rgb(0, 0, 0);
 	-fx-border-width: 1px;
+	-fx-font-family: "Orbitron-Bold";
+	-fx-border-insets: 5px;
+	-fx-max-width: 500px;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	-fx-text-wrap: true;
 }
