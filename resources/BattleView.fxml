@@ -19,12 +19,6 @@
 <AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="500.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <top>
-            <HBox fx:id="enemies" prefHeight="100.0" prefWidth="495.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
-               <children>
-               </children>
-            </HBox>
-         </top>
          <bottom>
             <VBox prefHeight="107.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
                <children>
@@ -69,6 +63,14 @@
                </children>
             </FlowPane>
          </center>
+         <top>
+            <HBox prefHeight="100.0" prefWidth="505.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="battleLogVBox" prefHeight="100.0" prefWidth="135.0" />
+                  <HBox fx:id="enemies" prefHeight="100.0" prefWidth="365.0" />
+               </children>
+            </HBox>
+         </top>
       </BorderPane>
    </children>
 </AnchorPane>

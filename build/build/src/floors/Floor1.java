@@ -9,6 +9,11 @@ import tiles.TileManager;
 
 public class Floor1 extends Floor {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1760612558001013811L;
+
 	public Floor1(Player player) {
 		genTiles();
 		setBoss(new Boss(){
@@ -19,7 +24,9 @@ public class Floor1 extends Floor {
 			private static final long serialVersionUID = 1L;
 			
 		});
+		getBoss().getCoordinates().setCoordinates(9, 1);
 		setPlayer(player);
+		getPlayer().getCoordinates().setCoordinates(9, 12);
 		setBattles(new Battle[5]);
 		genBattles();
 
@@ -53,12 +60,11 @@ public class Floor1 extends Floor {
 				{58, 5, 5, 5, 5, 5, 5, 5, 5, 5,59},
 				{48,53,53,53,53,53,53,53,53,53,49}
 		};
-		TileManager tileMan= new TileManager();
 		this.tiles = new Tile[tileRefs.length][tileRefs[0].length];
 		
 		for(int i = 0 ; i < tileRefs.length ; i++) {
 			for(int j = 0 ; j < tileRefs[i].length ; j++) {
-				this.tiles[i][j] = tileMan.createTile(tileRefs[i][j]);
+				this.tiles[i][j] = TileManager.createTile(tileRefs[i][j]);
 			}
 		}
 	}

@@ -20,4 +20,9 @@ public abstract class Item implements Serializable{
 	public String toString() {
 		return name;
 	}
+
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return description;
+	}
 }

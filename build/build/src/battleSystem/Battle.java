@@ -9,9 +9,10 @@ import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
-import character.PlayerSummary;
+import characterEnums.InventoryAction;
 import characterInterfaces.Listener;
 import characterInterfaces.Subscribable;
+import itemSystem.Item;
 import itemSystem.Usable;
 import models.Coordinates;
 
@@ -24,12 +25,16 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	protected Enemy[] enemies;
 	private Coordinates place = new Coordinates(0,0);
 	protected ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
+	private boolean isDone = false;
 	private Ability playerNextAbility = null;
 	private Usable playerNextItemUse = null;
 	//TODO(andrew): this might need to be an array or array list
 	private Character playerTarget = null;
 	
 	public Battle(Player player, Enemy...enemies) {
+		if(enemies.length == 0){
+			throw new IllegalArgumentException("Battle must have at least 1 enemy.");
+		}
 		this.enemies = enemies;
 		this.player = player;
 	}
@@ -37,11 +42,14 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	public void start() {
 		//TODO(andrew): loop based on turn list, and get data using a Listener interface talking to the game engine or GUI, then use that data to do the battle
 		//NOTE(andrew): add an listener interface that will take a battle as a parameter in the update method, and then change variables up at the top
+		//TODO(andrew): the createTurnList() method is probably not working correctly, it needs to not put dead enemies into the 
 		Character[] turnList = createTurnList();
 		
 		boolean battleOngoing = true;
+		boolean allEnemiesDead = false;
 		do {
 			for(int i = 0 ; i < turnList.length ; i++) {
+				allEnemiesDead = true;
 				if(turnList[i] instanceof Player) {
 					GameEngine.playerBattleInput(this);
 					if(playerNextAbility != null){
@@ -56,9 +64,25 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				} else {
 					player.takeDmg(turnList[i].attack());
 				}
-				
+				if(player.getHPProperty().get() <= 0){
+					battleOngoing = false;
+				}
+				for(int j = 0; j < enemies.length; j++){
+					if(enemies[j].getHPProperty().get() > 0){
+						allEnemiesDead = false;
+					}
+				}
+				if(allEnemiesDead){
+					battleOngoing = false;
+					for(int j = 0 ; j < enemies.length ; j++) {
+						Item[] loot = enemies[j].getInventoryContents();
+						player.modifyInventory(InventoryAction.GIVE, loot);
+					}
+				}
 			}
 		}while(battleOngoing);
+		isDone = true;
+		GameEngine.displayEndBattle(this);
 	}
 	
 	public Enemy[] getEnemies() {
@@ -117,8 +141,13 @@ public class Battle implements Subscribable<Battle>, Serializable{
 		}
 	}
 
-	public PlayerSummary getPlayerSummary() {
-		return new PlayerSummary(player);
+	public Player getPlayer() {
+		return player;
+	}
+
+	public boolean isDone() {
+		// TODO Auto-generated method stub
+		return isDone;
 	}
 	
 }

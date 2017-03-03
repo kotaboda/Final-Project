@@ -10,8 +10,8 @@ import character.Character;
 import character.Enemy;
 import character.Player;
 import characterEnums.InventoryAction;
-import characterInterfaces.Listener;
-import characterInterfaces.Subscribable;
+import publisherSubscriberInterfaces.Listener;
+import publisherSubscriberInterfaces.Subscribable;
 import itemSystem.Item;
 import itemSystem.Usable;
 import models.Coordinates;
@@ -28,6 +28,8 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	private boolean isDone = false;
 	private Ability playerNextAbility = null;
 	private Usable playerNextItemUse = null;
+	private String loggedAction = null;
+
 	//TODO(andrew): this might need to be an array or array list
 	private Character playerTarget = null;
 	
@@ -39,6 +41,10 @@ public class Battle implements Subscribable<Battle>, Serializable{
 		this.player = player;
 	}
 	
+	public void setPlayerNextItemUse(Usable playerNextItemUse) {
+		this.playerNextItemUse = playerNextItemUse;
+		this.playerNextAbility = null;
+	}
 	public void start() {
 		//TODO(andrew): loop based on turn list, and get data using a Listener interface talking to the game engine or GUI, then use that data to do the battle
 		//NOTE(andrew): add an listener interface that will take a battle as a parameter in the update method, and then change variables up at the top
@@ -54,12 +60,18 @@ public class Battle implements Subscribable<Battle>, Serializable{
 					GameEngine.playerBattleInput(this);
 					if(playerNextAbility != null){
 						player.ability(playerNextAbility, playerTarget);
+						loggedAction = player.NAME + ": Used " + playerNextAbility;
+						notifySubscribers();
 					}else if(playerNextItemUse != null){
 						//TODO(andrew): this method will take playerTarget, which needs to be possible to be the player itself, so in the GameGui class we need
 							//to allow selection of the player itself.
-						playerNextItemUse.use(playerTarget);
+						playerNextItemUse.use(turnList[i]);
+						loggedAction = player.NAME + ": Used " + ((Item)playerNextItemUse);
+						notifySubscribers();
 					}else if(playerTarget != null){
 						playerTarget.takeDmg(player.attack());
+						loggedAction = player.NAME + ": Attacked " + playerTarget.NAME;
+						notifySubscribers();
 					}
 				} else {
 					player.takeDmg(turnList[i].attack());
@@ -99,6 +111,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	
 	public void setPlayerNextAbility(Ability playerNextAbility) {
 		this.playerNextAbility = playerNextAbility;
+		this.playerNextItemUse = null;
 	}
 
 	public void setPlayerTarget(Character playerTarget) {
@@ -121,8 +134,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	@Override
 	public void addSubscriber(Listener<Battle> sub) {
 		if(sub != null) {
-			sub.update(null);
-			//TODO not sure why listener is needed, if someone else wants to modify this?
+			sub.update();
 			subscribers.add(sub);
 		}
 	}
@@ -137,7 +149,7 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	@Override
 	public void notifySubscribers() {
 		for(Listener<Battle> sub : subscribers) {
-			sub.update(null);
+			sub.update();
 		}
 	}
 
@@ -148,6 +160,10 @@ public class Battle implements Subscribable<Battle>, Serializable{
 	public boolean isDone() {
 		// TODO Auto-generated method stub
 		return isDone;
+	}
+
+	public String getLoggedAction() {
+		return loggedAction;
 	}
 	
 }

@@ -36,7 +36,8 @@ public class Player extends Character {
 		super();
 		ABILITIES.add(new PullAnAllNighter());
 		this.stats.put(Stats.INTELLIGIENCE, 100);
-		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
+		this.stats.put(Stats.ENDURANCE, 5);
+		this.hitPoints = stats.get(Stats.MOTIVATION)*20;
 		this.energy = stats.get(Stats.STAMINA)*10;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
