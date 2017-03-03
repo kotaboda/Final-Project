@@ -7,6 +7,7 @@ import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Enemy;
 import character.Player;
+import characterEnums.Direction;
 import characterEnums.Stats;
 import enums.GUILayouts;
 import floors.Floor;
@@ -34,6 +35,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -41,6 +43,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -48,6 +51,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
+import tileinterfaces.Interactable;
 import tiles.TileManager;
 
 public class GameGUI extends Application {
@@ -58,6 +62,15 @@ public class GameGUI extends Application {
 	private boolean isPlayersTurn = false;
 	private Object lock = new Object();
 	private Parent p;
+	private TextArea displayText = new TextArea("");
+	{
+		displayText.setId("displayText");
+		//displayText.setMouseTransparent(true);
+		displayText.setWrapText(true);
+		displayText.setFocusTraversable(false);
+		displayText.setEditable(false);
+	}
+	
 
 	@FXML
 	private Button exitButton;
@@ -439,7 +452,7 @@ public class GameGUI extends Application {
 			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
-					.divide(TESTINGGAME.getPlayer().getHPProperty().doubleValue()));
+					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
 			Scene scene = new Scene(p);
 			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
@@ -451,10 +464,6 @@ public class GameGUI extends Application {
 		}
 	}
 
-	// TODO(andrew): these are for an example of something that could be done to
-	// wait for the submit button to be clicked. Could also be accomplished by
-	// getting the
-	// battle loop thread to pause somehow, not entirely sure how.
 
 	public void waitForPlayerSelection(Battle battle) {
 		isPlayersTurn = true;
@@ -527,16 +536,23 @@ public class GameGUI extends Application {
 
 						switch (keyEvent) {
 						case W:
-							GameEngine.updatePlayerPosition(0, -1);
+							GameEngine.updatePlayerPosition(Direction.UP);
 							break;
 						case S:
-							GameEngine.updatePlayerPosition(0, 1);
+							GameEngine.updatePlayerPosition(Direction.DOWN);
 							break;
 						case A:
-							GameEngine.updatePlayerPosition(-1, 0);
+							GameEngine.updatePlayerPosition(Direction.LEFT);
 							break;
 						case D:
-							GameEngine.updatePlayerPosition(1, 0);
+							GameEngine.updatePlayerPosition(Direction.RIGHT);
+							break;
+						case E:
+							if(((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+							}else{
+								GameEngine.checkNote();
+							}
 							break;
 						case ESCAPE:
 							displayPauseMenu();
@@ -544,31 +560,30 @@ public class GameGUI extends Application {
 						default:
 							break;
 						}
-
-						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
-						Battle b = GameEngine
-								.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
-						// String message = GameEngine.checkNote();
-						// TODO(andrew): add a boolean check here so this only
-						// checks when a movement key is pressed
-						Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
-						System.out.println("Tile: " + TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
-								.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum());
-						if (b != null) {
-							displayBattleView(b);
-							GameEngine.startBattle(b);
-							// FIXME(andrew): commented out until the exceptions
-							// are resolved
-							// } else if(message != null) {
-							// displayMessageView(message);
-						} else if (TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
-								.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum() == 4) {
-							TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
-							TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
-									TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
-											.getX(),
-									TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
-											.getY());
+						//NOTE(andrew): added this if statement to ensure that this code only runs when it needs to.
+						if(keyEvent.equals(KeyCode.W) || keyEvent.equals(KeyCode.A) || keyEvent.equals(KeyCode.S) || keyEvent.equals(KeyCode.D)){
+							drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+							Battle b = GameEngine
+									.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+							//String message = GameEngine.checkNote();
+							Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
+							System.out.println("Tile: " + TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
+									.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum());
+							if (b != null) {
+								displayBattleView(b);
+								GameEngine.startBattle(b);
+								//FIXME(andrew): commented out until the exceptions are resolved
+	//						} else if(message != null) {
+	//							displayMessageView(message);
+							} else if (TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
+									.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum() == 4) {
+								TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+								TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
+										TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
+												.getX(),
+										TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1].getPlayerStart()
+												.getY());
+							}
 						}
 					}
 				}
@@ -666,57 +681,74 @@ public class GameGUI extends Application {
 
 	}
 
+	public void displayMessage(Interactable i){
+		displayText.setText(i.getMessage());
+		
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				
+				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+				
+				//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
+					//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
+					//event. Using this filter allows us to read the keycode before it is eaten up.
+				p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
+				    	((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+				    }
+				});
+			}
+
+		});
+	}
+	
 	public void displayEndBattle(Battle b) {
 		Player player = b.getPlayer();
 		// Enemy[] enemiesArray = b.getEnemies();
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
-//			Text display = new Text(100, 100, "You beat the dudes mango im real prouda you goodjob");
-
-			// TODO(andrew): This is called when they quit out of the
+			displayText.setText("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+			
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					//
-					displayGeneralView();
-					//
-					// new Service<Void>() {
-					// @Override
-					// protected Task<Void> createTask() {
-					// return new Task<Void>() {
-					// @Override
-					// protected Void call() throws Exception {
-					// Platform.runLater(new Runnable() {
-					// @Override
-					// public void run() {
-					// ((AnchorPane)
-					// primaryStage.getScene().getRoot()).getChildren().add(display);
-					// }
-					// });
-					// try {
-					// Thread.sleep(5000L);
-					// } catch (InterruptedException e) {
-					// e.printStackTrace();
-					// }
-					//
-					// Platform.runLater(new Runnable() {
-					// @Override
-					// public void run() {
-					// displayGeneralView();
-					// }
-					// });
-					// return null;
-					// }
-					// };
-					// }
-					// }.start();
+					
+					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+					
+					//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
+						//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
+						//event. Using this filter allows us to read the keycode before it is eaten up.
+					p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+					    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
+					        displayGeneralView();
+					    }
+					});
 				}
 
 			});
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
+			displayText.setText("You real bad at this videogame thign");
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					
+					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+					
+					//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
+						//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
+						//event. Using this filter allows us to read the keycode before it is eaten up.
+					p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+					    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
+					        displayMainMenu();
+					    }
+					});
+				}
+
+			});
 		}
 	}
 

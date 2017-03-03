@@ -29,15 +29,15 @@ public class Floor2 extends Floor {
 		playerStart = new Coordinates(9,2);
 		genTiles();
 		Note[] notesTemp = new Note[6];
-		notesTemp[0] = new Note("Where's my project folder????????", new Coordinates(3,6));
-		notesTemp[1] = new Note("I hate this class. Why don't the people who sit next to me use deodorant?", new Coordinates(5,3));
-		notesTemp[2] = new Note("Hey, why is that teacher looming so creepily at the end of the hallway? Everytime I head to the stairs he glares at me, so I can't leave.", new Coordinates(5,9));
-		notesTemp[3] = new Note("01100100 01100101 01110011 01110100 01110010 01101111 01111001 00100000 01100001 01101100 01101100 00100000 01101000 01110101 01101101 01100001 01101110 01110011", new Coordinates(10,6));
-		notesTemp[4] = new Note("I'm scared to leave this room, that teacher is scary.", new Coordinates(12,1));
-		notesTemp[5] = new Note("I've pulled more all nighters in one quarter than I did throughout all of high school.", new Coordinates(14,3));
-		for(Note note : notesTemp) {
-			getNotes().put(note.getCoord(), note);
-		}
+		notesTemp[0] = new Note("Where's my project folder????????"/*, new Coordinates(3,6)*/);
+		notesTemp[1] = new Note("I hate this class. Why don't the people who sit next to me use deodorant?"/*, new Coordinates(5,3)*/);
+		notesTemp[2] = new Note("Hey, why is that teacher looming so creepily at the end of the hallway? Everytime I head to the stairs he glares at me, so I can't leave."/*, new Coordinates(5,9)*/);
+		notesTemp[3] = new Note("01100100 01100101 01110011 01110100 01110010 01101111 01111001 00100000 01100001 01101100 01101100 00100000 01101000 01110101 01101101 01100001 01101110 01110011"/*, new Coordinates(10,6)*/);
+		notesTemp[4] = new Note("I'm scared to leave this room, that teacher is scary."/*, new Coordinates(12,1)*/);
+		notesTemp[5] = new Note("I've pulled more all nighters in one quarter than I did throughout all of high school."/*, new Coordinates(14,3)*/);
+//		for(Note note : notesTemp) {
+//			//getNotes().put(note.getCoord(), note);
+//		}
 	}
 	
 	public void genTiles() {

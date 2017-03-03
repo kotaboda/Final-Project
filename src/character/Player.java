@@ -6,6 +6,7 @@ import abilities.PullAnAllNighter;
 import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
+import characterEnums.Direction;
 import characterEnums.Stats;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +19,7 @@ public class Player extends Character {
 
 //	private final Image IMAGE = new Image();
 	private final ArrayList<Ability> ABILITIES = new ArrayList<>();
+	private Direction directionFacing = Direction.DOWN;
 //	private final int COLUMNS = 5;
 //	private final int COUNT = 10;
 //    private final int WIDTH = 32;
@@ -36,8 +38,8 @@ public class Player extends Character {
 		super();
 		ABILITIES.add(new PullAnAllNighter());
 		this.stats.put(Stats.INTELLIGIENCE, 100);
-		this.stats.put(Stats.ENDURANCE, 5);
-		this.hitPoints = stats.get(Stats.MOTIVATION)*20;
+		this.stats.put(Stats.MOTIVATION, 100);
+		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
 		this.energy = stats.get(Stats.STAMINA)*10;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
@@ -86,6 +88,14 @@ public class Player extends Character {
 
 	public void setFloorNum(int i) {
 		this.floorNum = i;
+	}
+
+	public Direction getDirectionFacing() {
+		return directionFacing;
+	}
+
+	public void setDirectionFacing(Direction directionFacing) {
+		this.directionFacing = directionFacing;
 	}
 
 
