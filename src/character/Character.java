@@ -61,8 +61,6 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		this.stats.put(Stats.ENDURANCE, 1);
 		this.stats.put(Stats.STAMINA, 1);
 		this.NAME = name;
-		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
-		this.energy = stats.get(Stats.STAMINA)*10;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		

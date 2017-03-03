@@ -26,12 +26,20 @@ public class Player extends Character {
 	public Player(String name, int tileSheetNum) {
 		super(name, tileSheetNum);
 		ABILITIES.add(new PullAnAllNighter());
+		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
+		this.energy = stats.get(Stats.STAMINA)*10;
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 	}
 	
 	public Player() {
 		super();
 		ABILITIES.add(new PullAnAllNighter());
 		this.stats.put(Stats.INTELLIGIENCE, 100);
+		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
+		this.energy = stats.get(Stats.STAMINA)*10;
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 	}
 	
 

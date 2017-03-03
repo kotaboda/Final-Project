@@ -36,7 +36,10 @@ public class TileManager {
 			tile = new WallMessage(tileSheetNum);
 		}else if(tileSheetNum >= (TILESHEET_TILES_WIDE * 4)&& tileSheetNum < (TILESHEET_TILES_WIDE * 5)){
 			tile = new Wall(tileSheetNum);
+		}else if(tileSheetNum >= (TILESHEET_TILES_WIDE * 5)&& tileSheetNum < (TILESHEET_TILES_WIDE * 6)){
+			tile = new Wall(tileSheetNum);
 		}
+		//(dakota) i needed to add another column to accomodate more wall tiles without having to completely rewrite the floors
 		return tile;
 	}
 	
