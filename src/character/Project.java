@@ -11,7 +11,7 @@ public class Project extends Enemy{
 	private static final long serialVersionUID = 7442909421705805038L;
 	
 	public Project() {
-		super("Project", 2);
+		super("Project", 300, 2);
 		coordinates = new Coordinates(5,5);
 		this.stats.put(Stats.MOTIVATION, 14);
 		this.stats.put(Stats.INTELLIGIENCE, 13);

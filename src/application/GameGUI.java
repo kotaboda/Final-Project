@@ -3,11 +3,8 @@ package application;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.event.HyperlinkEvent.EventType;
-
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
-import character.Character;
 import character.Enemy;
 import character.Player;
 import characterEnums.Stats;
@@ -48,11 +45,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
-import publisherSubscriberInterfaces.Subscribable;
 import tiles.TileManager;
 
 public class GameGUI extends Application {
@@ -257,13 +252,12 @@ public class GameGUI extends Application {
 		try {
 			p = loader.load();
 
-			playerName.setText(TESTINGGAME.getPlayer().NAME);
+			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			enemies.setAlignment(Pos.CENTER);
 			Listener<Battle> s = new Listener<Battle>(){
 
 				@Override
 				public void update() {
-					System.out.println("updated listener");
 					Platform.runLater(new Runnable(){
 						@Override
 						public void run(){
@@ -319,7 +313,7 @@ public class GameGUI extends Application {
 						for (Label name : enemyNames) {
 							name.styleProperty().setValue("");
 						}
-						enemyName.setStyle("-fx-background-color : blue;");
+						enemyName.setStyle("-fx-background-color : lightblue;");
 					};
 				});
 				if (i == 0) {
@@ -585,6 +579,7 @@ public class GameGUI extends Application {
 				Label statNum = new Label(TESTINGGAME.getPlayer().getStat(Stats.values()[i]) + "");
 				statGrid.addRow(i, stat, statNum);
 			}
+			statGrid.addRow(Stats.values().length, new Label("LVL"), new Label(""+TESTINGGAME.getPlayer().getLevel()));
 			menuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 				@Override
@@ -771,7 +766,7 @@ public class GameGUI extends Application {
 				}
 			});
 
-			playerName.setText(TESTINGGAME.getPlayer().NAME);
+			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 
 			for (int i = 0; i < Stats.values().length; i++) {
 				Label stat = new Label(Stats.values()[i].toString());
@@ -796,6 +791,7 @@ public class GameGUI extends Application {
 
 	public void displayLootManager() {
 		currentLayout = GUILayouts.LOOT_MANAGER;
+		
 	}
 
 }

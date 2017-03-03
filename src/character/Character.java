@@ -91,8 +91,9 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	}
 
 	protected void levelUp(int level) {
+		System.out.println("LEVELED UP!!!");
 		if (level > 0) {
-			level += level;
+			this.level += level;
 		}
 	}
 
@@ -104,7 +105,9 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 				leveledUp = true;
 				currentCredits -= creditReq;
 				levelUp(1);
+				System.out.println(creditReq);
 				creditReq *= 2;
+				System.out.println(creditReq);
 				if (currentCredits < creditReq) {
 					break;
 				}

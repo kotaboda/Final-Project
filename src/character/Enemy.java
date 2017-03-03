@@ -15,8 +15,9 @@ public class Enemy extends Character {
 	 * 
 	 */
 	private static final long serialVersionUID = 4495778022214568163L;
+	protected int creditDrop;
 
-	public Enemy(String name, int tileSheetNum) {
+	public Enemy(String name, int creditDrop, int tileSheetNum) {
 		super(name, tileSheetNum);
 		this.stats.put(Stats.MOTIVATION, 1);
 		this.stats.put(Stats.INTELLIGIENCE, 1);
@@ -25,6 +26,7 @@ public class Enemy extends Character {
 		this.stats.put(Stats.STAMINA, 1);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 5;
 		this.energy = stats.get(Stats.STAMINA) * 5;
+		this.creditDrop = creditDrop;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		inv = genLoot();
@@ -32,6 +34,10 @@ public class Enemy extends Character {
 
 	public Enemy() {
 		super();
+	}
+	
+	public int getCreditDrop(){
+		return creditDrop;
 	}
 
 	private Inventory genLoot() {
@@ -72,7 +78,6 @@ public class Enemy extends Character {
 	@Override
 	public int attack() {
 		int damage = 0;
-		System.out.println(getStat(Stats.INTELLIGIENCE));
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
 	}

@@ -86,10 +86,14 @@ public class Battle implements Subscribable<Battle>, Serializable{
 				}
 				if(allEnemiesDead){
 					battleOngoing = false;
+					int credits = 0;
 					for(int j = 0 ; j < enemies.length ; j++) {
 						Item[] loot = enemies[j].getInventoryContents();
+						credits += enemies[j].getCreditDrop();
 						player.modifyInventory(InventoryAction.GIVE, loot);
 					}
+					player.giveCredits(credits);
+					break;
 				}
 			}
 		}while(battleOngoing);
