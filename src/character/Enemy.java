@@ -18,6 +18,11 @@ public class Enemy extends Character {
 
 	public Enemy(String name, int tileSheetNum) {
 		super(name, tileSheetNum);
+		this.stats.put(Stats.MOTIVATION, 1);
+		this.stats.put(Stats.INTELLIGIENCE, 1);
+		this.stats.put(Stats.WIT, 1);
+		this.stats.put(Stats.ENDURANCE, 1);
+		this.stats.put(Stats.STAMINA, 1);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 5;
 		this.energy = stats.get(Stats.STAMINA) * 5;
 		hpProperty.set(hitPoints);
