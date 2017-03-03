@@ -13,6 +13,7 @@ import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
 import itemSystem.Item;
+import itemSystem.Usable;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -49,12 +50,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Coordinates;
+import publisherSubscriberInterfaces.Listener;
 import tileinterfaces.Interactable;
 import tiles.TileManager;
 
 public class GameGUI extends Application {
 
-	//Add log area for Battle View
 	private Stage primaryStage;
 	private GUILayouts currentLayout = GUILayouts.MAIN_MENU;
 	private Game TESTINGGAME = GameEngine.getGame();
@@ -176,11 +177,11 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-			p.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				@Override
 				public void handle(KeyEvent event) {
 					KeyCode k = event.getCode();
-					switch(k){
+					switch (k) {
 					case ESCAPE:
 						displayGeneralView();
 						break;
@@ -251,6 +252,9 @@ public class GameGUI extends Application {
 	private VBox middleBattleVBox;
 	@FXML
 	private Label battleTextLabel;
+	@FXML
+	private VBox battleLogVBox;
+	private ListView<Usable> itemList;
 
 	public void displayBattleView(Battle b) {
 
@@ -263,6 +267,22 @@ public class GameGUI extends Application {
 
 			playerName.setText(TESTINGGAME.getPlayer().NAME);
 			enemies.setAlignment(Pos.CENTER);
+			Listener<Battle> s = new Listener<Battle>(){
+
+				@Override
+				public void update() {
+					System.out.println("updated listener");
+					Platform.runLater(new Runnable(){
+						@Override
+						public void run(){
+							Label l = new Label(b.getLoggedAction());
+							l.wrapTextProperty().set(true);
+							battleLogVBox.getChildren().add(l);
+						}
+					});
+				}
+			};
+			b.addSubscriber(s);
 			ArrayList<Label> enemyNames = new ArrayList<Label>();
 			for (int i = 0; i < b.getEnemies().length; i++) {
 				Enemy currentEnemy = b.getEnemies()[i];
@@ -270,11 +290,11 @@ public class GameGUI extends Application {
 				enemyNames.add(enemyName);
 				ProgressBar enemyHealth = new ProgressBar();
 				enemyHealth.progressProperty()
-				.bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
+						.bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
 				Group child = new Group();
 				enemies.getChildren().add(child);
 				enemyHealth.progressProperty().addListener(new ChangeListener<Number>() {
-					
+
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 							Number newValue) {
@@ -296,7 +316,6 @@ public class GameGUI extends Application {
 							}
 						});
 					}
-					
 				});
 				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
 				child.getChildren().add(mainContainer);
@@ -380,8 +399,29 @@ public class GameGUI extends Application {
 							//
 							middleBattleVBox.getChildren().clear();
 							rightBattleVBox.getChildren().clear();
-							ListView<Item> itemList = new ListView<Item>(
-									FXCollections.observableArrayList(TESTINGGAME.getPlayer().getInventoryContents()));
+							ArrayList<Usable> usable = new ArrayList<>();
+							for(int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++){
+								if(TESTINGGAME.getPlayer().getInventoryContents()[i] instanceof Usable){
+									usable.add((Usable)TESTINGGAME.getPlayer().getInventoryContents()[i]);
+								}
+							}
+							itemList = new ListView<Usable>(FXCollections.observableArrayList(usable));
+							itemList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Usable>(){
+
+								@Override
+								public void changed(ObservableValue<? extends Usable> observable, Usable oldValue,
+										Usable newValue) {
+									if(isPlayersTurn){
+										submitButton.setDisable(false);
+									}
+									Label l = new Label(((Item)newValue).getDescription());
+									l.wrapTextProperty().set(true);
+									rightBattleVBox.getChildren().clear();
+									rightBattleVBox.getChildren().add(l);
+								}
+								
+							});
+							itemList.getSelectionModel().select(0);
 							middleBattleVBox.getChildren().add(itemList);
 							break;
 						}
@@ -451,7 +491,7 @@ public class GameGUI extends Application {
 
 		case 2:
 			// items
-
+			battle.setPlayerNextItemUse(itemList.getSelectionModel().getSelectedItem());
 			break;
 
 		default:
@@ -765,7 +805,6 @@ public class GameGUI extends Application {
 				Label statNum = new Label(TESTINGGAME.getPlayer().getStat(Stats.values()[i]) + "");
 				statGrid.addRow(i, stat, statNum);
 			}
-
 			for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
 				Label item = new Label(TESTINGGAME.getPlayer().getInventoryContents()[i].toString() + ": "
 						+ TESTINGGAME.getPlayer().getInventoryContents()[i].getDescription());

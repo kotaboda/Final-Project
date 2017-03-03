@@ -72,6 +72,7 @@ public class Enemy extends Character {
 	@Override
 	public int attack() {
 		int damage = 0;
+		System.out.println(getStat(Stats.INTELLIGIENCE));
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
 	}

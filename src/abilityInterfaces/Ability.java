@@ -9,10 +9,14 @@ public abstract class Ability implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -8165600092077902345L;
-	public String name;
+	public final String NAME;
+	
+	public Ability(String name){
+		NAME = name;
+	}
 	
 	public String getName(){
-		return name;
+		return NAME;
 	}
 	
 	public abstract void use(Character targets);
@@ -20,7 +24,7 @@ public abstract class Ability implements Serializable{
 	
 	@Override
 	public String toString(){
-		return name;
+		return NAME;
 	}
 
 }

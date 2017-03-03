@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import battleSystem.Battle;
 import character.Player;
@@ -13,9 +14,6 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import models.Coordinates;
 import tileinterfaces.Collidable;
-import tiles.FloorMessage;
-import tiles.Tile;
-import tiles.WallMessage;
 
 public class GameEngine {
 	private static GameGUI view;
@@ -24,40 +22,38 @@ public class GameEngine {
 	public static void run() {
 		// NOTE(andrew): This can be changed later, if it isn't done how we want
 		// it to be done
-		view.displayGeneralView(game.getFloors()[game.getPlayer().getFloorNum() - 1]);
+		view.displayGeneralView();
 
 	}
 
 	public static Game loadGame() {
-		Game g = new Game(new Player("Jeffrey", 0));
+		Game g = null;
 
-		if (Files.exists(Paths.get("src/saves/savedGame.neu"))) {
+		if (Files.exists(Paths.get("resources/saves/savedGame.neu"))) {
 			try (ObjectInputStream ois = new ObjectInputStream(
-					Files.newInputStream(Paths.get("src/saves/savedGame.neu")))) {
+					Files.newInputStream(Paths.get("resources/saves/savedGame.neu")))) {
 				g = (Game) ois.readObject();
 			} catch (IOException | ClassNotFoundException e) {
+				System.out.println("Failed Load");
 				e.printStackTrace();
 			}
 		}
+		game = g;
 		return g;
 	}
 
 	public static void saveGame(Game state) {
 		try (ObjectOutputStream oos = new ObjectOutputStream(
-				Files.newOutputStream(Paths.get("src/saves/savedGame.neu")))) {
+				Files.newOutputStream(Paths.get("resources/saves/savedGame.neu"), StandardOpenOption.CREATE))) {
 			oos.writeObject(state);
+			oos.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public static void setView(GameGUI newView) {
 		view = newView;
-	}
-
-	public static void setGame(Game g) {
-		game = g;
 	}
 
 	public static Game getGame() {
@@ -72,8 +68,6 @@ public class GameEngine {
 						+ x] instanceof Collidable)) {
 			c.setX(c.getX() + x);
 			c.setY(c.getY() + y);
-			System.out.println(c.getX());
-			System.out.println(c.getY());
 		}
 	}
 
@@ -83,7 +77,7 @@ public class GameEngine {
 		Battle battle = null;
 		for (int i = 0; i < battlesC.length; i++) {
 			Coordinates currentC = battlesC[i].getCoordinates();
-			if (playerC.equals(currentC)) {
+			if (playerC.equals(currentC) && !battlesC[i].isDone()) {
 				battle = battlesC[i];
 			}
 		}
@@ -92,7 +86,7 @@ public class GameEngine {
 	}
 	
 	public static String checkNote() {
-		Player p = GameEngine.getGame().getPlayer();
+//		Player p = GameEngine.getGame().getPlayer();
 //		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum()].getTiles()[p.getCoordinates().getX()][p.getCoordinates()
 //		                                                                                 				.getY()];
 //		if (t instanceof FloorMessage || t instanceof WallMessage) {
@@ -106,9 +100,6 @@ public class GameEngine {
 	
 
 	public static void playerBattleInput(Battle battle) {
-		// TODO(andrew): This should take the selected options from the view,
-		// but I am not sure on how to get that data from the view
-
 		view.waitForPlayerSelection(battle);
 	}
 
@@ -130,4 +121,12 @@ public class GameEngine {
 		battleService.start();
 	}
 
+	public static void displayEndBattle(Battle b){
+		view.displayEndBattle(b);
+	}
+
+	public static void setGame(Game g) {
+		game = g;
+	}
+	
 }

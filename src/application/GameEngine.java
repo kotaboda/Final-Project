@@ -98,7 +98,7 @@ public class GameEngine {
 		Battle battle = null;
 		for (int i = 0; i < battlesC.length; i++) {
 			Coordinates currentC = battlesC[i].getCoordinates();
-			if (playerC.equals(currentC) && !battlesC[i].isDone()) {
+			if (playerC.equals(currentC) && !battlesC[i].isCompleted()) {
 				battle = battlesC[i];
 			}
 		}

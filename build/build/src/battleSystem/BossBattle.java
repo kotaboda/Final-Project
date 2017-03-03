@@ -8,6 +8,11 @@ import character.Enemy;
 import character.Player;
 
 public class BossBattle extends Battle{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5129731413157601090L;
+	
 	private Boss boss;
 	
 	public BossBattle(Player player, Boss boss, Enemy...enemies) {
@@ -26,6 +31,7 @@ public class BossBattle extends Battle{
 	@Override
 	public void start() {
 		Character[] turnList = createTurnList();
+		turnList.getClass();
 	}
 	
 	private Character[] createTurnList() {

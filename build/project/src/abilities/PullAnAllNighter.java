@@ -5,6 +5,11 @@ import character.Character;
 
 public class PullAnAllNighter extends AttackAbility {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4660865307316702884L;
+
 	public PullAnAllNighter(){
 		name = "Pull An All Nighter!";
 	}

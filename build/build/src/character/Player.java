@@ -16,31 +16,29 @@ public class Player extends Character {
 	 */
 	private static final long serialVersionUID = -3349758486478712145L;
 
-//	private final Image IMAGE = new Image("images/Player");
+//	private final Image IMAGE = new Image();
 	private final ArrayList<Ability> ABILITIES = new ArrayList<>();
-	private final int COLUMNS = 5;
-	private final int COUNT = 10;
-    private final int WIDTH = 32;
-    private final int HEIGHT = 32;
+//	private final int COLUMNS = 5;
+//	private final int COUNT = 10;
+//    private final int WIDTH = 32;
+//    private final int HEIGHT = 32;
 
 	public Player(String name, int tileSheetNum) {
 		super(name, tileSheetNum);
-		// TODO Auto-generated constructor stub
+		ABILITIES.add(new PullAnAllNighter());
 	}
 	
 	public Player() {
 		super();
 		ABILITIES.add(new PullAnAllNighter());
+		this.stats.put(Stats.INTELLIGIENCE, 100);
 	}
 	
-	public PlayerSummary getPlayerSummary(){
-		return new PlayerSummary(this);
-	}
+
 
 	@Override
 	public int takeDmg(int dmg) {
 		hitPoints -= (dmg-getStat(Stats.ENDURANCE));
-		hitPoints -= dmg;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
 		return dmg;
