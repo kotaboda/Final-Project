@@ -91,7 +91,6 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	}
 
 	protected void levelUp(int level) {
-		System.out.println("LEVELED UP!!!");
 		if (level > 0) {
 			this.level += level;
 		}

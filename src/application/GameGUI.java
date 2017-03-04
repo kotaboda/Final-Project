@@ -54,7 +54,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
@@ -456,7 +455,6 @@ public class GameGUI extends Application {
 					// abilityList.getSelectionModel().getSelectedItem();
 					// Tell Game Engine about selections here.
 					submitButton.setDisable(true);
-					System.out.println(Thread.currentThread().getName());
 					isPlayersTurn = false;
 					synchronized (lock) {
 						lock.notifyAll();
@@ -586,9 +584,6 @@ public class GameGUI extends Application {
 							// String message = GameEngine.checkNote();
 
 							Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
-							System.out.println(
-									"Tile: " + TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
-											.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum());
 							if (b != null) {
 								displayBattleView(b);
 								GameEngine.startBattle(b);

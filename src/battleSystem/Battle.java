@@ -39,7 +39,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		this.enemies = enemies;
 		this.player = player;
 	}
-
+	
 	public void setPlayerNextItemUse(Usable playerNextItemUse) {
 		this.playerNextItemUse = playerNextItemUse;
 		this.playerNextAbility = null;
@@ -103,11 +103,10 @@ public class Battle implements Subscribable<Battle>, Serializable {
 
 				if (allEnemiesDead) {
 					battleOngoing = false;
-					int credits = 0;
 					for (int j = 0; j < enemies.length; j++) {
 						Item[] loot = enemies[j].getInventoryContents();
 						player.modifyInventory(InventoryAction.GIVE, loot);
-						player.giveCredits(credits);
+						player.giveCredits(enemies[j].getCreditDrop());
 					}
 
 					break;

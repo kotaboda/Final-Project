@@ -1,5 +1,11 @@
 package character;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import abilityInterfaces.Ability;
+import abilityInterfaces.AttackAbility;
+import abilityInterfaces.BuffAbility;
 import characterEnums.Stats;
 
 public abstract class Boss extends Character {
@@ -9,9 +15,12 @@ public abstract class Boss extends Character {
 	 */
 	private static final long serialVersionUID = -5036318833740582652L;
 	private boolean isDefeated = false;
+	private ArrayList<Ability> abilities = new ArrayList<>();
 
-	public Boss(String name, int tileSheetNum) {
+	public Boss(String name, int tileSheetNum, Ability... abilities) {
 		super(name, tileSheetNum);
+		this.abilities.addAll(Arrays.asList(abilities));
+		
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -21,6 +30,17 @@ public abstract class Boss extends Character {
 	
 	public boolean isDefeated() {
 		return isDefeated;
+	}
+	
+	public void ability(Ability ability, Character... targets) {
+		if (ability instanceof AttackAbility) {
+			for (int i = 0; i < targets.length; i++) {
+				ability.use(targets[i]);
+			}
+		} else if (ability instanceof BuffAbility) {
+			ability.use(this);
+		}
+		
 	}
 
 
