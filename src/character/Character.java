@@ -28,7 +28,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	 */
 	private static final long serialVersionUID = -888637062240963044L;
 	public final String NAME;
-	protected Inventory inv;
+	protected Inventory inv = new Inventory();
 	protected int hitPoints = 100;
 	protected transient IntegerProperty hpProperty = new SimpleIntegerProperty(hitPoints);
 	protected transient IntegerProperty maxHPProperty = new SimpleIntegerProperty(hitPoints);
@@ -105,12 +105,9 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 				leveledUp = true;
 				currentCredits -= creditReq;
 				levelUp(1);
-				System.out.println(creditReq);
 				creditReq *= 2;
-				System.out.println(creditReq);
-				if (currentCredits < creditReq) {
-					break;
-				}
+			} else {
+				break;				
 			}
 		} while (true);
 		return leveledUp;
