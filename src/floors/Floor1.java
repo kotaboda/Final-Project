@@ -3,6 +3,12 @@ package floors;
 import battleSystem.Battle;
 import character.Boss;
 import character.Player;
+import characterInterfaces.Lootable;
+import itemSystem.Coffee;
+import itemSystem.Doritos;
+import itemSystem.Item;
+import itemSystem.MountainDew;
+import itemSystem.Ramen;
 import tileinterfaces.Interactable;
 import tiles.Tile;
 import tiles.TileManager;
@@ -39,12 +45,21 @@ public class Floor1 extends Floor {
 		notesTemp[4] = new Note("I heard you can't even get to class on the second floor without getting past the security guard..."/*, new Coordinates(10,2)*/);
 		notesTemp[5] = new Note("Shopping list: More ramen(Really keeps me motivated to finish homework)"/*, new Coordinates(5,3)*/);
 		notesTemp[6] = new Note("chill out my dude");
+		
+		Item[][] floorLoot = new Item[2][];
+		floorLoot[0] = new Item[] {new Coffee(), new Ramen()};
+		floorLoot[1] = new Item[] {new MountainDew(), new Doritos()};
 		int noteCounter = 0;
+		int lootCounter = 0;
 		for(int i = 0; i < tiles.length; i++){
 			for(int j = 0; j < tiles[i].length; j++){
 				if(tiles[i][j] instanceof Interactable){
 					((Interactable) tiles[i][j]).setNote(notesTemp[noteCounter]);
 					noteCounter++;
+				}
+				if(tiles[i][j] instanceof Lootable){
+					((Lootable)tiles[i][j]).setLoot(floorLoot[lootCounter]);
+					lootCounter++;
 				}
 			}
 		}

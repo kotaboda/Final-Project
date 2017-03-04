@@ -30,8 +30,8 @@
                                     <Canvas fx:id="playerImage" height="155.0" width="155.0" />
                                     <Label fx:id="playerName" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="25.0" text="Player Name" />
                                     <Button fx:id="exitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Exit" />
-                                    <ProgressBar fx:id="playerHealthBar" prefHeight="18.0" prefWidth="247.0" progress="0.0" />
-                                    <ProgressBar fx:id="playerEnergyBar" prefHeight="18.0" prefWidth="247.0" progress="0.0" />
+                                    <ProgressBar fx:id="playerHealthBar" prefHeight="18.0" prefWidth="246.0" progress="0.0" />
+                                    <ProgressBar fx:id="playerEnergyBar" prefHeight="18.0" prefWidth="246.0" progress="0.0" />
                                  </children>
                               </VBox>
                               <Separator orientation="VERTICAL" prefHeight="200.0" />
@@ -60,7 +60,7 @@
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="30.0" text="Inventory" />
                               <Separator prefWidth="200.0" />
-                              <GridPane fx:id="playerInventoryGrid" alignment="CENTER" prefHeight="210.0" prefWidth="500.0">
+                              <GridPane fx:id="inventoryGrid" alignment="CENTER" prefHeight="210.0" prefWidth="500.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>

@@ -8,6 +8,9 @@ import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
 import characterEnums.Direction;
 import characterEnums.Stats;
+import itemSystem.Coffee;
+import itemSystem.Doritos;
+import itemSystem.MountainDew;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 public class Player extends Character {
@@ -43,6 +46,7 @@ public class Player extends Character {
 		this.energy = stats.get(Stats.STAMINA)*10;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
+		inv.addAllItems(new Coffee(), new Doritos(), new MountainDew());
 	}
 	
 

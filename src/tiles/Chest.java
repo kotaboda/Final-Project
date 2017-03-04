@@ -1,5 +1,8 @@
 package tiles;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import character.Player;
 import characterInterfaces.Lootable;
 import floors.Note;
@@ -14,7 +17,8 @@ public class Chest extends Tile implements Interactable, Collidable, Lootable {
 	 */
 	private static final long serialVersionUID = -6248188691328046026L;
 	private Note note;
-	private Item[] loot;
+	//TODO(andrew):  need to initialize this bb
+	private ArrayList<Item> loot = new ArrayList<>();
 	
 	public Chest(int tileSheetNum){
 		super(tileSheetNum);
@@ -29,7 +33,7 @@ public class Chest extends Tile implements Interactable, Collidable, Lootable {
 	
 	@Override
 	public Item[] obtainLoot(){
-		return loot;
+		return loot.toArray(new Item[0]);
 		//TODO(andrew): what exactly should this method do?
 		
 	}
@@ -42,5 +46,17 @@ public class Chest extends Tile implements Interactable, Collidable, Lootable {
 	@Override
 	public void setNote(Note note) {
 		this.note = note;
+	}
+
+	@Override
+	public void setLoot(Item[] loot) {
+		this.loot = new ArrayList<Item>(Arrays.asList(loot));
+	}
+
+	@Override
+	public void removeItem(Item item) {
+		if(loot.contains(item)){
+			loot.remove(item);
+		}
 	}
 }
