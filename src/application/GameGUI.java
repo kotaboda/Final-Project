@@ -9,6 +9,7 @@ import character.Enemy;
 import character.Player;
 import characterEnums.Direction;
 import characterEnums.Stats;
+import characterInterfaces.Lootable;
 import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Inventory;
@@ -52,6 +53,7 @@ import javafx.stage.Stage;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
 import tileinterfaces.Interactable;
+import tiles.Chest;
 import tiles.TileManager;
 
 public class GameGUI extends Application {
@@ -85,7 +87,13 @@ public class GameGUI extends Application {
 	@FXML
 	private Canvas canvas;
 	@FXML
-	private GridPane inventoryGrid;
+	private GridPane playerInventoryGrid;
+	@FXML
+	private ListView<Item> otherInventoryGrid;
+	@FXML
+	private Button lootManagerButton;
+	@FXML
+	private Button exitLootButton;
 	@FXML
 	private GridPane statGrid;
 
@@ -508,13 +516,6 @@ public class GameGUI extends Application {
 		});
 	}
 
-	// TODO(dakota): I'm not sure how to do the whole canvas drawing thing so
-	// it's just an overlay over the map
-	// or if we just want the messsage to take up the whole screen
-	public void displayMessageView(String message) {
-
-	}
-
 	// GeneralView specific elements
 	@FXML
 	private Button menuButton;
@@ -536,20 +537,29 @@ public class GameGUI extends Application {
 
 						switch (keyEvent) {
 						case W:
-							GameEngine.updatePlayerPosition(Direction.UP);
+							if(!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+								GameEngine.updatePlayerPosition(Direction.UP);
+							}
 							break;
 						case S:
-							GameEngine.updatePlayerPosition(Direction.DOWN);
+							if(!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+								GameEngine.updatePlayerPosition(Direction.DOWN);
+							}
 							break;
 						case A:
-							GameEngine.updatePlayerPosition(Direction.LEFT);
+							if(!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+								GameEngine.updatePlayerPosition(Direction.LEFT);
+							}
 							break;
 						case D:
-							GameEngine.updatePlayerPosition(Direction.RIGHT);
+							if(!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+								GameEngine.updatePlayerPosition(Direction.RIGHT);
+							}
 							break;
 						case E:
 							if(((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
 								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+								GameEngine.checkLoot();
 							}else{
 								GameEngine.checkNote();
 							}
@@ -565,16 +575,12 @@ public class GameGUI extends Application {
 							drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 							Battle b = GameEngine
 									.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
-							//String message = GameEngine.checkNote();
 							Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
 							System.out.println("Tile: " + TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 									.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum());
 							if (b != null) {
 								displayBattleView(b);
 								GameEngine.startBattle(b);
-								//FIXME(andrew): commented out until the exceptions are resolved
-	//						} else if(message != null) {
-	//							displayMessageView(message);
 							} else if (TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 									.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum() == 4) {
 								TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
@@ -681,8 +687,9 @@ public class GameGUI extends Application {
 
 	}
 
-	public void displayMessage(Interactable i){
-		displayText.setText(i.getMessage());
+	
+	public void displayMessage(String message){
+		displayText.setText(message);
 		
 		Platform.runLater(new Runnable() {
 			@Override
@@ -691,11 +698,12 @@ public class GameGUI extends Application {
 				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
 				
 				//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
-					//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
+					//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the ESCAPE
 					//event. Using this filter allows us to read the keycode before it is eaten up.
 				p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-				    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
-				    	((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+				    if ((event.getCode().equals(KeyCode.ESCAPE) || event.getCode().equals(KeyCode.E))&& currentLayout.equals(GUILayouts.BATTLE)) {
+//				    	((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+				    	displayGeneralView();
 				    }
 				});
 			}
@@ -709,25 +717,26 @@ public class GameGUI extends Application {
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
-			displayText.setText("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
-			
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					
-					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
-					
-					//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
-						//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
-						//event. Using this filter allows us to read the keycode before it is eaten up.
-					p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-					    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
-					        displayGeneralView();
-					    }
-					});
-				}
-
-			});
+			displayMessage("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+//			displayText.setText("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+//			
+//			Platform.runLater(new Runnable() {
+//				@Override
+//				public void run() {
+//					
+//					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+//					
+//					//NOTE(andrew): this must be an event filter that is passed in the type of event and its function, rather than using the 
+//						//setOnKeyPressed() method, because there are selections made in the battle view, and those selections eat up the escape
+//						//event. Using this filter allows us to read the keycode before it is eaten up.
+//					p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+//					    if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
+//					        displayGeneralView();
+//					    }
+//					});
+//				}
+//
+//			});
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
@@ -809,7 +818,7 @@ public class GameGUI extends Application {
 				Label item = new Label(TESTINGGAME.getPlayer().getInventoryContents()[i].toString() + ": "
 						+ TESTINGGAME.getPlayer().getInventoryContents()[i].getDescription());
 				GridPane.setHalignment(item, HPos.CENTER);
-				inventoryGrid.addRow(i, item);
+				playerInventoryGrid.addRow(i, item);
 			}
 
 			Scene scene = new Scene(p);
@@ -821,8 +830,62 @@ public class GameGUI extends Application {
 		}
 	}
 
-	public void displayLootManager() {
+	public void displayLootManager(Lootable l) {
 		currentLayout = GUILayouts.LOOT_MANAGER;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/LootManagerView.fxml"));
+		loader.setController(this);
+		
+		try {
+			p = loader.load();
+			
+			for(int i = 0; i < l.obtainLoot().length; i++){
+//				Label item = new Label(l.obtainLoot()[i].toString() + ": " + l.obtainLoot()[i].getDescription());
+//				GridPane.setHalignment(item, HPos.CENTER);
+				otherInventoryGrid.getItems().add(l.obtainLoot()[i]);
+				
+			}
+			lootManagerButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+				@Override
+				public void handle(MouseEvent event) {
+					Item item = otherInventoryGrid.getSelectionModel().getSelectedItem();
+					boolean successful = false;
+					if(item != null){
+						successful = GameEngine.givePlayerItem(item);
+					}
+					if(!successful && !((AnchorPane) p).getChildren().contains(displayText)){
+						displayMessage("You can't take the item!");
+					}
+					if(successful){
+						otherInventoryGrid.getItems().remove(item);
+						l.removeItem(item);
+						Label label = new Label(item.toString() + ": " + item.getDescription());
+						GridPane.setHalignment(label, HPos.CENTER);
+						playerInventoryGrid.addRow(TESTINGGAME.getPlayer().getInventoryContents().length, label);
+					}
+				}
+			});
+			exitLootButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+				@Override
+				public void handle(MouseEvent event){
+					displayGeneralView();
+				}
+			});
+			for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
+				Label item = new Label(TESTINGGAME.getPlayer().getInventoryContents()[i].toString() + ": "
+						+ TESTINGGAME.getPlayer().getInventoryContents()[i].getDescription());
+				GridPane.setHalignment(item, HPos.CENTER);
+				playerInventoryGrid.addRow(i, item);
+			}
+			
+			
+			
+			Scene scene = new Scene(p);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		
 	}
 

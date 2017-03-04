@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="500.0" prefWidth="500.0">
          <center>
@@ -57,7 +57,7 @@
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="30.0" text="Inventory" />
                               <Separator prefWidth="200.0" />
-                              <GridPane fx:id="playerInventoryGrid" alignment="CENTER" prefHeight="210.0" prefWidth="500.0">
+                              <GridPane fx:id="inventoryGrid" alignment="CENTER" prefHeight="210.0" prefWidth="500.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>

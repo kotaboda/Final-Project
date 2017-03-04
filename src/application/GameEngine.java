@@ -10,12 +10,16 @@ import java.nio.file.StandardOpenOption;
 import battleSystem.Battle;
 import character.Player;
 import characterEnums.Direction;
+import characterEnums.InventoryAction;
+import characterInterfaces.Lootable;
 import floors.Floor;
+import itemSystem.Item;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import models.Coordinates;
 import tileinterfaces.Collidable;
 import tileinterfaces.Interactable;
+import tiles.Chest;
 import tiles.Tile;
 
 public class GameEngine {
@@ -132,11 +136,38 @@ public class GameEngine {
 		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
 		if (t instanceof Interactable) {
 			// retreive the notes at those coordinates in order to display it
-			view.displayMessage(((Interactable) t));
+			view.displayMessage(((Interactable) t).getMessage());
 		}
 		return null;
 	}
 	
+	public static String checkLoot() {
+		Player p = GameEngine.getGame().getPlayer();
+		Direction d = p.getDirectionFacing();
+		int x = 0;
+		int y = 0;
+		switch(d){
+		case UP:
+			y = -1;
+			break;
+		case RIGHT:
+			x = 1;
+			break;
+		case DOWN:
+			y = 1;
+			break;
+		case LEFT:
+			x = -1;
+			break;
+		}
+		
+		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
+		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
+		if(t instanceof Chest){
+			view.displayLootManager((Lootable)t); 
+		}
+		return null;
+	}
 
 	public static void playerBattleInput(Battle battle) {
 		view.waitForPlayerSelection(battle);
@@ -160,6 +191,10 @@ public class GameEngine {
 		battleService.start();
 	}
 
+	public static boolean givePlayerItem(Item item){
+		return game.getPlayer().modifyInventory(InventoryAction.GIVE, item);
+	}
+	
 	public static void displayEndBattle(Battle b){
 		view.displayEndBattle(b);
 	}
