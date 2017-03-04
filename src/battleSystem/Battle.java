@@ -25,12 +25,12 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	protected Enemy[] enemies;
 	private Coordinates place = new Coordinates(0, 0);
 	protected ArrayList<Listener<Battle>> subscribers = new ArrayList<Listener<Battle>>();
-	private Ability playerNextAbility = null;
-	private Usable playerNextItemUse = null;
-	private boolean isCompleted = false;
-	private String loggedAction = null;
+	protected Ability playerNextAbility = null;
+	protected Usable playerNextItemUse = null;
+	protected boolean isCompleted = false;
+	protected String loggedAction = null;
 	// TODO(andrew): this might need to be an array or array list
-	private Character playerTarget = null;
+	protected Character playerTarget = null;
 
 	public Battle(Player player, Enemy... enemies) {
 		if (enemies.length == 0) {

@@ -77,11 +77,6 @@ public class Player extends Character {
 		
 	}
 	
-	public void move() {
-//		 final ImageView imageView = new ImageView(IMAGE);
-//	        imageView.setViewport(new Rectangle2D(WIDTH, HEIGHT, WIDTH, HEIGHT));
-
-	}
 
 	public ObservableList<Ability> getAbilities() {
 		ObservableList<Ability> abilities = FXCollections.observableArrayList();

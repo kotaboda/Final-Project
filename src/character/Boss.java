@@ -7,6 +7,8 @@ import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
 import characterEnums.Stats;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public abstract class Boss extends Character {
 	
@@ -30,6 +32,12 @@ public abstract class Boss extends Character {
 	
 	public boolean isDefeated() {
 		return isDefeated;
+	}
+	
+	public ObservableList<Ability> getAbilities() {
+		ObservableList<Ability> abilities = FXCollections.observableArrayList();
+		abilities.addAll(this.abilities);
+		return abilities;
 	}
 	
 	public void ability(Ability ability, Character... targets) {
