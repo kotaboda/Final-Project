@@ -43,10 +43,10 @@ public abstract class Boss extends Character {
 	public void ability(Ability ability, Character... targets) {
 		if (ability instanceof AttackAbility) {
 			for (int i = 0; i < targets.length; i++) {
-				ability.use(targets[i]);
+				ability.use(this, targets[i]);
 			}
 		} else if (ability instanceof BuffAbility) {
-			ability.use(this);
+			ability.use(this, this);
 		}
 		
 	}

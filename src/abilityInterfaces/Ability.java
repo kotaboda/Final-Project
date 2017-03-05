@@ -19,7 +19,7 @@ public abstract class Ability implements Serializable{
 		return NAME;
 	}
 	
-	public abstract void use(Character targets);
+	public abstract boolean use(Character user, Character targets);
 	public abstract String getDescription();
 	
 	@Override

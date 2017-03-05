@@ -33,13 +33,19 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	protected Character playerTarget = null;
 
 	public Battle(Player player, Enemy... enemies) {
+		if (player == null) {
+			throw new IllegalArgumentException("The player in a battle cannot be null");
+		}
+		if (enemies == null) {
+			throw new IllegalArgumentException("The enemies in a battle cannot be null");
+		}
 		if (enemies.length == 0) {
 			throw new IllegalArgumentException("Battle must have at least 1 enemy.");
 		}
 		this.enemies = enemies;
 		this.player = player;
 	}
-	
+
 	public void setPlayerNextItemUse(Usable playerNextItemUse) {
 		this.playerNextItemUse = playerNextItemUse;
 		this.playerNextAbility = null;
@@ -60,8 +66,11 @@ public class Battle implements Subscribable<Battle>, Serializable {
 					if (playerNextAbility != null) {
 						// NOTE(andrew): If the player selected an ability this
 						// branch should run
-						player.ability(playerNextAbility, playerTarget);
-						loggedAction = player.NAME + ": Used " + playerNextAbility;
+						if(player.ability(playerNextAbility, playerTarget)){
+							loggedAction = player.NAME + ": Used " + playerNextAbility;							
+						} else{
+							loggedAction = player.NAME + ": Used " + playerNextAbility + "but it failed!";							
+						}
 						notifySubscribers();
 					} else if (playerNextItemUse != null) {
 						// TODO(andrew): this method will take playerTarget,
@@ -150,13 +159,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		// a traditional array
 		ArrayList<Character> initial = new ArrayList<>();
 		initial.add(player);
-		for (int i = 1; i < enemies.length + 1; i++) {
-			if (enemies[i - 1].getHPProperty().get() > 0) {
-				initial.add(enemies[i - 1]);
-			}
-
-		}
-
+		initial.addAll(Arrays.asList(enemies));
 		Character[] turnList = initial.toArray(new Character[0]);
 		Arrays.sort(turnList, Character::compareWit);
 

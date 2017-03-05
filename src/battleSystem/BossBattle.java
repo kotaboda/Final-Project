@@ -1,5 +1,6 @@
 package battleSystem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -11,24 +12,19 @@ import character.Player;
 import characterEnums.InventoryAction;
 import itemSystem.Item;
 
-public class BossBattle extends Battle{
+public class BossBattle extends Battle {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5129731413157601090L;
-	
-	private Boss boss;
-	
-	public BossBattle(Player player, Boss boss, Enemy...enemies) {
-		super(player, enemies);
-		this.setBoss(boss);
-	}
-	
-	public Boss getBoss() {
-		return boss;
-	}
 
-	public void setBoss(Boss boss) {
+	private Boss boss;
+
+	public BossBattle(Player player, Boss boss, Enemy... enemies) {
+		super(player, enemies);
+		if (boss == null) {
+			throw new IllegalArgumentException("The boss in a boss battle cannot be null.");
+		}
 		this.boss = boss;
 	}
 
@@ -68,25 +64,24 @@ public class BossBattle extends Battle{
 						loggedAction = player.NAME + ": Attacked " + playerTarget.NAME;
 						notifySubscribers();
 					}
-				} else if (turnList[i] instanceof Boss){
+				} else if (turnList[i] instanceof Boss) {
 					if (turnList[i].getHPProperty().get() > 0) {
-						Boss b = (Boss) turnList[i];
 						Random r = new Random();
 						switch (r.nextInt(2)) {
 						case 0:
-							b.ability(b.getAbilities().get(r.nextInt(b.getAbilities().size())), player);
-							if(b.getAbilities().size() != 0){
+							boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
+							if (boss.getAbilities().size() != 0) {
 								break;
 							}
 						case 1:
-							player.takeDmg(b.attack());
+							player.takeDmg(boss.attack());
 							break;
 						default:
 							break;
 						}
 					}
-					
-				}else {
+
+				} else {
 					// NOTE(andrew): this branch runs if it's the enemies turn,
 					// this should probably be changed, not totally sure,
 					// because
@@ -125,12 +120,14 @@ public class BossBattle extends Battle{
 		GameEngine.displayEndBattle(this);
 	}
 	
+	
 	private Character[] createTurnList() {
-		int bossAndPlayer = 2;
-		Character[] turnList = new Character[bossAndPlayer+enemies.length];
-		
-		Arrays.sort(turnList);
-		
+		ArrayList<Character> c = new ArrayList<>(Arrays.asList(enemies));
+		c.add(player);
+		c.add(boss);
+		Character[] turnList = c.toArray(new Character[0]);
+		Arrays.sort(turnList, Character::compareWit);
+
 		return turnList;
 	}
 }
