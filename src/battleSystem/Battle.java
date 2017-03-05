@@ -69,7 +69,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 						if(player.ability(playerNextAbility, playerTarget)){
 							loggedAction = player.NAME + ": Used " + playerNextAbility;							
 						} else{
-							loggedAction = player.NAME + ": Used " + playerNextAbility + "but it failed!";							
+							loggedAction = player.NAME + ": Used " + playerNextAbility + " but it failed!";				
 						}
 						notifySubscribers();
 					} else if (playerNextItemUse != null) {
@@ -79,7 +79,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 						// to allow selection of the player itself.
 						// NOTE(andrew): this branch runs if the player uses an
 						// item
-						playerNextItemUse.use(turnList[i]);
+						playerNextItemUse.use(player);
 						loggedAction = player.NAME + ": Used " + ((Item) playerNextItemUse);
 						notifySubscribers();
 					} else if (playerTarget != null) {
@@ -124,6 +124,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 			}
 		} while (battleOngoing);
 		// System.out.println(Thread.currentThread().getName());
+		subscribers.clear();
 		isCompleted = true;
 		GameEngine.displayEndBattle(this);
 	}

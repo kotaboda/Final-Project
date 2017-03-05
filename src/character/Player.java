@@ -2,6 +2,7 @@ package character;
 
 import java.util.ArrayList;
 
+import abilities.Procrastinate;
 import abilities.PullAnAllNighter;
 import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
@@ -31,6 +32,7 @@ public class Player extends Character {
 	public Player(String name, int tileSheetNum) {
 		super(name, tileSheetNum);
 		ABILITIES.add(new PullAnAllNighter());
+		ABILITIES.add(new Procrastinate());
 		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
 		this.energy = stats.get(Stats.STAMINA)*10;
 		hpProperty.set(hitPoints);
@@ -40,6 +42,7 @@ public class Player extends Character {
 	public Player() {
 		super();
 		ABILITIES.add(new PullAnAllNighter());
+		ABILITIES.add(new Procrastinate());
 		this.stats.put(Stats.INTELLIGIENCE, 100);
 		this.stats.put(Stats.MOTIVATION, 100);
 		this.hitPoints = stats.get(Stats.MOTIVATION)*10;

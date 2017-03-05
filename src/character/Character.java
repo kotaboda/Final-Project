@@ -160,10 +160,12 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		case HITPOINTS:
 			hitPoints += modification;
 			hitPoints = hitPoints < 0 ? 0 : hitPoints;
+			hpProperty.set(hitPoints);
 			break;
 		case ENERGY:
 			energy += modification;
 			energy = energy < 0 ? 0 : energy;
+			energyProperty.set(energy);
 			break;
 		}
 	}
@@ -251,6 +253,13 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	public int getEnergy() {
 		// TODO Auto-generated method stub
 		return energy;
+	}
+
+	public void gainEnergy(int i) {
+		energy += i;
+		energy = energy > maxEnergy ? maxEnergy : energy;
+		energyProperty.set(energy);
+		
 	}
 	
 	

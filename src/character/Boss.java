@@ -22,8 +22,6 @@ public abstract class Boss extends Character {
 	public Boss(String name, int tileSheetNum, Ability... abilities) {
 		super(name, tileSheetNum);
 		this.abilities.addAll(Arrays.asList(abilities));
-		
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Boss() {
@@ -54,7 +52,6 @@ public abstract class Boss extends Character {
 
 	@Override
 	public int takeDmg(int dmg) {
-		// TODO Auto-generated method stub
 		int damage = dmg-getStat(Stats.ENDURANCE);
 		hitPoints -= damage;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
