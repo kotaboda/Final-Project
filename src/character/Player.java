@@ -44,6 +44,8 @@ public class Player extends Character {
 		this.stats.put(Stats.MOTIVATION, 100);
 		this.hitPoints = stats.get(Stats.MOTIVATION)*10;
 		this.energy = stats.get(Stats.STAMINA)*10;
+		energyProperty.set(energy);
+		maxEnergyProperty.set(energy);
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		inv.addAllItems(new Coffee(), new Doritos(), new MountainDew());
@@ -66,14 +68,13 @@ public class Player extends Character {
 		return damage;
 	}
 
-	public void ability(Ability ability, Character... targets) {
+	public boolean ability(Ability ability, Character targets) {
 		if (ability instanceof AttackAbility) {
-			for (int i = 0; i < targets.length; i++) {
-				ability.use(targets[i]);
-			}
+			return ability.use(this, targets);
 		} else if (ability instanceof BuffAbility) {
-			ability.use(this);
+			return ability.use(this, this);
 		}
+		return false;
 		
 	}
 	
@@ -96,8 +97,6 @@ public class Player extends Character {
 	public void setDirectionFacing(Direction directionFacing) {
 		this.directionFacing = directionFacing;
 	}
-
-
 
 
 }

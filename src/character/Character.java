@@ -238,6 +238,20 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		energyProperty = new SimpleIntegerProperty(energy);
 		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
 	}
+
+	public boolean useEnergy(int i) {
+		if (i <= energy) {
+			energy -= i;
+			energyProperty.set(energy);
+			return true;
+		}
+		return false;
+	}
+
+	public int getEnergy() {
+		// TODO Auto-generated method stub
+		return energy;
+	}
 	
 	
 	
