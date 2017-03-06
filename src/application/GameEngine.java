@@ -68,7 +68,36 @@ public class GameEngine {
 		return game;
 	}
 
-	public static void updatePlayerPosition(Direction direction) {
+	public static boolean updatePlayerPosition(Direction direction) {
+		int x = 0;
+		int y = 0;
+		boolean success = false;
+		switch(direction){
+		case UP:
+			y = -1;
+			break;
+		case RIGHT:
+			x = 1;
+			break;
+		case DOWN:
+			y = 1;
+			break;
+		case LEFT:
+			x = -1;
+			break;
+		}
+		Coordinates c = game.getPlayer().getCoordinates();
+		if (checkMovement(direction)) {
+			c.setX(c.getX() + x);
+			c.setY(c.getY() + y);
+			success = true;
+			
+		}
+		game.getPlayer().setDirectionFacing(direction);
+		return success;
+	}
+	
+	public static boolean checkMovement(Direction direction){
 		int x = 0;
 		int y = 0;
 		switch(direction){
@@ -86,15 +115,10 @@ public class GameEngine {
 			break;
 		}
 		Coordinates c = game.getPlayer().getCoordinates();
-		if (((c.getX() + x)	 >= 0 && (c.getX() + x) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[0].length)
+		 return (((c.getX() + x) >= 0 && (c.getX() + x) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[0].length)
 				&& ((c.getY() + y) >= 0 && (c.getY() + y) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles().length)
 				&& !(game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[c.getY() + y][c.getX()
-						+ x] instanceof Collidable)) {
-			c.setX(c.getX() + x);
-			c.setY(c.getY() + y);
-			
-		}
-		game.getPlayer().setDirectionFacing(direction);
+						+ x] instanceof Collidable));
 	}
 
 	public static Battle checkForBattle(Floor currentFloor) {

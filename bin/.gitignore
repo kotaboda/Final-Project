@@ -1,3 +1,12 @@
+/abilities/
+/abilityInterfaces/
+/application/
+/battleSystem/
+/character/
+/characterEnums/
+/characterInterfaces/
+/drawinterfaces/
+/enums/
 /floors/
 /itemSystem/
 /models/
