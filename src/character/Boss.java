@@ -10,7 +10,7 @@ import characterEnums.Stats;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public abstract class Boss extends Character {
+public abstract class Boss extends Enemy {
 	
 	/**
 	 * 
@@ -20,7 +20,7 @@ public abstract class Boss extends Character {
 	private ArrayList<Ability> abilities = new ArrayList<>();
 
 	public Boss(String name, int tileSheetNum, Ability... abilities) {
-		super(name, tileSheetNum);
+		super(name, 600, tileSheetNum);
 		this.abilities.addAll(Arrays.asList(abilities));
 	}
 	

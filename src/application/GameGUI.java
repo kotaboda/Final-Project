@@ -314,7 +314,7 @@ public class GameGUI extends Application {
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
-								if (newValue.intValue() == 0) {
+								if (newValue.doubleValue() <= 0) {
 									int newSelection = enemies.getChildren().indexOf(child);
 									enemies.getChildren().remove(child);
 									Node n = null;
@@ -472,6 +472,7 @@ public class GameGUI extends Application {
 
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			GameEngine.startBattle(b);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -563,9 +564,9 @@ public class GameGUI extends Application {
 								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 							} else {
 								GameEngine.checkLoot();
-							}
-							if (currentLayout == GUILayouts.GENERAL) {
-								GameEngine.checkNote();
+								if (currentLayout == GUILayouts.GENERAL) {
+									GameEngine.checkNote();
+								}
 							}
 							break;
 						case ESCAPE:
@@ -586,7 +587,6 @@ public class GameGUI extends Application {
 							Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
 							if (b != null) {
 								displayBattleView(b);
-								GameEngine.startBattle(b);
 
 							} else if (TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 									.getTiles()[playerCoord.getY()][playerCoord.getX()].getTileSheetNum() == 4) {
@@ -596,6 +596,7 @@ public class GameGUI extends Application {
 												.getPlayerStart().getX(),
 										TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 												.getPlayerStart().getY());
+								drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()-1]);
 							}
 						}
 					}

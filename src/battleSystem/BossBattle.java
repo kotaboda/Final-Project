@@ -26,6 +26,21 @@ public class BossBattle extends Battle {
 			throw new IllegalArgumentException("The boss in a boss battle cannot be null.");
 		}
 		this.boss = boss;
+		Enemy[] e = new Enemy[enemies.length + 1];
+		for(int i = 0; i < enemies.length; i++){
+			e[i] = enemies[i];
+		}
+		e[enemies.length] = boss;
+		this.setEnemies(e);
+	}
+	
+	public BossBattle(Player player, Boss boss){
+		super(player);
+		if (boss == null) {
+			throw new IllegalArgumentException("The boss in a boss battle cannot be null.");
+		}
+		this.setEnemies(boss);
+		this.boss = boss;
 	}
 
 	@Override
@@ -70,6 +85,7 @@ public class BossBattle extends Battle {
 						switch (r.nextInt(2)) {
 						case 0:
 							boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
+							System.out.println(boss.getAbilities().size());
 							if (boss.getAbilities().size() != 0) {
 								break;
 							}
@@ -119,12 +135,10 @@ public class BossBattle extends Battle {
 		isCompleted = true;
 		GameEngine.displayEndBattle(this);
 	}
-	
-	
+
 	private Character[] createTurnList() {
 		ArrayList<Character> c = new ArrayList<>(Arrays.asList(enemies));
 		c.add(player);
-		c.add(boss);
 		Character[] turnList = c.toArray(new Character[0]);
 		Arrays.sort(turnList, Character::compareWit);
 

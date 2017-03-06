@@ -45,6 +45,13 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		this.enemies = enemies;
 		this.player = player;
 	}
+	
+	protected Battle(Player player){
+		if (player == null) {
+			throw new IllegalArgumentException("The player in a battle cannot be null");
+		}
+		this.player = player;
+	}
 
 	public void setPlayerNextItemUse(Usable playerNextItemUse) {
 		this.playerNextItemUse = playerNextItemUse;

@@ -25,7 +25,7 @@ public abstract class Floor implements Paintable, Serializable{
 	 */
 	private static final long serialVersionUID = -4879286765234322293L;
 	protected Tile[][] tiles;
-	private Boss boss;
+	protected Boss boss;
 	private BossBattle bossBattle;
 	private Battle[] battles;
 	private Player player;
@@ -115,6 +115,10 @@ public abstract class Floor implements Paintable, Serializable{
 
 	public HashMap<Coordinates, Note> getNotes() {
 		return notes;
+	}
+	
+	public boolean bossIsDefeated(){
+		return boss.isDefeated();
 	}
 
 	@Override

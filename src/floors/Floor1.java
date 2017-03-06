@@ -1,6 +1,7 @@
 package floors;
 
 import battleSystem.Battle;
+import battleSystem.BossBattle;
 import character.Boss;
 import character.Player;
 import characterInterfaces.Lootable;
@@ -10,6 +11,7 @@ import itemSystem.Item;
 import itemSystem.MountainDew;
 import itemSystem.Ramen;
 import tileinterfaces.Interactable;
+import tiles.BossTile;
 import tiles.Tile;
 import tiles.TileManager;
 
@@ -30,6 +32,7 @@ public class Floor1 extends Floor {
 			private static final long serialVersionUID = 1L;
 			
 		});
+		setBossBattle(new BossBattle(player, boss));
 		getBoss().getCoordinates().setCoordinates(9, 1);
 		setPlayer(player);
 		getPlayer().getCoordinates().setCoordinates(9, 12);
@@ -66,6 +69,7 @@ public class Floor1 extends Floor {
 //		for(Note note : notesTemp) {
 //			getNotes().put(note.getCoord(), note);
 //		}
+		tiles[1][9] = new BossTile(12);
 	}
 	
 	public void genTiles() {

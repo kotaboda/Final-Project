@@ -19,6 +19,7 @@ import javafx.concurrent.Task;
 import models.Coordinates;
 import tileinterfaces.Collidable;
 import tileinterfaces.Interactable;
+import tiles.BossTile;
 import tiles.Chest;
 import tiles.Tile;
 
@@ -165,6 +166,8 @@ public class GameEngine {
 		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
 		if(t instanceof Chest){
 			view.displayLootManager((Lootable)t); 
+		} else if(t instanceof BossTile){
+			view.displayBattleView(game.getFloors()[game.getPlayer().getFloorNum() - 1].getBossBattle());
 		}
 		return null;
 	}
