@@ -15,6 +15,9 @@ import enums.GUILayouts;
 import floors.Floor;
 import itemSystem.Item;
 import itemSystem.Usable;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -55,6 +58,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
 import tiles.TileManager;
@@ -68,6 +72,7 @@ public class GameGUI extends Application {
 	private Object lock = new Object();
 	private Parent p;
 	private TextArea displayText = new TextArea("");
+	private boolean isAnimating = false;
 	{
 		displayText.setId("displayText");
 		// displayText.setMouseTransparent(true);
@@ -530,6 +535,7 @@ public class GameGUI extends Application {
 		try {
 			p = loader.load();
 			playerImageView.setImage(new Image(getClass().getResourceAsStream("/hero.jpg")));
+			drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, 0);
 			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 				@Override
@@ -540,22 +546,34 @@ public class GameGUI extends Application {
 						switch (keyEvent) {
 						case W:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								GameEngine.updatePlayerPosition(Direction.UP);
+								if(!isAnimating && GameEngine.checkMovement(Direction.UP)){
+									playAnimation(Direction.UP);
+//									GameEngine.updatePlayerPosition(Direction.UP);
+								}
 							}
 							break;
 						case S:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								GameEngine.updatePlayerPosition(Direction.DOWN);
+								if(!isAnimating && GameEngine.checkMovement(Direction.DOWN)){
+									playAnimation(Direction.DOWN);
+//									GameEngine.updatePlayerPosition(Direction.DOWN);
+								}
 							}
 							break;
 						case A:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								GameEngine.updatePlayerPosition(Direction.LEFT);
+								if(!isAnimating && GameEngine.checkMovement(Direction.LEFT)){
+									playAnimation(Direction.LEFT);
+//									GameEngine.updatePlayerPosition(Direction.LEFT);
+								}
 							}
 							break;
 						case D:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								GameEngine.updatePlayerPosition(Direction.RIGHT);
+								if(!isAnimating && GameEngine.checkMovement(Direction.RIGHT)){
+									playAnimation(Direction.RIGHT);
+//									GameEngine.updatePlayerPosition(Direction.RIGHT);
+								}
 							}
 							break;
 						case E:
@@ -578,7 +596,7 @@ public class GameGUI extends Application {
 						// this code only runs when it needs to.
 						if (keyEvent.equals(KeyCode.W) || keyEvent.equals(KeyCode.A) || keyEvent.equals(KeyCode.S)
 								|| keyEvent.equals(KeyCode.D)) {
-							drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+//							drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, 0);
 							Battle b = GameEngine
 									.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 							// String message = GameEngine.checkNote();
@@ -623,42 +641,32 @@ public class GameGUI extends Application {
 
 			// Drawing testing
 			// GraphicsContext gc = canvas.getGraphicsContext2D();
-			drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
-			// WritableImage image =
-			// TileManager.getImageToDraw(currentFloor.getTiles(),
-			// playerSummary.coordinates);
-			// gc.drawImage(image, 0, 0, image.getWidth() * 2, image.getHeight()
-			// * 2);
-			// Animation testing
-			// Timeline gameLoop = new Timeline();
-			// gameLoop.setCycleCount( 64 );
-			//
-			// KeyFrame kf = new KeyFrame(
-			// Duration.seconds(0.01666667), // 60 FPS
-			// new EventHandler<ActionEvent>()
-			// {
-			// int x = 0;
-			// public void handle(ActionEvent ae)
-			// {
-			// x -= 1;
-			// int tempX = x % 64;
-			// gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-			// if(tempX == 0){
-			// playerSummary.coordinates.setX(playerSummary.coordinates.getX() +
-			// 1);
-			// x = 0;
-			// }
-			// WritableImage image =
-			// TileManager.getImageToDraw(currentFloor.getTiles(),
-			// playerSummary.coordinates);
-			// System.out.println(x);
-			// gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2,
-			// image.getHeight() * 2);
-			// }
-			// });
-			//
-			// gameLoop.getKeyFrames().add( kf );
-			// gameLoop.play();
+			//NOTE(andrew): animation testing!!
+//			drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+//			Animation testing
+//			isAnimating = true;
+//			Timeline gameLoop = new Timeline();
+//			gameLoop.setCycleCount( 64 );
+//			
+//			KeyFrame kf = new KeyFrame(
+//				Duration.seconds(0.01666667), // 60 FPS
+//				new EventHandler<ActionEvent>()
+//				{
+//					int x = 0;
+//					public void handle(ActionEvent ae)
+//					{
+//						x += 1;
+//						int tempX = x % 64;
+//						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
+//						if(tempX == 0){
+//							x = 0;
+//							isAnimating = false;
+//						}
+//					}
+//				}
+//			);
+//			gameLoop.getKeyFrames().add( kf );
+//			gameLoop.play();
 			// gameLoop.getKeyFrames().add( kf );
 			// gameLoop.play();
 			// split
@@ -785,16 +793,19 @@ public class GameGUI extends Application {
 		}
 	}
 
-	private void drawToGeneralCanvas(Floor currentFloor) {
+	private void drawToGeneralCanvas(Floor currentFloor, int offsetX, int offsetY) {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
 		Image playerImg = new Image(getClass().getResourceAsStream("/hero.jpg"));
-		gc.drawImage(image, 0, 0, image.getWidth() * (canvas.getWidth() / image.getWidth()),
-				image.getHeight() * (canvas.getHeight() / image.getHeight()));
-		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16, (canvas.getHeight() / 2) - 16, 32, 32);
-
+//		gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() * (canvas.getWidth() / image.getWidth()),
+//				image.getHeight() * (canvas.getHeight() / image.getHeight()));
+		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
+//		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16, (canvas.getHeight() / 2) - 16, 32, 32);
+		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
+		System.out.println(currentFloor.getPlayer().getCoordinates());
+		System.out.println("X: " + offsetX + "Y: " + offsetY);
 	}
 
 	public void displayCharacterManager() {
@@ -924,5 +935,98 @@ public class GameGUI extends Application {
 		}
 
 	}
-
+	
+	public void playAnimation(Direction direction){
+		if(!isAnimating){
+			switch(direction){
+			case UP:
+				isAnimating = true;
+				new AnimationTimer()
+				{
+					int y = 0;
+					public void handle(long currentNanoTime) {
+						y += 1;
+						int temp = y % 64;
+						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, y);
+						if(temp == 0){
+							isAnimating = false;
+							y = 0;
+							GameEngine.updatePlayerPosition(Direction.UP);
+							this.stop();
+						}
+					
+					}
+				}.start();
+			
+				break;
+			case RIGHT:
+				isAnimating = true;
+				new AnimationTimer()
+				{
+					int x = 0;
+					public void handle(long currentNanoTime) {
+						x -= 1;
+						int temp = x % 64;
+						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
+						if(temp == 0){
+							isAnimating = false;
+							x = 0;
+							GameEngine.updatePlayerPosition(Direction.RIGHT);
+							this.stop();
+						}
+					
+					}
+				}.start();
+				break;
+				
+			case DOWN:
+				isAnimating = true;
+				new AnimationTimer()
+				{
+					int y = 0;
+					public void handle(long currentNanoTime) {
+						y -= 1;
+						int temp = y % 64;
+						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, y);
+						if(temp == 0){
+							isAnimating = false;
+							y = 0;
+							GameEngine.updatePlayerPosition(Direction.DOWN);
+							this.stop();
+						}
+					
+					}
+				}.start();
+				//
+				
+				break;
+				
+			case LEFT:
+				isAnimating = true;
+				new AnimationTimer()
+				{
+					int x = 0;
+					public void handle(long currentNanoTime) {
+						x += 1;
+						int temp = x % 64;
+						System.out.println(temp);
+						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
+						if(temp == 0){
+							isAnimating = false;
+							x = 0;
+							GameEngine.updatePlayerPosition(Direction.LEFT);
+							this.stop();
+						}
+					
+					}
+				}.start();
+	
+				break;
+				
+			default:
+				break;
+			}
+			System.out.println(Thread.currentThread().getName());
+		}
+	}
 }
