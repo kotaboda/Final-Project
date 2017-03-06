@@ -579,12 +579,12 @@ public class GameGUI extends Application {
 						case E:
 							if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
-							} else {
 								GameEngine.checkLoot();
-							}
-							if (currentLayout == GUILayouts.GENERAL) {
+							} else {
 								GameEngine.checkNote();
+								
 							}
+							
 							break;
 						case ESCAPE:
 							displayPauseMenu();
@@ -798,14 +798,45 @@ public class GameGUI extends Application {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		WritableImage image = TileManager.getImageToDraw(currentFloor.getTiles(),
 				currentFloor.getPlayer().getCoordinates());
+		int currentImageIndex = 0;
+		int imageRow = 0;
+		switch(currentFloor.getPlayer().getDirectionFacing()){
+		
+		case UP:
+			if(offsetX % 8 == 0){
+				if(currentImageIndex < 4){
+					currentImageIndex++;
+				}else{
+					currentImageIndex = 0;
+				}
+			}
+			
+			break;
+		case DOWN:
+			if(offsetX % 8 == 0){
+				if(currentImageIndex < 4){
+					currentImageIndex++;
+				}else{
+					currentImageIndex = 0;
+				}
+			}
+			imageRow = 2;
+			break;
+			
+		case LEFT:
+		case RIGHT:
+			
+			break;
+		}
 		Image playerImg = new Image(getClass().getResourceAsStream("/hero.jpg"));
 //		gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() * (canvas.getWidth() / image.getWidth()),
 //				image.getHeight() * (canvas.getHeight() / image.getHeight()));
 		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
 //		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16, (canvas.getHeight() / 2) - 16, 32, 32);
-		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
-		System.out.println(currentFloor.getPlayer().getCoordinates());
-		System.out.println("X: " + offsetX + "Y: " + offsetY);
+//		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
+		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64, 64, 64);
+//		System.out.println(currentFloor.getPlayer().getCoordinates());
+//		System.out.println("X: " + offsetX + "Y: " + offsetY);
 	}
 
 	public void displayCharacterManager() {
@@ -945,7 +976,7 @@ public class GameGUI extends Application {
 				{
 					int y = 0;
 					public void handle(long currentNanoTime) {
-						y += 1;
+						y += 2;
 						int temp = y % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, y);
 						if(temp == 0){
@@ -965,7 +996,7 @@ public class GameGUI extends Application {
 				{
 					int x = 0;
 					public void handle(long currentNanoTime) {
-						x -= 1;
+						x -= 2;
 						int temp = x % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
 						if(temp == 0){
@@ -985,7 +1016,7 @@ public class GameGUI extends Application {
 				{
 					int y = 0;
 					public void handle(long currentNanoTime) {
-						y -= 1;
+						y -= 2;
 						int temp = y % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, y);
 						if(temp == 0){
@@ -1007,9 +1038,8 @@ public class GameGUI extends Application {
 				{
 					int x = 0;
 					public void handle(long currentNanoTime) {
-						x += 1;
+						x += 2;
 						int temp = x % 64;
-						System.out.println(temp);
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
 						if(temp == 0){
 							isAnimating = false;
@@ -1026,7 +1056,6 @@ public class GameGUI extends Application {
 			default:
 				break;
 			}
-			System.out.println(Thread.currentThread().getName());
 		}
 	}
 }
