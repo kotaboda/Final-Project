@@ -1,7 +1,7 @@
 package floors;
 
 import battleSystem.Battle;
-import character.Boss;
+import character.JerryPay;
 import character.Player;
 import models.Coordinates;
 import tiles.Tile;
@@ -16,12 +16,7 @@ public class Floor2 extends Floor {
 	
 	public Floor2(Player player) {
 		genTiles();
-		setBoss(new Boss() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;});
+		setBoss(new JerryPay());
 		getBoss().getCoordinates().setCoordinates(1, 8);
 		setPlayer(player);
 		setBattles(new Battle[7]);
@@ -50,7 +45,7 @@ public class Floor2 extends Floor {
 				{58, 5, 5,24, 5, 5, 5, 5, 3,24,59},
 				{58, 5, 5, 5,51,51,51, 5,59, 5,59},
 				{63,53, 0,53,53,53,53,53,49, 5,59},
-				{58, 5, 5, 5, 5, 5, 5, 5, 5, 5,59},
+				{58,73, 5, 5, 5, 5, 5, 5, 5, 5,59},
 				{61,54, 1,54,54,54,54,54,57, 5,59},
 				{58, 5, 5,12,50,50,36, 5,59, 5,59},
 				{58, 5, 5, 5, 5, 5, 5, 5, 3, 5,59},
