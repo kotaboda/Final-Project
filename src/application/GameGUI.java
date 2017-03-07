@@ -2,7 +2,9 @@ package application;
 
 /**
  * battle regen on floors / battle occur by chance after
+ * 
  */
+
 
 import java.io.IOException;
 import java.util.ArrayList;
