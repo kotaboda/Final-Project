@@ -70,7 +70,7 @@ public class BossBattle extends Battle {
 						// NOTE(andrew): this branch runs if the player uses an
 						// item
 						playerNextItemUse.use(turnList[i]);
-						loggedAction = player.NAME + ": Used " + ((Item) playerNextItemUse);
+						loggedAction = player.NAME + ": Used " + (playerNextItemUse);
 						notifySubscribers();
 					} else if (playerTarget != null) {
 						// NOTE(andrew): this branch runs if the player selected
