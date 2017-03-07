@@ -555,8 +555,6 @@ public class GameGUI extends Application {
 									playAnimation(Direction.UP);
 //									GameEngine.updatePlayerPosition(Direction.UP);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
-								}else if(!isAnimating){
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
 								}else if (!isAnimating){
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
 									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
@@ -582,8 +580,6 @@ public class GameGUI extends Application {
 									playAnimation(Direction.LEFT);
 //									GameEngine.updatePlayerPosition(Direction.LEFT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
-								}else if(!isAnimating){
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
 								}else if (!isAnimating){
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
 									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
@@ -600,7 +596,7 @@ public class GameGUI extends Application {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
 									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 								}
-								}
+							}
 							break;
 						case E:
 							if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
@@ -763,33 +759,11 @@ public class GameGUI extends Application {
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
-
-			displayMessage("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
-			// displayText.setText("You beat the dudes mango im real prouda you
-			// goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
-			//
-			// Platform.runLater(new Runnable() {
-			// @Override
-			// public void run() {
-			//
-			// ((AnchorPane)
-			// primaryStage.getScene().getRoot()).getChildren().add(displayText);
-			//
-			// //NOTE(andrew): this must be an event filter that is passed in
-			// the type of event and its function, rather than using the
-			// //setOnKeyPressed() method, because there are selections made in
-			// the battle view, and those selections eat up the escape
-			// //event. Using this filter allows us to read the keycode before
-			// it is eaten up.
-			// p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			// if (event.getCode().equals(KeyCode.ESCAPE) &&
-			// currentLayout.equals(GUILayouts.BATTLE)) {
-			// displayGeneralView();
-			// }
-			// });
-			// }
-			//
-			// });
+			String itemsDropped = "Item Drops:\n";
+			for(Item i : b.getItemDrops()){
+				itemsDropped += i.NAME + "\n";
+			}
+			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + itemsDropped);
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
@@ -847,7 +821,7 @@ public class GameGUI extends Application {
 			imageRow = 1;
 			break;
 		}
-		Image playerImg = new Image(getClass().getResourceAsStream("/images/MaleWalk.png"));
+		Image playerImg = currentFloor.getPlayer().getWorldImage();
 //		gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() * (canvas.getWidth() / image.getWidth()),
 //				image.getHeight() * (canvas.getHeight() / image.getHeight()));
 		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
