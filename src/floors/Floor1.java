@@ -3,13 +3,11 @@ package floors;
 import battleSystem.BossBattle;
 import character.Boss;
 import character.Player;
-import characterInterfaces.Lootable;
 import itemSystem.Coffee;
 import itemSystem.Doritos;
 import itemSystem.Item;
 import itemSystem.MountainDew;
 import itemSystem.Ramen;
-import noteInterface.Noteable;
 import tiles.Tile;
 import tiles.TileManager;
 
@@ -47,23 +45,8 @@ public class Floor1 extends Floor {
 		Item[][] floorLoot = new Item[2][];
 		floorLoot[0] = new Item[] {new Coffee(), new Ramen()};
 		floorLoot[1] = new Item[] {new MountainDew(), new Doritos()};
-		int noteCounter = 0;
-		int lootCounter = 0;
-		for(int i = 0; i < tiles.length; i++){
-			for(int j = 0; j < tiles[i].length; j++){
-				if(tiles[i][j] instanceof Noteable){
-					((Noteable) tiles[i][j]).setNote(notesTemp[noteCounter]);
-					noteCounter++;
-				}
-				if(tiles[i][j] instanceof Lootable){
-					((Lootable)tiles[i][j]).setLoot(floorLoot[lootCounter]);
-					lootCounter++;
-				}
-			}
-		}
-//		for(Note note : notesTemp) {
-//			getNotes().put(note.getCoord(), note);
-//		}
+		
+		genNotes(notesTemp, floorLoot);
 	}
 	
 	public void genTiles() {
