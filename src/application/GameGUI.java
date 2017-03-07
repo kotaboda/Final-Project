@@ -1,43 +1,67 @@
 package application;
 
-import javafx.scene.*;
-import javafx.collections.*;
-import javafx.application.*;
-import javafx.scene.control.*;
-import javafx.event.*;
-import javafx.scene.image.*;
-import javafx.scene.input.*;
-import javafx.animation.AnimationTimer;
-import javafx.beans.value.*;
-import javafx.stage.*;
-import models.Coordinates;
-import publisherSubscriberInterfaces.Listener;
-import tiles.TileManager;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
-import character.*;
-import characterEnums.*;
+import character.Enemy;
+import character.Player;
+import characterEnums.Direction;
+import characterEnums.InventoryAction;
+import characterEnums.Stats;
 import characterInterfaces.Lootable;
 import enums.GUILayouts;
-import enums.Genders;
 import floors.Floor;
-import itemSystem.*;
-import javafx.fxml.*;
-import javafx.geometry.*;
-import javafx.scene.canvas.*;
-import javafx.scene.layout.*;
+import itemSystem.Item;
+import itemSystem.Usable;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-
-/**
- * character creation 
- * battle regen on floors / battle occur by chance after
- * step;
- */
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import models.Coordinates;
+import publisherSubscriberInterfaces.Listener;
+import tiles.TileManager;
 
 public class GameGUI extends Application {
 
@@ -93,7 +117,6 @@ public class GameGUI extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-
 			displayMainMenu();
 
 		} catch (Exception e) {
@@ -120,8 +143,9 @@ public class GameGUI extends Application {
 
 				@Override
 				public void handle(ActionEvent event) {
-					displayCharacterCreation();
-//					displayGeneralView();
+					TESTINGGAME = new Game(new Player());
+					GameEngine.setGame(TESTINGGAME);
+					displayGeneralView();
 				}
 			});
 
@@ -232,7 +256,9 @@ public class GameGUI extends Application {
 	private Pane rightBattleVBox;
 	@FXML
 	private ListView<String> leftActionList;
+	//
 	private ListView<Ability> abilityList;
+	//
 	@FXML
 	private Button submitButton;
 	@FXML
@@ -521,37 +547,49 @@ public class GameGUI extends Application {
 						switch (keyEvent) {
 						case W:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.UP)) {
+								if(!isAnimating && GameEngine.checkMovement(Direction.UP)){
 									playAnimation(Direction.UP);
-									// GameEngine.updatePlayerPosition(Direction.UP);
+//									GameEngine.updatePlayerPosition(Direction.UP);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
+								}else if(!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
+									drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, 0);
 								}
 							}
 							break;
 						case S:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.DOWN)) {
+								if(!isAnimating && GameEngine.checkMovement(Direction.DOWN)){
 									playAnimation(Direction.DOWN);
-									// GameEngine.updatePlayerPosition(Direction.DOWN);
+//									GameEngine.updatePlayerPosition(Direction.DOWN);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
+								}else if(!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
+									drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, 0);
 								}
 							}
 							break;
 						case A:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.LEFT)) {
+								if(!isAnimating && GameEngine.checkMovement(Direction.LEFT)){
 									playAnimation(Direction.LEFT);
-									// GameEngine.updatePlayerPosition(Direction.LEFT);
+//									GameEngine.updatePlayerPosition(Direction.LEFT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
+								}else if(!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
+									drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, 0);
 								}
 							}
 							break;
 						case D:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.RIGHT)) {
+								if(!isAnimating && GameEngine.checkMovement(Direction.RIGHT)){
 									playAnimation(Direction.RIGHT);
-									// GameEngine.updatePlayerPosition(Direction.RIGHT);
+//									GameEngine.updatePlayerPosition(Direction.RIGHT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
+								}else if(!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
+									drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, 0);
 								}
 							}
 							break;
@@ -560,10 +598,9 @@ public class GameGUI extends Application {
 								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 								GameEngine.checkLoot();
 							} else {
-								if (!GameEngine.checkForBoss()) {
-									GameEngine.checkNote();
-								}
+								GameEngine.checkNote();
 							}
+							
 							break;
 						case ESCAPE:
 							displayPauseMenu();
@@ -575,8 +612,7 @@ public class GameGUI extends Application {
 						// this code only runs when it needs to.
 						if (keyEvent.equals(KeyCode.W) || keyEvent.equals(KeyCode.A) || keyEvent.equals(KeyCode.S)
 								|| keyEvent.equals(KeyCode.D)) {
-							// drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()
-							// - 1], 0, 0);
+//							drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, 0);
 							Battle b = GameEngine
 									.checkForBattle(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 							// String message = GameEngine.checkNote();
@@ -593,8 +629,7 @@ public class GameGUI extends Application {
 												.getPlayerStart().getX(),
 										TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 												.getPlayerStart().getY());
-								drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1],
-										0, 0);
+								drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()-1], 0, 0);
 							}
 						}
 					}
@@ -619,6 +654,60 @@ public class GameGUI extends Application {
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
 			playerName.setText(TESTINGGAME.getPlayer().NAME);
+
+			// Drawing testing
+			// GraphicsContext gc = canvas.getGraphicsContext2D();
+			//NOTE(andrew): animation testing!!
+//			drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
+//			Animation testing
+//			isAnimating = true;
+//			Timeline gameLoop = new Timeline();
+//			gameLoop.setCycleCount( 64 );
+//			
+//			KeyFrame kf = new KeyFrame(
+//				Duration.seconds(0.01666667), // 60 FPS
+//				new EventHandler<ActionEvent>()
+//				{
+//					int x = 0;
+//					public void handle(ActionEvent ae)
+//					{
+//						x += 1;
+//						int tempX = x % 64;
+//						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
+//						if(tempX == 0){
+//							x = 0;
+//							isAnimating = false;
+//						}
+//					}
+//				}
+//			);
+//			gameLoop.getKeyFrames().add( kf );
+//			gameLoop.play();
+			// gameLoop.getKeyFrames().add( kf );
+			// gameLoop.play();
+			// split
+			// new AnimationTimer()
+			// {
+			// int x = 0;
+			// public void handle(long currentNanoTime)
+			// {
+			// x -= 1;
+			// int tempX = x % 64;
+			// gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+			// if(tempX == 0){
+			// playerSummary.coordinates.setX(playerSummary.coordinates.getX() +
+			// 1);
+			// x = 0;
+			// }
+			// WritableImage image =
+			// TileManager.getImageToDraw(currentFloor.getTiles(),
+			// playerSummary.coordinates);
+			// gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2,
+			// image.getHeight() * 2);
+			//
+			//
+			// }
+			// }.start();
 			Scene scene = new Scene(p);
 			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
@@ -664,12 +753,33 @@ public class GameGUI extends Application {
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
-			String itemsDropped = "Item Drops:\n";
-			for (Item i : b.getItemDrops()) {
-				itemsDropped += i.NAME + "\n";
-			}
-			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + itemsDropped);
 
+			displayMessage("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+			// displayText.setText("You beat the dudes mango im real prouda you
+			// goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+			//
+			// Platform.runLater(new Runnable() {
+			// @Override
+			// public void run() {
+			//
+			// ((AnchorPane)
+			// primaryStage.getScene().getRoot()).getChildren().add(displayText);
+			//
+			// //NOTE(andrew): this must be an event filter that is passed in
+			// the type of event and its function, rather than using the
+			// //setOnKeyPressed() method, because there are selections made in
+			// the battle view, and those selections eat up the escape
+			// //event. Using this filter allows us to read the keycode before
+			// it is eaten up.
+			// p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			// if (event.getCode().equals(KeyCode.ESCAPE) &&
+			// currentLayout.equals(GUILayouts.BATTLE)) {
+			// displayGeneralView();
+			// }
+			// });
+			// }
+			//
+			// });
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
@@ -706,8 +816,8 @@ public class GameGUI extends Application {
 				currentFloor.getPlayer().getCoordinates());
 		int currentImageIndex = 0;
 		int imageRow = 0;
-		switch (currentFloor.getPlayer().getDirectionFacing()) {
-
+		switch(currentFloor.getPlayer().getDirectionFacing()){
+		
 		case UP:
 			currentImageIndex = Math.abs((offsetY % 32) / 8);
 			imageRow = 0;
@@ -716,7 +826,7 @@ public class GameGUI extends Application {
 			currentImageIndex = Math.abs((offsetY % 32) / 8);
 			imageRow = 2;
 			break;
-
+			
 		case LEFT:
 			currentImageIndex = Math.abs((offsetX % 32) / 8);
 			imageRow = 3;
@@ -726,19 +836,15 @@ public class GameGUI extends Application {
 			imageRow = 1;
 			break;
 		}
-		Image playerImg = TESTINGGAME.getPlayer().getWorldImage();
-		// gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() *
-		// (canvas.getWidth() / image.getWidth()),
-		// image.getHeight() * (canvas.getHeight() / image.getHeight()));
+		Image playerImg = new Image(getClass().getResourceAsStream("/images/MaleWalk.png"));
+//		gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() * (canvas.getWidth() / image.getWidth()),
+//				image.getHeight() * (canvas.getHeight() / image.getHeight()));
 		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
-		// gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16,
-		// (canvas.getHeight() / 2) - 16, 32, 32);
-		// gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32,
-		// (canvas.getHeight() / 2) - 32, 64, 64);
-		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, 32, 32, (canvas.getWidth() / 2) - 32,
-				(canvas.getHeight() / 2) - 32, 64, 64);
-		// System.out.println(currentFloor.getPlayer().getCoordinates());
-		// System.out.println("X: " + offsetX + "Y: " + offsetY);
+//		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16, (canvas.getHeight() / 2) - 16, 32, 32);
+//		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
+		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, 32, 32, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
+//		System.out.println(currentFloor.getPlayer().getCoordinates());
+//		System.out.println("X: " + offsetX + "Y: " + offsetY);
 	}
 
 	public void displayCharacterManager() {
@@ -772,10 +878,8 @@ public class GameGUI extends Application {
 			});
 
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
-			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
-					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
-			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty()
-					.divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
+			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
+			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty().divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
 			for (int i = 0; i < Stats.values().length; i++) {
 				Label stat = new Label(Stats.values()[i].toString());
 				Label statNum = new Label(TESTINGGAME.getPlayer().getStat(Stats.values()[i]) + "");
@@ -787,8 +891,8 @@ public class GameGUI extends Application {
 				MenuBar item = new MenuBar(m);
 				GridPane.setHalignment(item, HPos.CENTER);
 				if (theItem instanceof Usable) {
-					MenuItem use = new MenuItem("Use");
-					use.setOnAction(new EventHandler<ActionEvent>() {
+					MenuItem mi = new MenuItem("Use");
+					mi.setOnAction(new EventHandler<ActionEvent>() {
 
 						@Override
 						public void handle(ActionEvent event) {
@@ -798,18 +902,7 @@ public class GameGUI extends Application {
 						}
 
 					});
-					MenuItem drop = new MenuItem("Drop");
-					drop.setOnAction(new EventHandler<ActionEvent>() {
-
-						@Override
-						public void handle(ActionEvent event) {
-							TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
-							playerInventoryGrid.getChildren().remove(item);
-						}
-
-					});
-					m.getItems().add(use);
-					m.getItems().add(drop);
+					m.getItems().add(mi);
 				}
 				playerInventoryGrid.addRow(i, item);
 			}
@@ -881,138 +974,96 @@ public class GameGUI extends Application {
 		}
 
 	}
-
-	public void playAnimation(Direction direction) {
-		if (!isAnimating) {
-			switch (direction) {
+	
+	public void playAnimation(Direction direction){
+		if(!isAnimating){
+			switch(direction){
 			case UP:
 				isAnimating = true;
-				new AnimationTimer() {
+				new AnimationTimer()
+				{
 					int y = 0;
-
 					public void handle(long currentNanoTime) {
 						y += 2;
 						int temp = y % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, y);
-						if (temp == 0) {
+						if(temp == 0){
 							isAnimating = false;
 							y = 0;
 							GameEngine.updatePlayerPosition(Direction.UP);
 							this.stop();
 						}
-
+					
 					}
 				}.start();
-
+			
 				break;
 			case RIGHT:
 				isAnimating = true;
-				new AnimationTimer() {
+				new AnimationTimer()
+				{
 					int x = 0;
-
 					public void handle(long currentNanoTime) {
 						x -= 2;
 						int temp = x % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
-						if (temp == 0) {
+						if(temp == 0){
 							isAnimating = false;
 							x = 0;
 							GameEngine.updatePlayerPosition(Direction.RIGHT);
 							this.stop();
 						}
-
+					
 					}
 				}.start();
 				break;
-
+				
 			case DOWN:
 				isAnimating = true;
-				new AnimationTimer() {
+				new AnimationTimer()
+				{
 					int y = 0;
-
 					public void handle(long currentNanoTime) {
 						y -= 2;
 						int temp = y % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], 0, y);
-						if (temp == 0) {
+						if(temp == 0){
 							isAnimating = false;
 							y = 0;
 							GameEngine.updatePlayerPosition(Direction.DOWN);
 							this.stop();
 						}
-
+					
 					}
 				}.start();
 				//
-
+				
 				break;
-
+				
 			case LEFT:
 				isAnimating = true;
-				new AnimationTimer() {
+				new AnimationTimer()
+				{
 					int x = 0;
-
 					public void handle(long currentNanoTime) {
 						x += 2;
 						int temp = x % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
-						if (temp == 0) {
+						if(temp == 0){
 							isAnimating = false;
 							x = 0;
 							GameEngine.updatePlayerPosition(Direction.LEFT);
 							this.stop();
 						}
-
+					
 					}
 				}.start();
-
+	
 				break;
-
+				
 			default:
 				break;
 			}
-		}
-	}
-	@FXML
-	private RadioButton boyRadioButton;
-	@FXML
-	private RadioButton girlRadioButton;
-	@FXML
-	private TextField nameTextField;
-	public void displayCharacterCreation(){
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CharacterCreationView.fxml"));
-		
-		loader.setController(this);
-		
-		try{
-			p = loader.load();
-			Scene scene = new Scene(p);
-			
-			ToggleGroup tg = new ToggleGroup();
-			boyRadioButton.setUserData(Genders.BOY);
-			tg.getToggles().add(boyRadioButton);
-			girlRadioButton.setUserData(Genders.GIRL);
-			tg.getToggles().add(girlRadioButton);
-			boyRadioButton.setSelected(true);
-			
-			submitButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
-
-				@Override
-				public void handle(MouseEvent event) {
-					TESTINGGAME = new Game(new Player(nameTextField.getText(), (Genders) tg.getSelectedToggle().getUserData(), 0));
-					GameEngine.setGame(TESTINGGAME);
-					displayGeneralView();
-				}
-				
-			});;
-			
-			String css = getClass().getResource("application.css").toExternalForm();
-			scene.getStylesheets().add(css);
-			primaryStage.setScene(scene);
-			primaryStage.show();
-			
-		}catch(IOException e){
-			
 		}
 	}
 }
