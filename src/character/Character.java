@@ -55,7 +55,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		} else if (name.isEmpty()) {
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
-		
+		this.coordinates = new Coordinates(0,0);
 		this.stats.put(Stats.MOTIVATION, 1);
 		this.stats.put(Stats.INTELLIGIENCE, 1);
 		this.stats.put(Stats.WIT, 1);
@@ -173,6 +173,10 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 
 	public int getStat(Stats STAT) {
 		return stats.get(STAT);
+	}
+	
+	public HashMap<Stats, Integer> getStats() {
+		return stats;
 	}
 
 	public Coordinates getCoordinates() {
