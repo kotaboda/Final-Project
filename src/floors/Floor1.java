@@ -68,13 +68,12 @@ public class Floor1 extends Floor {
 //		for(Note note : notesTemp) {
 //			getNotes().put(note.getCoord(), note);
 //		}
-		tiles[1][9] = new BossTile(12);
 	}
 	
 	public void genTiles() {
 		int[][] tileRefs = {
 				{56,54,54,54,54,54,54,54,54, 4,57},
-				{58,12, 5, 5, 5, 5, 5, 5, 5, 5,59},
+				{58,12, 5, 5, 5, 5, 5, 5, 5,72,59},
 				{58, 5, 5, 5, 5, 5, 5, 5, 5, 5,59},
 				{58, 5,52, 5,52, 5,52, 5,52, 5,59},
 				{58, 5,55, 5,55, 5,55, 5,55, 5,59},

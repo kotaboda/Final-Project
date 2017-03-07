@@ -1,3 +1,11 @@
+/abilityInterfaces/
+/application/
+/battleSystem/
+/character/
+/characterEnums/
+/characterInterfaces/
+/drawinterfaces/
+/enums/
 /floors/
 /itemSystem/
 /models/
@@ -5,12 +13,4 @@
 /tileinterfaces/
 /tiles/
 /viewInterface/
-/battleSystem/
-/application/
-/character/
 /abilities/
-/abilityInterfaces/
-/saves/
-/saves/savedGame.neu
-/images/
-/fxmls/
