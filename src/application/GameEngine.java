@@ -198,10 +198,7 @@ public class GameEngine {
 		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y).get(p.getCoordinates().getX() + x);
 		if(t instanceof Chest){
 			view.displayLootManager((Lootable)t); 
-		} else if(t instanceof Boss){
-			System.out.println("What the hell?");
-			view.displayBattleView(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle());
-		}
+		} 
 		return null;
 	}
 
