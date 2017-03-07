@@ -32,6 +32,7 @@ public class Player extends Character {
 	private final ArrayList<Ability> ABILITIES = new ArrayList<>();
 	private Direction directionFacing = Direction.DOWN;
 	private final Genders sex;
+	private transient Image worldIcon;
 	// private final int COLUMNS = 5;
 	// private final int COUNT = 10;
 	// private final int WIDTH = 32;
@@ -54,10 +55,14 @@ public class Player extends Character {
 		case BOY:
 			sex = Genders.BOY;
 			worldImage = new Image(getClass().getResourceAsStream("/images/MaleWalk.png"));
+			battleImage = new Image(getClass().getResourceAsStream("/images/malebattleicon.png"));
+			worldIcon = new Image(getClass().getResourceAsStream("/images/maleicon.png"));
 			break;
 		case GIRL:
 			sex = Genders.GIRL;
 			worldImage = new Image(getClass().getResourceAsStream("/images/FemaleWalk.png"));
+			battleImage = new Image(getClass().getResourceAsStream("/images/femalebattleicon.png"));
+			worldIcon = new Image(getClass().getResourceAsStream("/images/femaleicon.png"));
 			break;
 		default:
 			sex = Genders.BOY;
@@ -129,6 +134,10 @@ public class Player extends Character {
 	public Image getWorldImage() {
 		// TODO Auto-generated method stub
 		return worldImage;
+	}
+	
+	public Image getWorldIcon() {
+		return worldIcon;
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {

@@ -1,6 +1,5 @@
 package character;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -41,7 +40,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	private int currentCredits = 0;
 	protected ArrayList<Listener<Character>> subscribers = new ArrayList<>();
 	protected transient Image worldImage;
-	protected BufferedImage battleImage;
+	protected transient Image battleImage;
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
 	private int maxHitPoints = 100;
 	protected int maxEnergy = 100;
@@ -134,6 +133,10 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	
 	public int getNumOfCredits(){
 		return currentCredits;
+	}
+	
+	public Image getBattleImage() {
+		return battleImage;
 	}
 	
 	public int getCreditRequirement(){

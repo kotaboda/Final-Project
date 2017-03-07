@@ -286,7 +286,7 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-
+			playerImageView.setImage(TESTINGGAME.getPlayer().getBattleImage());
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			enemies.setAlignment(Pos.CENTER);
 			Listener<Battle> s = new Listener<Battle>() {
@@ -309,6 +309,11 @@ public class GameGUI extends Application {
 			ArrayList<Label> enemyNames = new ArrayList<Label>();
 			for (int i = 0; i < b.getEnemies().length; i++) {
 				Enemy currentEnemy = b.getEnemies()[i];
+				ImageView enemyImage = new ImageView();
+				enemyImage.setImage(currentEnemy.getBattleImage());
+				enemyImage.setFitHeight(150);
+				enemyImage.setFitWidth(150);
+				enemyImage.setPreserveRatio(true);
 				Label enemyName = new Label(currentEnemy.NAME);
 				enemyNames.add(enemyName);
 				ProgressBar enemyHealth = new ProgressBar();
@@ -340,7 +345,7 @@ public class GameGUI extends Application {
 						});
 					}
 				});
-				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
+				VBox mainContainer = new VBox(enemyImage, enemyName, enemyHealth);
 				child.getChildren().add(mainContainer);
 				child.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
@@ -540,7 +545,7 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-			playerImageView.setImage(new Image(getClass().getResourceAsStream("/hero.jpg")));
+			playerImageView.setImage(TESTINGGAME.getPlayer().getWorldIcon());
 			drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
