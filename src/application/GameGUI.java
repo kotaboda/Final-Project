@@ -624,30 +624,7 @@ public class GameGUI extends Application {
 						}
 						// NOTE(andrew): added this if statement to ensure that
 						// this code only runs when it needs to.
-						if ((keyEvent.equals(KeyCode.W) || keyEvent.equals(KeyCode.A) || keyEvent.equals(KeyCode.S)
-								|| keyEvent.equals(KeyCode.D))) {
-							// drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()
-							// - 1], 0, 0);
-							Battle b = GameEngine.checkForBattle(
-									TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1));
-							// String message = GameEngine.checkNote();
-
-							Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
-							if (b != null) {
-								displayBattleView(b);
-
-							} else if (TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getTiles()
-									.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4) {
-								TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
-								TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
-										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)
-												.getPlayerStart().getX(),
-										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)
-												.getPlayerStart().getY());
-								drawToGeneralCanvas(
-										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
-							}
-						}
+			
 					}
 				}
 			});
@@ -995,6 +972,7 @@ public class GameGUI extends Application {
 							isAnimating = false;
 							y = 0;
 							GameEngine.updatePlayerPosition(Direction.UP);
+							chanceBattle();
 							this.stop();
 						}
 
@@ -1018,6 +996,7 @@ public class GameGUI extends Application {
 							isAnimating = false;
 							x = 0;
 							GameEngine.updatePlayerPosition(Direction.RIGHT);
+							chanceBattle();
 							this.stop();
 						}
 
@@ -1041,6 +1020,7 @@ public class GameGUI extends Application {
 							isAnimating = false;
 							y = 0;
 							GameEngine.updatePlayerPosition(Direction.DOWN);
+							chanceBattle();
 							this.stop();
 						}
 
@@ -1066,6 +1046,7 @@ public class GameGUI extends Application {
 							isAnimating = false;
 							x = 0;
 							GameEngine.updatePlayerPosition(Direction.LEFT);
+							chanceBattle();
 							this.stop();
 						}
 
@@ -1077,6 +1058,27 @@ public class GameGUI extends Application {
 			default:
 				break;
 			}
+		}
+	}
+	
+	private void chanceBattle(){
+		Battle b = GameEngine.checkForBattle();
+		// String message = GameEngine.checkNote();
+
+		Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
+		if (b != null) {
+			displayBattleView(b);
+
+		} else if (TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getTiles()
+				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4) {
+			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+			TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
+					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)
+							.getPlayerStart().getX(),
+					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)
+							.getPlayerStart().getY());
+			drawToGeneralCanvas(
+					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 		}
 	}
 

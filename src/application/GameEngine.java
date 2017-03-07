@@ -18,7 +18,6 @@ import character.Project;
 import characterEnums.Direction;
 import characterEnums.InventoryAction;
 import characterInterfaces.Lootable;
-import floors.Floor;
 import itemSystem.Item;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -119,10 +118,10 @@ public class GameEngine {
 						+ x) instanceof Collidable));
 	}
 
-	public static Battle checkForBattle(Floor currentFloor) {
+	public static Battle checkForBattle() {
 		Random r = new Random();
 		Battle battle = null;
-		if(r.nextInt(100) + 1 <= 5){
+		if(r.nextInt(100) + 1 <= 15){
 			int numOfEnemies = r.nextInt(3) + 1;
 			Enemy[] enemies = new Enemy[numOfEnemies];
 			for(int i = 0; i < numOfEnemies; i++){
