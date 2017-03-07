@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import battleSystem.Battle;
+import character.Boss;
 import character.Player;
 import characterEnums.Direction;
 import characterEnums.InventoryAction;
@@ -17,10 +18,10 @@ import itemSystem.Item;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import models.Coordinates;
+import noteInterface.Noteable;
 import tileinterfaces.Collidable;
-import tileinterfaces.Interactable;
-import tiles.BossTile;
 import tiles.Chest;
+import tiles.GroundTile;
 import tiles.Tile;
 
 public class GameEngine {
@@ -158,9 +159,9 @@ public class GameEngine {
 		
 		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
 		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
-		if (t instanceof Interactable) {
+		if (t instanceof Noteable) {
 			// retreive the notes at those coordinates in order to display it
-			view.displayMessage(((Interactable) t).getMessage());
+			view.displayMessage(((Noteable) t).getMessage());
 		}
 		return null;
 	}
@@ -189,7 +190,8 @@ public class GameEngine {
 		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
 		if(t instanceof Chest){
 			view.displayLootManager((Lootable)t); 
-		} else if(t instanceof BossTile){
+		} else if(t instanceof Boss){
+			System.out.println("What the hell?");
 			view.displayBattleView(game.getFloors()[game.getPlayer().getFloorNum() - 1].getBossBattle());
 		}
 		return null;
@@ -228,5 +230,35 @@ public class GameEngine {
 	public static void setGame(Game g) {
 		game = g;
 	}
+
+	public static boolean checkForBoss() {
+		Player p = GameEngine.getGame().getPlayer();
+		Direction d = p.getDirectionFacing();
+		int x = 0;
+		int y = 0;
+		switch(d){
+		case UP:
+			y = -1;
+			break;
+		case RIGHT:
+			x = 1;
+			break;
+		case DOWN:
+			y = 1;
+			break;
+		case LEFT:
+			x = -1;
+			break;
+		}
+		
+		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
+		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
+		if(t instanceof Boss && !game.getFloors()[game.getPlayer().getFloorNum() - 1].getBossBattle().isCompleted()){
+			view.displayBattleView(game.getFloors()[game.getPlayer().getFloorNum() - 1].getBossBattle());
+			game.getFloors()[p.getFloorNum() - 1].getTiles()[game.getFloors()[p.getFloorNum() - 1].getBoss().getCoordinates().getY()][game.getFloors()[p.getFloorNum() - 1].getBoss().getCoordinates().getX()] = new GroundTile(5);
+			return true;
+		}
+		return false;
+		}
 	
 }

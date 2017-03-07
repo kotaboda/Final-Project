@@ -9,8 +9,9 @@ import abilityInterfaces.BuffAbility;
 import characterEnums.Stats;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import tileinterfaces.Interactable;
 
-public abstract class Boss extends Enemy {
+public abstract class Boss extends Enemy implements Interactable {
 	
 	/**
 	 * 
@@ -48,6 +49,12 @@ public abstract class Boss extends Enemy {
 		}
 		
 	}
+	
+	@Override
+	public void interact(Player player) {
+		
+	}
+	
 
 
 	@Override

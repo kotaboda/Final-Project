@@ -2,9 +2,10 @@ package tiles;
 
 import character.Player;
 import floors.Note;
+import noteInterface.Noteable;
 import tileinterfaces.Interactable;
 
-public class FloorMessage extends Tile implements Interactable {
+public class FloorMessage extends Tile implements Interactable, Noteable{
 
 	/**
 	 * 

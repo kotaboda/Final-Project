@@ -7,10 +7,11 @@ import character.Player;
 import characterInterfaces.Lootable;
 import floors.Note;
 import itemSystem.Item;
+import noteInterface.Noteable;
 import tileinterfaces.Collidable;
 import tileinterfaces.Interactable;
 
-public class Chest extends Tile implements Interactable, Collidable, Lootable {
+public class Chest extends Tile implements Interactable, Collidable, Lootable, Noteable {
 
 	/**
 	 * 

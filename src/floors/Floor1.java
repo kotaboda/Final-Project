@@ -10,8 +10,7 @@ import itemSystem.Doritos;
 import itemSystem.Item;
 import itemSystem.MountainDew;
 import itemSystem.Ramen;
-import tileinterfaces.Interactable;
-import tiles.BossTile;
+import noteInterface.Noteable;
 import tiles.Tile;
 import tiles.TileManager;
 
@@ -55,8 +54,8 @@ public class Floor1 extends Floor {
 		int lootCounter = 0;
 		for(int i = 0; i < tiles.length; i++){
 			for(int j = 0; j < tiles[i].length; j++){
-				if(tiles[i][j] instanceof Interactable){
-					((Interactable) tiles[i][j]).setNote(notesTemp[noteCounter]);
+				if(tiles[i][j] instanceof Noteable){
+					((Noteable) tiles[i][j]).setNote(notesTemp[noteCounter]);
 					noteCounter++;
 				}
 				if(tiles[i][j] instanceof Lootable){

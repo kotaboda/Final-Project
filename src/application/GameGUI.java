@@ -17,8 +17,6 @@ import floors.Floor;
 import itemSystem.Item;
 import itemSystem.Usable;
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -59,7 +57,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
 import tiles.TileManager;
@@ -593,7 +590,11 @@ public class GameGUI extends Application {
 								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 								GameEngine.checkLoot();
 							} else {
-								GameEngine.checkNote();
+								if(GameEngine.checkForBoss()){
+									
+								} else {
+									GameEngine.checkNote();
+								}
 							}
 							break;
 						case ESCAPE:
