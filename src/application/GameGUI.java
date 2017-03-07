@@ -554,6 +554,9 @@ public class GameGUI extends Application {
 									playAnimation(Direction.UP);
 									// GameEngine.updatePlayerPosition(Direction.UP);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
+								}else if (!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
+									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 								}
 							}
 							break;
@@ -563,6 +566,9 @@ public class GameGUI extends Application {
 									playAnimation(Direction.DOWN);
 									// GameEngine.updatePlayerPosition(Direction.DOWN);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
+								}else if (!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
+									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 								}
 							}
 							break;
@@ -572,6 +578,9 @@ public class GameGUI extends Application {
 									playAnimation(Direction.LEFT);
 									// GameEngine.updatePlayerPosition(Direction.LEFT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
+								}else if (!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
+									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 								}
 							}
 							break;
@@ -581,6 +590,9 @@ public class GameGUI extends Application {
 									playAnimation(Direction.RIGHT);
 									// GameEngine.updatePlayerPosition(Direction.RIGHT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
+								}else if (!isAnimating){
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
+									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 								}
 							}
 							break;
