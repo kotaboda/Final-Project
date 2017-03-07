@@ -93,7 +93,6 @@ public class GameEngine {
 			success = true;
 			
 		}
-		game.getPlayer().setDirectionFacing(direction);
 		return success;
 	}
 	

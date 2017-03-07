@@ -550,6 +550,7 @@ public class GameGUI extends Application {
 								if(!isAnimating && GameEngine.checkMovement(Direction.UP)){
 									playAnimation(Direction.UP);
 //									GameEngine.updatePlayerPosition(Direction.UP);
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
 								}
 							}
 							break;
@@ -558,6 +559,7 @@ public class GameGUI extends Application {
 								if(!isAnimating && GameEngine.checkMovement(Direction.DOWN)){
 									playAnimation(Direction.DOWN);
 //									GameEngine.updatePlayerPosition(Direction.DOWN);
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
 								}
 							}
 							break;
@@ -566,6 +568,7 @@ public class GameGUI extends Application {
 								if(!isAnimating && GameEngine.checkMovement(Direction.LEFT)){
 									playAnimation(Direction.LEFT);
 //									GameEngine.updatePlayerPosition(Direction.LEFT);
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
 								}
 							}
 							break;
@@ -574,6 +577,7 @@ public class GameGUI extends Application {
 								if(!isAnimating && GameEngine.checkMovement(Direction.RIGHT)){
 									playAnimation(Direction.RIGHT);
 //									GameEngine.updatePlayerPosition(Direction.RIGHT);
+									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
 								}
 							}
 							break;
@@ -613,7 +617,7 @@ public class GameGUI extends Application {
 												.getPlayerStart().getX(),
 										TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 												.getPlayerStart().getY());
-								drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()-1]);
+								drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()-1], 0, 0);
 							}
 						}
 					}
@@ -803,38 +807,30 @@ public class GameGUI extends Application {
 		switch(currentFloor.getPlayer().getDirectionFacing()){
 		
 		case UP:
-			if(offsetX % 8 == 0){
-				if(currentImageIndex < 4){
-					currentImageIndex++;
-				}else{
-					currentImageIndex = 0;
-				}
-			}
-			
+			currentImageIndex = Math.abs((offsetY % 32) / 8);
+			imageRow = 0;
 			break;
 		case DOWN:
-			if(offsetX % 8 == 0){
-				if(currentImageIndex < 4){
-					currentImageIndex++;
-				}else{
-					currentImageIndex = 0;
-				}
-			}
+			currentImageIndex = Math.abs((offsetY % 32) / 8);
 			imageRow = 2;
 			break;
 			
 		case LEFT:
+			currentImageIndex = Math.abs((offsetX % 32) / 8);
+			imageRow = 3;
+			break;
 		case RIGHT:
-			
+			currentImageIndex = Math.abs((offsetX % 32) / 8);
+			imageRow = 1;
 			break;
 		}
-		Image playerImg = new Image(getClass().getResourceAsStream("/hero.jpg"));
+		Image playerImg = new Image(getClass().getResourceAsStream("/images/MaleWalk.png"));
 //		gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() * (canvas.getWidth() / image.getWidth()),
 //				image.getHeight() * (canvas.getHeight() / image.getHeight()));
 		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
 //		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16, (canvas.getHeight() / 2) - 16, 32, 32);
 //		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
-		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64, 64, 64);
+		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, 32, 32, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
 //		System.out.println(currentFloor.getPlayer().getCoordinates());
 //		System.out.println("X: " + offsetX + "Y: " + offsetY);
 	}
