@@ -5,7 +5,6 @@ package application;
  * 
  */
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -553,65 +552,75 @@ public class GameGUI extends Application {
 						switch (keyEvent) {
 						case W:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if(!isAnimating && GameEngine.checkMovement(Direction.UP)){
+								if (!isAnimating && GameEngine.checkMovement(Direction.UP)) {
 									playAnimation(Direction.UP);
-//									GameEngine.updatePlayerPosition(Direction.UP);
+									// GameEngine.updatePlayerPosition(Direction.UP);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
-								}else if(!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
-								}else if (!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
-									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+									drawToGeneralCanvas(
+											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
+											0);
 								}
 							}
 							break;
 						case S:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if(!isAnimating && GameEngine.checkMovement(Direction.DOWN)){
+								if (!isAnimating && GameEngine.checkMovement(Direction.DOWN)) {
 									playAnimation(Direction.DOWN);
-//									GameEngine.updatePlayerPosition(Direction.DOWN);
+									// GameEngine.updatePlayerPosition(Direction.DOWN);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
-								}else if (!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
-									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+									drawToGeneralCanvas(
+											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
+											0);
 
 								}
 							}
 							break;
 						case A:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if(!isAnimating && GameEngine.checkMovement(Direction.LEFT)){
+								if (!isAnimating && GameEngine.checkMovement(Direction.LEFT)) {
 									playAnimation(Direction.LEFT);
-//									GameEngine.updatePlayerPosition(Direction.LEFT);
+									// GameEngine.updatePlayerPosition(Direction.LEFT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
-								}else if(!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
-								}else if (!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
-									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+									drawToGeneralCanvas(
+											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
+											0);
 								}
 							}
 							break;
 						case D:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if(!isAnimating && GameEngine.checkMovement(Direction.RIGHT)){
+								if (!isAnimating && GameEngine.checkMovement(Direction.RIGHT)) {
 									playAnimation(Direction.RIGHT);
-//									GameEngine.updatePlayerPosition(Direction.RIGHT);
+									// GameEngine.updatePlayerPosition(Direction.RIGHT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
-								}else if (!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
-									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+									drawToGeneralCanvas(
+											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
+											0);
 								}
-								}
+							}
 							break;
 						case E:
 							if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 								GameEngine.checkLoot();
 							} else {
-								GameEngine.checkNote();
+								if (!GameEngine.checkForBoss()) {
+									GameEngine.checkNote();
+								}
 							}
-							
+
 							break;
 						case ESCAPE:
 							displayPauseMenu();
@@ -621,8 +630,8 @@ public class GameGUI extends Application {
 						}
 						// NOTE(andrew): added this if statement to ensure that
 						// this code only runs when it needs to.
-						if (keyEvent.equals(KeyCode.W) || keyEvent.equals(KeyCode.A) || keyEvent.equals(KeyCode.S)
-								|| keyEvent.equals(KeyCode.D)) {
+						if ((keyEvent.equals(KeyCode.W) || keyEvent.equals(KeyCode.A) || keyEvent.equals(KeyCode.S)
+								|| keyEvent.equals(KeyCode.D))) {
 							// drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()
 							// - 1], 0, 0);
 							Battle b = GameEngine.checkForBattle(
@@ -642,7 +651,8 @@ public class GameGUI extends Application {
 										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)
 												.getPlayerStart().getY());
 								drawToGeneralCanvas(
-										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);							}
+										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+							}
 						}
 					}
 				}
@@ -669,32 +679,34 @@ public class GameGUI extends Application {
 
 			// Drawing testing
 			// GraphicsContext gc = canvas.getGraphicsContext2D();
-			//NOTE(andrew): animation testing!!
-//			drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
-//			Animation testing
-//			isAnimating = true;
-//			Timeline gameLoop = new Timeline();
-//			gameLoop.setCycleCount( 64 );
-//			
-//			KeyFrame kf = new KeyFrame(
-//				Duration.seconds(0.01666667), // 60 FPS
-//				new EventHandler<ActionEvent>()
-//				{
-//					int x = 0;
-//					public void handle(ActionEvent ae)
-//					{
-//						x += 1;
-//						int tempX = x % 64;
-//						drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1], x, 0);
-//						if(tempX == 0){
-//							x = 0;
-//							isAnimating = false;
-//						}
-//					}
-//				}
-//			);
-//			gameLoop.getKeyFrames().add( kf );
-//			gameLoop.play();
+			// NOTE(andrew): animation testing!!
+			// drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()
+			// - 1]);
+			// Animation testing
+			// isAnimating = true;
+			// Timeline gameLoop = new Timeline();
+			// gameLoop.setCycleCount( 64 );
+			//
+			// KeyFrame kf = new KeyFrame(
+			// Duration.seconds(0.01666667), // 60 FPS
+			// new EventHandler<ActionEvent>()
+			// {
+			// int x = 0;
+			// public void handle(ActionEvent ae)
+			// {
+			// x += 1;
+			// int tempX = x % 64;
+			// drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()
+			// - 1], x, 0);
+			// if(tempX == 0){
+			// x = 0;
+			// isAnimating = false;
+			// }
+			// }
+			// }
+			// );
+			// gameLoop.getKeyFrames().add( kf );
+			// gameLoop.play();
 			// gameLoop.getKeyFrames().add( kf );
 			// gameLoop.play();
 			// split
@@ -829,8 +841,8 @@ public class GameGUI extends Application {
 				currentFloor.getPlayer().getCoordinates());
 		int currentImageIndex = 0;
 		int imageRow = 0;
-		switch(currentFloor.getPlayer().getDirectionFacing()){
-		
+		switch (currentFloor.getPlayer().getDirectionFacing()) {
+
 		case UP:
 			currentImageIndex = Math.abs((offsetY % 32) / 8);
 			imageRow = 0;
@@ -839,7 +851,7 @@ public class GameGUI extends Application {
 			currentImageIndex = Math.abs((offsetY % 32) / 8);
 			imageRow = 2;
 			break;
-			
+
 		case LEFT:
 			currentImageIndex = Math.abs((offsetX % 32) / 8);
 			imageRow = 3;
@@ -850,14 +862,18 @@ public class GameGUI extends Application {
 			break;
 		}
 		Image playerImg = new Image(getClass().getResourceAsStream("/images/MaleWalk.png"));
-//		gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() * (canvas.getWidth() / image.getWidth()),
-//				image.getHeight() * (canvas.getHeight() / image.getHeight()));
+		// gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() *
+		// (canvas.getWidth() / image.getWidth()),
+		// image.getHeight() * (canvas.getHeight() / image.getHeight()));
 		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
-//		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16, (canvas.getHeight() / 2) - 16, 32, 32);
-//		gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
-		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, 32, 32, (canvas.getWidth() / 2) - 32, (canvas.getHeight() / 2) - 32, 64, 64);
-//		System.out.println(currentFloor.getPlayer().getCoordinates());
-//		System.out.println("X: " + offsetX + "Y: " + offsetY);
+		// gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16,
+		// (canvas.getHeight() / 2) - 16, 32, 32);
+		// gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32,
+		// (canvas.getHeight() / 2) - 32, 64, 64);
+		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, 32, 32, (canvas.getWidth() / 2) - 32,
+				(canvas.getHeight() / 2) - 32, 64, 64);
+		// System.out.println(currentFloor.getPlayer().getCoordinates());
+		// System.out.println("X: " + offsetX + "Y: " + offsetY);
 	}
 
 	public void displayCharacterManager() {
@@ -891,8 +907,10 @@ public class GameGUI extends Application {
 			});
 
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
-			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
-			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty().divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
+			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
+					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
+			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty()
+					.divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
 			for (int i = 0; i < Stats.values().length; i++) {
 				Label stat = new Label(Stats.values()[i].toString());
 				Label statNum = new Label(TESTINGGAME.getPlayer().getStat(Stats.values()[i]) + "");
@@ -987,15 +1005,16 @@ public class GameGUI extends Application {
 		}
 
 	}
-	
-	public void playAnimation(Direction direction){
-		if(!isAnimating){
-			switch(direction){
+
+	public void playAnimation(Direction direction) {
+		if (!isAnimating) {
+			switch (direction) {
 			case UP:
 				isAnimating = true;
-				new AnimationTimer()
-				{
+				new AnimationTimer() {
 					int y = 0;
+
+					@Override
 					public void handle(long currentNanoTime) {
 						y += 2;
 						int temp = y % 64;
@@ -1007,16 +1026,17 @@ public class GameGUI extends Application {
 							GameEngine.updatePlayerPosition(Direction.UP);
 							this.stop();
 						}
-					
+
 					}
 				}.start();
-			
+
 				break;
 			case RIGHT:
 				isAnimating = true;
-				new AnimationTimer()
-				{
+				new AnimationTimer() {
 					int x = 0;
+
+					@Override
 					public void handle(long currentNanoTime) {
 						x -= 2;
 						int temp = x % 64;
@@ -1029,16 +1049,17 @@ public class GameGUI extends Application {
 							GameEngine.updatePlayerPosition(Direction.RIGHT);
 							this.stop();
 						}
-					
+
 					}
 				}.start();
 				break;
-				
+
 			case DOWN:
 				isAnimating = true;
-				new AnimationTimer()
-				{
+				new AnimationTimer() {
 					int y = 0;
+
+					@Override
 					public void handle(long currentNanoTime) {
 						y -= 2;
 						int temp = y % 64;
@@ -1051,18 +1072,19 @@ public class GameGUI extends Application {
 							GameEngine.updatePlayerPosition(Direction.DOWN);
 							this.stop();
 						}
-					
+
 					}
 				}.start();
 				//
-				
+
 				break;
-				
+
 			case LEFT:
 				isAnimating = true;
-				new AnimationTimer()
-				{
+				new AnimationTimer() {
 					int x = 0;
+
+					@Override
 					public void handle(long currentNanoTime) {
 						x += 2;
 						int temp = x % 64;
@@ -1075,12 +1097,12 @@ public class GameGUI extends Application {
 							GameEngine.updatePlayerPosition(Direction.LEFT);
 							this.stop();
 						}
-					
+
 					}
 				}.start();
-	
+
 				break;
-				
+
 			default:
 				break;
 			}
