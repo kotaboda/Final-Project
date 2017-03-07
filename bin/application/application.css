@@ -17,6 +17,7 @@
     -fx-font-family: "Orbitron-Bold";
 	}
 .button:hover {
+/* <<<<<<< HEAD
 	-fx-text-fill: rgb(0,0,0);
 	-fx-background-color: rgb(249,210,132);
 	-fx-border-radius: 5px;
@@ -27,6 +28,18 @@
 .button:pressed {
 	-fx-text-fill:rgb(0,0,0);
 	-fx-background-color: rgb(217,150,11);
+======= */
+	-fx-text-fill:rgb(0,0,0);
+	-fx-background-color: rgb(248,201,103);
+	-fx-border-radius: 5px;
+	-fx-padding: 10px;
+	-fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+.button:pressed {
+	-fx-text-fill:rgb(0,0,0);
+	-fx-background-color: rgb(209,145,10);
+/*>>>>>>> refs/remotes/origin/Dakota */
 	-fx-border-radius: 5px;
 	-fx-padding: 10px;
 	-fx-border-insets: 5px;
