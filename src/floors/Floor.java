@@ -6,12 +6,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
 import battleSystem.BossBattle;
 import character.Boss;
 import character.Player;
+import characterInterfaces.Lootable;
 import drawinterfaces.Paintable;
+import itemSystem.Item;
 import javafx.scene.image.Image;
 import models.Coordinates;
+import noteInterface.Noteable;
 import tiles.Tile;
 
 public abstract class Floor implements Paintable, Serializable{
@@ -47,7 +51,22 @@ public abstract class Floor implements Paintable, Serializable{
 		}
 	}
 	
-	
+	public void genNotes(Note[] notesTemp, Item[][] floorLoot) {
+		int noteCounter = 0;
+		int lootCounter = 0;
+		for(int i = 0; i < tiles.length; i++){
+			for(int j = 0; j < tiles[i].length; j++){
+				if(tiles[i][j] instanceof Noteable){
+					((Noteable) tiles[i][j]).setNote(notesTemp[noteCounter]);
+					noteCounter++;
+				}
+				if(tiles[i][j] instanceof Lootable){
+					((Lootable)tiles[i][j]).setLoot(floorLoot[lootCounter]);
+					lootCounter++;
+				}
+			}
+		}
+	}
 	
 	public Boss getBoss() {
 		return boss;

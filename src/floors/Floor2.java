@@ -2,6 +2,11 @@ package floors;
 
 import character.JerryPay;
 import character.Player;
+import itemSystem.Coffee;
+import itemSystem.Doritos;
+import itemSystem.Item;
+import itemSystem.MountainDew;
+import itemSystem.Ramen;
 import models.Coordinates;
 import tiles.Tile;
 import tiles.TileManager;
@@ -27,9 +32,12 @@ public class Floor2 extends Floor {
 		notesTemp[3] = new Note("01100100 01100101 01110011 01110100 01110010 01101111 01111001 00100000 01100001 01101100 01101100 00100000 01101000 01110101 01101101 01100001 01101110 01110011"/*, new Coordinates(10,6)*/);
 		notesTemp[4] = new Note("I'm scared to leave this room, that teacher is scary."/*, new Coordinates(12,1)*/);
 		notesTemp[5] = new Note("I've pulled more all nighters in one quarter than I did throughout all of high school."/*, new Coordinates(14,3)*/);
-//		for(Note note : notesTemp) {
-//			//getNotes().put(note.getCoord(), note);
-//		}
+		
+		Item[][] floorLoot = new Item[2][];
+		floorLoot[0] = new Item[] {new Coffee(), new Ramen()};
+		floorLoot[1] = new Item[] {new MountainDew(), new Doritos()};
+		
+		genNotes(notesTemp,floorLoot);
 	}
 	
 	public void genTiles() {
