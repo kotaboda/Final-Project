@@ -1,6 +1,5 @@
 package floors;
 
-import battleSystem.Battle;
 import battleSystem.BossBattle;
 import character.Boss;
 import character.Player;
@@ -34,8 +33,6 @@ public class Floor1 extends Floor {
 		getBoss().getCoordinates().setCoordinates(9, 1);
 		setPlayer(player);
 		getPlayer().getCoordinates().setCoordinates(9, 12);
-		setBattles(new Battle[5]);
-		genBattles();
 
 		genTiles();
 		Note[] notesTemp = new Note[7];

@@ -1,6 +1,5 @@
 package floors;
 
-import battleSystem.Battle;
 import character.JerryPay;
 import character.Player;
 import models.Coordinates;
@@ -19,8 +18,6 @@ public class Floor2 extends Floor {
 		setBoss(new JerryPay());
 		getBoss().getCoordinates().setCoordinates(1, 8);
 		setPlayer(player);
-		setBattles(new Battle[7]);
-		genBattles();
 		playerStart = new Coordinates(9,2);
 		genTiles();
 		Note[] notesTemp = new Note[6];

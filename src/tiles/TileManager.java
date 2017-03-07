@@ -1,5 +1,7 @@
 package tiles;
 
+import java.util.List;
+
 import character.JerryPay;
 import character.JoshKrebs;
 import character.SecurityGuard;
@@ -51,7 +53,7 @@ public class TileManager {
 	
 	
 	
-	public static WritableImage getImageToDraw(Tile[][] tiles, Coordinates playerPosition){
+	public static WritableImage getImageToDraw(List<List<Tile>> list, Coordinates playerPosition){
 		//NOTE(andrew): The width and length of the image WILL change depending on the size
 			//of the image that will be displayed at the end
 		int startYTile = playerPosition.getY() - (TILES_HIGH_TO_DRAW/2);
@@ -59,8 +61,8 @@ public class TileManager {
 		WritableImage wi = new WritableImage(TILES_WIDE_TO_DRAW * TILE_WIDTH, TILES_HIGH_TO_DRAW * TILE_WIDTH);
 		
 		for(int i = 0; i < TILES_HIGH_TO_DRAW; i++){
-			if(i + startYTile >= 0 && i + startYTile < tiles.length){
-				buildRow(tiles[i + startYTile], wi, i, startXTile);
+			if(i + startYTile >= 0 && i + startYTile < list.size()){
+				buildRow(list.get(i + startYTile), wi, i, startXTile);
 			}else{
 				buildBlankRow(wi, i);
 			}
@@ -69,7 +71,7 @@ public class TileManager {
 		return wi;
 	}
 	
-	private static void buildRow(Tile[] tiles, WritableImage wi, int row, int startXTile){
+	private static void buildRow(List<Tile> list, WritableImage wi, int row, int startXTile){
 		//NOTE(andrew): grab the objects that allow reading from the tile sheet and writing to the writable image
 		PixelReader pr = tileSheet.getPixelReader();
 		PixelWriter pw = wi.getPixelWriter();
@@ -98,9 +100,9 @@ public class TileManager {
 					y = 0;
 					//NOTE(andrew): if the tile that is trying to be accessed is outside of the array, we don't
 						//need to read a tile, it will just be black.
-					if(tileCounter + startXTile >= 0 && tileCounter + startXTile < tiles.length){
+					if(tileCounter + startXTile >= 0 && tileCounter + startXTile < list.size()){
 						//NOTE(andrew): get the tile number that we are currently needing to access
-						tileSheetNum = tiles[tileCounter + startXTile].getTileSheetNum();
+						tileSheetNum = list.get(tileCounter + startXTile).getTileSheetNum();
 						//NOTE(andrew): if the tile we are trying to access is not on the initial row, we use this loop to edit
 							//y based on the tile num, this is used to find the ROW
 						while(tileSheetNum > TILESHEET_TILES_WIDE - 1){
@@ -120,7 +122,7 @@ public class TileManager {
 				Color color = null;
 				//NOTE(andrew): if the tile that is trying to be accessed is outside of the array, we don't
 					//need to read a tile, it will just be black.
-				if(tileCounter + startXTile >= 0 && tileCounter + startXTile < tiles.length){
+				if(tileCounter + startXTile >= 0 && tileCounter + startXTile < list.size()){
 					//NOTE(andrew): read the current pixel from the tilesheet
 					color = pr.getColor(x , y + i);
 				}else{

@@ -1,6 +1,9 @@
 package application;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import character.Character;
 import character.Player;
@@ -47,7 +50,7 @@ public class Game implements Serializable{
 		return this.player;
 	}
 	
-	public Floor[] getFloors(){
-		return this.floors;
+	public List<Floor> getFloors(){
+		return Collections.unmodifiableList(Arrays.asList(floors));
 	}
 }

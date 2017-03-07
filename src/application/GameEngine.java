@@ -6,10 +6,15 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Random;
 
 import battleSystem.Battle;
 import character.Boss;
+import character.Enemy;
+import character.Exercise;
+import character.Lab;
 import character.Player;
+import character.Project;
 import characterEnums.Direction;
 import characterEnums.InventoryAction;
 import characterInterfaces.Lootable;
@@ -108,24 +113,34 @@ public class GameEngine {
 			break;
 		}
 		Coordinates c = game.getPlayer().getCoordinates();
-		 return (((c.getX() + x) >= 0 && (c.getX() + x) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[0].length)
-				&& ((c.getY() + y) >= 0 && (c.getY() + y) < game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles().length)
-				&& !(game.getFloors()[game.getPlayer().getFloorNum() - 1].getTiles()[c.getY() + y][c.getX()
-						+ x] instanceof Collidable));
+		 return (((c.getX() + x) >= 0 && (c.getX() + x) < game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().get(0).size())
+				&& ((c.getY() + y) >= 0 && (c.getY() + y) < game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().size())
+				&& !(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().get(c.getY() + y).get(c.getX()
+						+ x) instanceof Collidable));
 	}
 
 	public static Battle checkForBattle(Floor currentFloor) {
-		Coordinates playerC = game.getPlayer().getCoordinates();
-		Battle[] battlesC = currentFloor.getBattles();
+		Random r = new Random();
 		Battle battle = null;
-		for (int i = 0; i < battlesC.length; i++) {
-			Coordinates currentC = battlesC[i].getCoordinates();
-			if (playerC.equals(currentC) && !battlesC[i].isCompleted()) {
-				battle = battlesC[i];
+		if(r.nextInt(100) + 1 <= 5){
+			int numOfEnemies = r.nextInt(3) + 1;
+			Enemy[] enemies = new Enemy[numOfEnemies];
+			for(int i = 0; i < numOfEnemies; i++){
+				Enemy e = null;
+				switch(r.nextInt(3) + 1){
+				case 1:
+					e = new Exercise();
+					break;
+				case 2:
+					e = new Lab();
+					break;
+				case 3:
+					e = new Project();
+					break;
+				}
+				enemies[i] = e;
 			}
-		}
-		if(battle != null && battle.isCompleted()){
-			battle = null;
+			battle = new Battle(game.getPlayer(), enemies);
 		}
 		return battle;
 	}
@@ -151,7 +166,7 @@ public class GameEngine {
 		}
 		
 		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
-		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
+		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y).get(p.getCoordinates().getX() + x);
 		if (t instanceof Noteable) {
 			// retreive the notes at those coordinates in order to display it
 			view.displayMessage(((Noteable) t).getMessage());
@@ -180,12 +195,12 @@ public class GameEngine {
 		}
 		
 		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
-		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
+		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y).get(p.getCoordinates().getX() + x);
 		if(t instanceof Chest){
 			view.displayLootManager((Lootable)t); 
 		} else if(t instanceof Boss){
 			System.out.println("What the hell?");
-			view.displayBattleView(game.getFloors()[game.getPlayer().getFloorNum() - 1].getBossBattle());
+			view.displayBattleView(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle());
 		}
 		return null;
 	}
@@ -245,10 +260,10 @@ public class GameEngine {
 		}
 		
 		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
-		Tile t = GameEngine.getGame().getFloors()[p.getFloorNum() - 1].getTiles()[p.getCoordinates().getY() + y][p.getCoordinates().getX() + x];
-		if(t instanceof Boss && !game.getFloors()[game.getPlayer().getFloorNum() - 1].getBossBattle().isCompleted()){
-			view.displayBattleView(game.getFloors()[game.getPlayer().getFloorNum() - 1].getBossBattle());
-			game.getFloors()[p.getFloorNum() - 1].getTiles()[game.getFloors()[p.getFloorNum() - 1].getBoss().getCoordinates().getY()][game.getFloors()[p.getFloorNum() - 1].getBoss().getCoordinates().getX()] = new GroundTile(5);
+		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y).get(p.getCoordinates().getX() + x);
+		if(t instanceof Boss && !game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle().isCompleted()){
+			view.displayBattleView(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle());
+			game.getFloors().get(p.getFloorNum() - 1).changeTile(game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getY() ,game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getX(), new GroundTile(5));
 			return true;
 		}
 		return false;

@@ -18,7 +18,12 @@ public abstract class Ability implements Serializable{
 	public String getName(){
 		return NAME;
 	}
-	
+	/**
+	 *  
+	 * @param user The user of the Ability
+	 * @param targets The target of the ability.
+	 * @return A boolean value representing the success of the ability's use.
+	 */
 	public abstract boolean use(Character user, Character targets);
 	public abstract String getDescription();
 	

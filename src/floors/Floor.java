@@ -1,21 +1,17 @@
 package floors;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Random;
-
-import battleSystem.Battle;
+import java.util.List;
 import battleSystem.BossBattle;
 import character.Boss;
-import character.Enemy;
-import character.Exercise;
-import character.Lab;
 import character.Player;
-import character.Project;
 import drawinterfaces.Paintable;
 import javafx.scene.image.Image;
 import models.Coordinates;
-import tileinterfaces.Collidable;
 import tiles.Tile;
 
 public abstract class Floor implements Paintable, Serializable{
@@ -27,7 +23,6 @@ public abstract class Floor implements Paintable, Serializable{
 	protected Tile[][] tiles;
 	protected Boss boss;
 	private BossBattle bossBattle;
-	private Battle[] battles;
 	private Player player;
 	protected Coordinates playerStart;
 	private HashMap<Coordinates, Note> notes = new HashMap<>();
@@ -36,50 +31,23 @@ public abstract class Floor implements Paintable, Serializable{
 		return playerStart;
 	}
 	
-	public Tile[][] getTiles(){
-		return this.tiles;
+	public  List<List<Tile>> getTiles(){
+		ArrayList<List<Tile>> t = new ArrayList<>();
+		for(int i = 0; i < this.tiles.length; i++){
+			t.add(Collections.unmodifiableList(Arrays.asList(this.tiles[i])));
+		}
+		return Collections.unmodifiableList(t);
 	}
 	
-	
-	public void genBattles() {
-		Random xD = new Random();
-		int mapBorderX = getTiles()[0].length - 2;
-		int mapBorderY = getTiles().length - 2;
-		for(int i = 0 ; i < getBattles().length ; i++) {
-			boolean validPlace = false;
-			int x = 0;
-			int y = 0;
-			
-			do {
-				x = xD.nextInt(mapBorderY)+1;
-				y = xD.nextInt(mapBorderX)+1;
-				if(getTiles()[x][y] instanceof Collidable && getBoss().getCoordinates().equals(new Coordinates(x,y))) {
-					validPlace = false;
-				} else {
-					validPlace = true;
-				}
-			}while(!validPlace);
-			
-			Enemy[] enemies = new Enemy[xD.nextInt(3)+1];
-			for (int j = 0; j < enemies.length; j++) {
-				//TODO Dress up enemy generation here.
-				int e = xD.nextInt(3);
-				switch(e) {
-				case 0:
-					enemies[j] = new Exercise();
-					break;
-				case 1:
-					enemies[j] = new Lab();
-					break;
-				case 2:
-					enemies[j] = new Project();
-					break;
-				}
-			}
-			getBattles()[i] = new Battle(getPlayer(), enemies);
-			getBattles()[i].getCoordinates().setCoordinates(x, y);
+	public void changeTile(int y, int x, Tile tile){
+		if(tile != null){
+			tiles[y][x] = tile;
+		}else{
+			throw new IllegalArgumentException("You cannot set a tile on a floor to null");
 		}
 	}
+	
+	
 	
 	public Boss getBoss() {
 		return boss;
@@ -103,14 +71,6 @@ public abstract class Floor implements Paintable, Serializable{
 
 	public void setBossBattle(BossBattle bossBattle) {
 		this.bossBattle = bossBattle;
-	}
-
-	public Battle[] getBattles() {
-		return battles;
-	}
-
-	public void setBattles(Battle[] battles) {
-		this.battles = battles;
 	}
 
 	public HashMap<Coordinates, Note> getNotes() {
