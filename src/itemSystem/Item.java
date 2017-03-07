@@ -8,17 +8,17 @@ public abstract class Item implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -6732819968550686679L;
-	protected String name;
+	public final String NAME;
 	protected String description;
 	
 	public Item(String name, String description) {
-		this.name = name;
+		this.NAME = name;
 		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return NAME;
 	}
 
 	public String getDescription() {

@@ -19,7 +19,7 @@ public abstract class Boss extends Enemy {
 	private boolean isDefeated = false;
 	private ArrayList<Ability> abilities = new ArrayList<>();
 
-	public Boss(String name, int tileSheetNum, Ability... abilities) {
+	public Boss(String name, int creditDrop, int tileSheetNum, Ability... abilities) {
 		super(name, 600, tileSheetNum);
 		this.abilities.addAll(Arrays.asList(abilities));
 	}

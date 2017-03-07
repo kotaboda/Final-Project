@@ -27,14 +27,14 @@ public class BossBattle extends Battle {
 		}
 		this.boss = boss;
 		Enemy[] e = new Enemy[enemies.length + 1];
-		for(int i = 0; i < enemies.length; i++){
+		for (int i = 0; i < enemies.length; i++) {
 			e[i] = enemies[i];
 		}
 		e[enemies.length] = boss;
 		this.setEnemies(e);
 	}
-	
-	public BossBattle(Player player, Boss boss){
+
+	public BossBattle(Player player, Boss boss) {
 		super(player);
 		if (boss == null) {
 			throw new IllegalArgumentException("The boss in a boss battle cannot be null.");
@@ -84,9 +84,8 @@ public class BossBattle extends Battle {
 						Random r = new Random();
 						switch (r.nextInt(2)) {
 						case 0:
-							boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
-							System.out.println(boss.getAbilities().size());
 							if (boss.getAbilities().size() != 0) {
+								boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
 								break;
 							}
 						case 1:
@@ -124,6 +123,7 @@ public class BossBattle extends Battle {
 						Item[] loot = enemies[j].getInventoryContents();
 						player.modifyInventory(InventoryAction.GIVE, loot);
 						player.giveCredits(enemies[j].getCreditDrop());
+						creditsDropped += enemies[j].getCreditDrop();
 					}
 
 					break;

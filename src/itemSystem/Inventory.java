@@ -29,23 +29,23 @@ public class Inventory implements Serializable{
 	public boolean addItem(Item item) {
 		boolean successful = false;
 
-//		if (!isMaxed()) {
+		if (!isMaxed()) {
 			successful = true;
 			items.add(item);
-//		}
+		}
 
 		return successful;
 	}
 
 	public boolean addAllItems(Item... itemsToAdd) {
 		boolean successful = true;
-//		if (itemsToAdd.length + items.size() >= invMax) {
-//			successful = false;
-//		} else {
+		if (itemsToAdd.length + items.size() >= invMax) {
+			successful = false;
+		} else {
 			for (Item thing : itemsToAdd) {
 				addItem(thing);
 			}
-//		}
+		}
 		return successful;
 	}
 	

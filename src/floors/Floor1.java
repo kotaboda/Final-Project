@@ -24,13 +24,12 @@ public class Floor1 extends Floor {
 
 	public Floor1(Player player) {
 		genTiles();
-		setBoss(new Boss(){
+		setBoss(new Boss("Security Guard", 600, 0) {
 
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 1L;
-			
+			private static final long serialVersionUID = -2926182399108237508L;
 		});
 		setBossBattle(new BossBattle(player, boss));
 		getBoss().getCoordinates().setCoordinates(9, 1);

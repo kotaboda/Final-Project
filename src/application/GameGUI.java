@@ -1,6 +1,7 @@
 package application;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 
 import abilityInterfaces.Ability;
@@ -59,6 +60,14 @@ import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
 import tiles.TileManager;
 
+
+/**
+ * character creation
+ * battle regen on floors / battle occur by chance after step;
+ * 
+ *
+ */
+
 public class GameGUI extends Application {
 
 	private Stage primaryStage;
@@ -112,6 +121,7 @@ public class GameGUI extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
+			
 			displayMainMenu();
 
 		} catch (Exception e) {
@@ -126,7 +136,7 @@ public class GameGUI extends Application {
 	private Button loadGameButton;
 
 	public void displayMainMenu() {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainMenuView.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/MainMenuView.fxml"));
 
 		loader.setController(this);
 
@@ -183,7 +193,7 @@ public class GameGUI extends Application {
 	public void displayPauseMenu() {
 		// TODO Auto-generated method stub
 		this.currentLayout = GUILayouts.PAUSE;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/PauseView.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PauseView.fxml"));
 		loader.setController(this);
 		try {
 			p = loader.load();
@@ -251,9 +261,7 @@ public class GameGUI extends Application {
 	private Pane rightBattleVBox;
 	@FXML
 	private ListView<String> leftActionList;
-	//
 	private ListView<Ability> abilityList;
-	//
 	@FXML
 	private Button submitButton;
 	@FXML
@@ -271,7 +279,7 @@ public class GameGUI extends Application {
 	public void displayBattleView(Battle b) {
 
 		this.currentLayout = GUILayouts.BATTLE;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/BattleView.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/BattleView.fxml"));
 
 		loader.setController(this);
 		try {
@@ -525,7 +533,7 @@ public class GameGUI extends Application {
 
 	public void displayGeneralView() {
 		this.currentLayout = GUILayouts.GENERAL;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/GeneralView.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/GeneralView.fxml"));
 
 		loader.setController(this);
 		try {
@@ -562,11 +570,11 @@ public class GameGUI extends Application {
 						case E:
 							if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
-							} else {
+								GameEngine.checkNote();
+							}
+							if (currentLayout == GUILayouts.GENERAL) {
 								GameEngine.checkLoot();
-								if (currentLayout == GUILayouts.GENERAL) {
-									GameEngine.checkNote();
-								}
+							} else {
 							}
 							break;
 						case ESCAPE:
@@ -596,7 +604,7 @@ public class GameGUI extends Application {
 												.getPlayerStart().getX(),
 										TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]
 												.getPlayerStart().getY());
-								drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()-1]);
+								drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum() - 1]);
 							}
 						}
 					}
@@ -730,10 +738,13 @@ public class GameGUI extends Application {
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
-
-			displayMessage("You beat the dudes mango im real prouda you goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+			String itemsDropped = "Item Drops:\n";
+			for(Item i : b.getItemDrops()){
+				itemsDropped += i.NAME + "\n";
+			}
+			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + itemsDropped);
 			// displayText.setText("You beat the dudes mango im real prouda you
-			// goodjob\nb\nu\nt\ni\n'\nm\nn\no\nt");
+			// goodjob\nb\nu\nwt\ni\n'\nm\nn\no\nt");
 			//
 			// Platform.runLater(new Runnable() {
 			// @Override
@@ -800,7 +811,7 @@ public class GameGUI extends Application {
 
 	public void displayCharacterManager() {
 		currentLayout = GUILayouts.PLAYER_MENU;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/CharacterView.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/CharacterView.fxml"));
 		loader.setController(this);
 
 		try {
@@ -829,8 +840,10 @@ public class GameGUI extends Application {
 			});
 
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
-			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty().divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
-			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty().divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
+			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
+					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
+			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty()
+					.divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
 			for (int i = 0; i < Stats.values().length; i++) {
 				Label stat = new Label(Stats.values()[i].toString());
 				Label statNum = new Label(TESTINGGAME.getPlayer().getStat(Stats.values()[i]) + "");
@@ -842,8 +855,8 @@ public class GameGUI extends Application {
 				MenuBar item = new MenuBar(m);
 				GridPane.setHalignment(item, HPos.CENTER);
 				if (theItem instanceof Usable) {
-					MenuItem mi = new MenuItem("Use");
-					mi.setOnAction(new EventHandler<ActionEvent>() {
+					MenuItem use = new MenuItem("Use");
+					use.setOnAction(new EventHandler<ActionEvent>() {
 
 						@Override
 						public void handle(ActionEvent event) {
@@ -853,7 +866,18 @@ public class GameGUI extends Application {
 						}
 
 					});
-					m.getItems().add(mi);
+					MenuItem drop = new MenuItem("Drop");
+					drop.setOnAction(new EventHandler<ActionEvent>(){
+
+						@Override
+						public void handle(ActionEvent event) {
+							TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
+							playerInventoryGrid.getChildren().remove(item);
+						}
+						
+					});
+					m.getItems().add(use);
+					m.getItems().add(drop);
 				}
 				playerInventoryGrid.addRow(i, item);
 			}
@@ -870,7 +894,7 @@ public class GameGUI extends Application {
 	public void displayLootManager(Lootable l) {
 		currentLayout = GUILayouts.LOOT_MANAGER;
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/LootManagerView.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/LootManagerView.fxml"));
 		loader.setController(this);
 
 		try {

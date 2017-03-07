@@ -31,6 +31,8 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	protected String loggedAction = null;
 	// TODO(andrew): this might need to be an array or array list
 	protected Character playerTarget = null;
+	protected int creditsDropped;
+	private ArrayList<Item> itemsDropped = new ArrayList<Item>();
 
 	public Battle(Player player, Enemy... enemies) {
 		if (player == null) {
@@ -122,7 +124,9 @@ public class Battle implements Subscribable<Battle>, Serializable {
 					for (int j = 0; j < enemies.length; j++) {
 						Item[] loot = enemies[j].getInventoryContents();
 						player.modifyInventory(InventoryAction.GIVE, loot);
+						itemsDropped.addAll(Arrays.asList(loot));
 						player.giveCredits(enemies[j].getCreditDrop());
+						creditsDropped += enemies[j].getCreditDrop();
 					}
 
 					break;
@@ -202,6 +206,15 @@ public class Battle implements Subscribable<Battle>, Serializable {
 
 	public String getLoggedAction() {
 		return loggedAction;
+	}
+
+	public int getCreditsDropped() {
+		// TODO Auto-generated method stub
+		return creditsDropped;
+	}
+
+	public Item[] getItemDrops() {
+		return itemsDropped.toArray(new Item[0]);
 	}
 
 }
