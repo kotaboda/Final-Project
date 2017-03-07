@@ -15,6 +15,7 @@ import itemSystem.Inventory;
 import itemSystem.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.image.Image;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
 import publisherSubscriberInterfaces.Subscribable;
@@ -39,11 +40,11 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	private int creditReq = 150;
 	private int currentCredits = 0;
 	protected ArrayList<Listener<Character>> subscribers = new ArrayList<>();
-	protected BufferedImage worldImage;
+	protected transient Image worldImage;
 	protected BufferedImage battleImage;
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
 	private int maxHitPoints = 100;
-	private int maxEnergy = 100;
+	protected int maxEnergy = 100;
 	protected transient IntegerProperty maxEnergyProperty = new SimpleIntegerProperty(energy);
 	protected transient IntegerProperty energyProperty = new SimpleIntegerProperty(energy);
 

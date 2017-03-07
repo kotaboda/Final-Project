@@ -28,13 +28,6 @@ public class GameEngine {
 	private static GameGUI view;
 	private static Game game = new Game(new Player());
 
-	public static void run() {
-		// NOTE(andrew): This can be changed later, if it isn't done how we want
-		// it to be done
-		view.displayGeneralView();
-
-	}
-
 	public static Game loadGame() {
 		Game g = null;
 
