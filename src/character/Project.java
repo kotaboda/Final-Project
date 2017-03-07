@@ -1,6 +1,7 @@
 package character;
 
 import characterEnums.Stats;
+import javafx.scene.image.Image;
 import models.Coordinates;
 
 public class Project extends Enemy{
@@ -17,6 +18,6 @@ public class Project extends Enemy{
 		this.stats.put(Stats.INTELLIGIENCE, 13);
 		this.stats.put(Stats.WIT, 12);
 		this.stats.put(Stats.ENDURANCE, 14);
-		this.stats.put(Stats.STAMINA, 12);
+		this.stats.put(Stats.STAMINA, 12);battleImage = new Image(getClass().getResourceAsStream("/images/project.png"));
 	}
 }

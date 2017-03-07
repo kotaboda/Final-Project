@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
@@ -45,10 +46,10 @@
             <FlowPane alignment="BOTTOM_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="290.0" prefWidth="496.0" rowValignment="BOTTOM" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
                <children>
                   <Group />
-                  <Canvas fx:id="playerImage" height="200.0" width="200.0" />
+                  <ImageView fx:id="playerImageView" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                   <VBox alignment="BOTTOM_CENTER" prefHeight="130.0" prefWidth="147.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label fx:id="playerName" alignment="CENTER" prefHeight="20.0" prefWidth="100.0" text="Player Name">
+                        <Label fx:id="playerName" alignment="CENTER" prefHeight="20.0" prefWidth="150.0" text="Player Name">
                            <font>
                               <Font size="14.0" />
                            </font>
