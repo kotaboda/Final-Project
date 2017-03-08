@@ -16,11 +16,13 @@ public class MinionAssault extends AttackAbility {
 
 	@Override
 	public boolean use(Character user, Character... targets) {
-		targets[0].takeDmg(5);
-		targets[0].takeDmg(5);
-		targets[0].takeDmg(5);
-		targets[0].takeDmg(5);
-		return false;
+		int main = user.attack()+2;
+		int dmg = main/4;
+		targets[0].takeDmg(dmg);
+		targets[0].takeDmg(dmg);
+		targets[0].takeDmg(dmg);
+		targets[0].takeDmg(dmg);
+		return true;
 	}
 
 	@Override
