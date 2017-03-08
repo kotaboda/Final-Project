@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import battleSystem.Battle;
+import character.Character;
 import character.Boss;
 import character.Enemy;
 import character.Exercise;
@@ -21,6 +22,7 @@ import characterInterfaces.Lootable;
 import itemSystem.Item;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.image.Image;
 import models.Coordinates;
 import noteInterface.Noteable;
 import tileinterfaces.Collidable;
@@ -263,6 +265,10 @@ public class GameEngine {
 			return true;
 		}
 		return false;
-		}
+	}
+	
+	public static void playTakeDamageAnimation(Image animation, Character character){
+		view.playTakeDamageAnimation(animation, character);
+	}
 	
 }
