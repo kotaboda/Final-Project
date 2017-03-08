@@ -1115,10 +1115,17 @@ public class GameGUI extends Application {
 
 				@Override
 				public void handle(MouseEvent event) {
-					TESTINGGAME = new Game(
-							new Player(nameTextField.getText(), (Genders) tg.getSelectedToggle().getUserData(), 0));
-					GameEngine.setGame(TESTINGGAME);
-					displayGeneralView();
+					if (nameTextField.getText().equals("") && !((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+						displayMessage("Please enter a name.");
+					} else if(!nameTextField.getText().equals("")) {
+						if(((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+							((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+						}
+						TESTINGGAME = new Game(
+								new Player(nameTextField.getText(), (Genders) tg.getSelectedToggle().getUserData(), 0));
+						GameEngine.setGame(TESTINGGAME);
+						displayGeneralView();
+					}
 				}
 
 			});
