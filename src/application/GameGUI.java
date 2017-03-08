@@ -92,7 +92,7 @@ public class GameGUI extends Application {
 
 	@FXML
 	private Canvas playerBattleCanvas;
-	
+
 	@FXML
 	private Button exitButton;
 	@FXML
@@ -292,12 +292,15 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-//			GraphicsContext pgc = playerBattleCanvas.getGraphicsContext2D();
+			// GraphicsContext pgc = playerBattleCanvas.getGraphicsContext2D();
 			TESTINGGAME.getPlayer().setBattleImageView(playerImageView);
 			Image playerBattleImage = TESTINGGAME.getPlayer().getBattleImage();
 			playerImageView.setImage(playerBattleImage);
-//			playerBattleCanvas.snapshot(new SnapshotParameters() , new WritableImage(10,10));
-//			pgc.drawImage(playerBattleImage, 0, 0, playerBattleImage.getWidth() / 3, playerBattleImage.getHeight() / 3);
+			// playerBattleCanvas.snapshot(new SnapshotParameters() , new
+			// WritableImage(10,10));
+			// pgc.drawImage(playerBattleImage, 0, 0,
+			// playerBattleImage.getWidth() / 3, playerBattleImage.getHeight() /
+			// 3);
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			enemies.setAlignment(Pos.CENTER);
 			Listener<Battle> s = new Listener<Battle>() {
@@ -356,7 +359,7 @@ public class GameGUI extends Application {
 						});
 					}
 				});
-				//NOTE(andrew): changing things around here, i might goof it up
+				// NOTE(andrew): changing things around here, i might goof it up
 				currentEnemy.setBattleImageView(new ImageView());
 				VBox mainContainer = new VBox(currentEnemy.getBattleImageView(), enemyName, enemyHealth);
 				child.getChildren().add(mainContainer);
@@ -887,8 +890,12 @@ public class GameGUI extends Application {
 			}
 			for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
 				Item theItem = TESTINGGAME.getPlayer().getInventoryContents()[i];
-				Menu m = new Menu(theItem.toString() + ": " + theItem.getDescription());
+				Menu m = new Menu();
+				Label l = new Label(theItem.toString() + ": " + theItem.getDescription());
+				l.setPrefWidth(playerInventoryGrid.getPrefWidth());
+				m.setGraphic(l);
 				MenuBar item = new MenuBar(m);
+
 				GridPane.setHalignment(item, HPos.CENTER);
 				if (theItem instanceof Usable) {
 					MenuItem mi = new MenuItem("Use");
@@ -959,8 +966,18 @@ public class GameGUI extends Application {
 				}
 			});
 			for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
-				Label item = new Label(TESTINGGAME.getPlayer().getInventoryContents()[i].toString() + ": "
-						+ TESTINGGAME.getPlayer().getInventoryContents()[i].getDescription());
+				Item theItem = TESTINGGAME.getPlayer().getInventoryContents()[i];
+				Label item = new Label(theItem.toString() + ": " + theItem.getDescription());
+				item.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+					@Override
+					public void handle(MouseEvent event) {
+						otherInventoryGrid.getItems().add(theItem);
+						playerInventoryGrid.getChildren().remove(item);
+						TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
+					}
+
+				});
 				GridPane.setHalignment(item, HPos.CENTER);
 				playerInventoryGrid.addRow(i, item);
 			}
@@ -1082,9 +1099,9 @@ public class GameGUI extends Application {
 			}
 		}
 	}
-	
-	public void playTakeDamageAnimation(Image animation, Character character){
-		
+
+	public void playTakeDamageAnimation(Image animation, Character character) {
+
 		PixelReader reader = animation.getPixelReader();
 		ImageView view = character.getBattleImageView();
 		Image temp = character.getBattleImage();
@@ -1092,9 +1109,9 @@ public class GameGUI extends Application {
 		int heightOfFrame = (int) temp.getHeight();
 		int numOfFrames = (int) (animation.getWidth() / widthOfFrame);
 		int framesPlayedPerAnimationFrame = 4;
-		while(character.isBattleAnimating()){
+		while (character.isBattleAnimating()) {
 			try {
-				synchronized(animationLock){
+				synchronized (animationLock) {
 					animationLock.wait();
 				}
 			} catch (InterruptedException e) {
@@ -1102,34 +1119,35 @@ public class GameGUI extends Application {
 			}
 		}
 		character.setIsBattleAnimating(true);
-		Platform.runLater(new Runnable(){
+		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
-				
-				new AnimationTimer(){
+
+				new AnimationTimer() {
 					int x = -1;
+
 					@Override
 					public void handle(long now) {
 						x += 1;
-						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0, widthOfFrame, heightOfFrame);
+						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0,
+								widthOfFrame, heightOfFrame);
 						view.setImage(currentFrame);
-						if(x > numOfFrames * framesPlayedPerAnimationFrame){
-							
+						if (x > numOfFrames * framesPlayedPerAnimationFrame) {
+
 							view.setImage(character.getBattleImage());
-							synchronized(animationLock){
+							synchronized (animationLock) {
 								character.setIsBattleAnimating(false);
 								animationLock.notifyAll();
 							}
 							this.stop();
 						}
 					}
-					
+
 				}.start();
 			}
 		});
 	}
-	
 
 	private void chanceBattle() {
 		Battle b = GameEngine.checkForBattle();
@@ -1177,10 +1195,11 @@ public class GameGUI extends Application {
 
 				@Override
 				public void handle(MouseEvent event) {
-					if (nameTextField.getText().equals("") && !((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+					if (nameTextField.getText().equals("")
+							&& !((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 						displayMessage("Please enter a name.");
-					} else if(!nameTextField.getText().equals("")) {
-						if(((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)){
+					} else if (!nameTextField.getText().equals("")) {
+						if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 							((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 						}
 						TESTINGGAME = new Game(
