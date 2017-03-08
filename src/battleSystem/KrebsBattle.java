@@ -1,48 +1,27 @@
 package battleSystem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import application.GameEngine;
 import character.Boss;
 import character.Character;
-import character.Enemy;
+import character.Krebsinator;
 import character.Player;
 import characterEnums.InventoryAction;
 import itemSystem.Item;
 
-public class BossBattle extends Battle {
+public class KrebsBattle extends BossBattle {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5129731413157601090L;
+	private static final long serialVersionUID = -3108289910004524673L;
+	private Boss krebsinator = new Krebsinator();
 
-	protected Boss boss;
-
-	public BossBattle(Player player, Boss boss, Enemy... enemies) {
-		super(player, enemies);
-		if (boss == null) {
-			throw new IllegalArgumentException("The boss in a boss battle cannot be null.");
-		}
-		this.boss = boss;
-		Enemy[] e = new Enemy[enemies.length + 1];
-		for (int i = 0; i < enemies.length; i++) {
-			e[i] = enemies[i];
-		}
-		e[enemies.length] = boss;
-		this.setEnemies(e);
+	public KrebsBattle(Player player, Boss boss) {
+		super(player, boss);
 	}
-
-	public BossBattle(Player player, Boss boss) {
-		super(player);
-		if (boss == null) {
-			throw new IllegalArgumentException("The boss in a boss battle cannot be null.");
-		}
-		this.setEnemies(boss);
-		this.boss = boss;
-	}
-
+	
 	@Override
 	public void start() {
 		Character[] turnList = createTurnList();
@@ -113,12 +92,4 @@ public class BossBattle extends Battle {
 		GameEngine.displayEndBattle(this);
 	}
 
-	protected Character[] createTurnList() {
-		ArrayList<Character> c = new ArrayList<>(Arrays.asList(enemies));
-		c.add(player);
-		Character[] turnList = c.toArray(new Character[0]);
-		Arrays.sort(turnList, Character::compareWit);
-
-		return turnList;
-	}
 }
