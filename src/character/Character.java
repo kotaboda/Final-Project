@@ -1,6 +1,5 @@
 package character;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,6 +15,7 @@ import itemSystem.Item;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import models.Coordinates;
 import publisherSubscriberInterfaces.Listener;
 import publisherSubscriberInterfaces.Subscribable;
@@ -41,13 +41,15 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	private int currentCredits = 0;
 	protected ArrayList<Listener<Character>> subscribers = new ArrayList<>();
 	protected transient Image worldImage;
-	protected BufferedImage battleImage;
+	protected Image battleImage;
+	protected Image takeDamageAnimation;
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
 	private int maxHitPoints = 100;
 	protected int maxEnergy = 100;
 	protected transient IntegerProperty maxEnergyProperty = new SimpleIntegerProperty(energy);
 	protected transient IntegerProperty energyProperty = new SimpleIntegerProperty(energy);
-
+	protected ImageView battleImageView;
+	protected boolean isBattleAnimating = false;
 
 	public Character(String name, int tileSheetNum) {
 		super(tileSheetNum);
@@ -215,6 +217,34 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 
 	public int getFloorNum(){
 		return floorNum;
+	}
+	
+	public ImageView getBattleImageView(){
+		return battleImageView;
+	}
+	
+	public void setBattleImageView(ImageView battleImageView){
+		this.battleImageView = battleImageView;
+	}
+	
+	public Image getWorldImage() {
+		return worldImage;
+	}
+	
+	public Image getBattleImage(){
+		return battleImage;
+	}
+	
+	public Image getTakeDamageAnimation(){
+		return takeDamageAnimation;
+	}
+	
+	public boolean isBattleAnimating(){
+		return isBattleAnimating;
+	}
+	
+	public void setIsBattleAnimating(boolean isAnimating){
+		isBattleAnimating = isAnimating;
 	}
 	
 	public int compareWit(Character chara) {

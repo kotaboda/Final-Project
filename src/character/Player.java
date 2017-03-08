@@ -10,6 +10,7 @@ import abilities.PullAnAllNighter;
 import abilityInterfaces.Ability;
 import abilityInterfaces.AttackAbility;
 import abilityInterfaces.BuffAbility;
+import application.GameEngine;
 import characterEnums.Direction;
 import characterEnums.Stats;
 import enums.Genders;
@@ -54,10 +55,14 @@ public class Player extends Character {
 		case BOY:
 			sex = Genders.BOY;
 			worldImage = new Image(getClass().getResourceAsStream("/images/MaleWalk.png"));
+			battleImage = new Image(getClass().getResourceAsStream("/images/malebattleicon.png"));
+			takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/maletakedamage.png"));
 			break;
 		case GIRL:
 			sex = Genders.GIRL;
 			worldImage = new Image(getClass().getResourceAsStream("/images/FemaleWalk.png"));
+			//TODO(andrew): we need to add the female battleImage and takeDamageAnimation
+			battleImage = new Image(getClass().getResourceAsStream("images/"));
 			break;
 		default:
 			sex = Genders.BOY;
@@ -87,6 +92,8 @@ public class Player extends Character {
 		hitPoints -= (dmg - getStat(Stats.ENDURANCE));
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
+		//NOTE(andrew): maybe breaks mvc
+		GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
 		return dmg;
 	}
 
@@ -126,10 +133,7 @@ public class Player extends Character {
 		this.directionFacing = directionFacing;
 	}
 
-	public Image getWorldImage() {
-		// TODO Auto-generated method stub
-		return worldImage;
-	}
+	
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();

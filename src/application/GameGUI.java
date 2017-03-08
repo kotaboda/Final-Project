@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
+import character.Character;
 import character.Enemy;
 import character.Player;
 import characterEnums.Direction;
@@ -37,6 +38,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -53,6 +55,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -76,6 +79,7 @@ public class GameGUI extends Application {
 	private Game TESTINGGAME = GameEngine.getGame();
 	private boolean isPlayersTurn = false;
 	private Object lock = new Object();
+	private Object animationLock = new Object();
 	private Parent p;
 	private TextArea displayText = new TextArea("");
 	private boolean isAnimating = false;
@@ -87,6 +91,9 @@ public class GameGUI extends Application {
 		displayText.setEditable(false);
 	}
 
+	@FXML
+	private Canvas playerBattleCanvas;
+	
 	@FXML
 	private Button exitButton;
 	@FXML
@@ -286,7 +293,13 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-
+//			GraphicsContext pgc = playerBattleCanvas.getGraphicsContext2D();
+			TESTINGGAME.getPlayer().setBattleImageView(playerImageView);
+			Image playerBattleImage = TESTINGGAME.getPlayer().getBattleImage();
+			playerImageView.setImage(playerBattleImage);
+//			playerBattleCanvas.snapshot(new SnapshotParameters() , new WritableImage(10,10));
+//			pgc.drawImage(playerBattleImage, 0, 0, playerBattleImage.getWidth() / 3, playerBattleImage.getHeight() / 3);
+			
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			enemies.setAlignment(Pos.CENTER);
 			Listener<Battle> s = new Listener<Battle>() {
@@ -340,7 +353,9 @@ public class GameGUI extends Application {
 						});
 					}
 				});
-				VBox mainContainer = new VBox(new Canvas(100, 100), enemyName, enemyHealth);
+				//NOTE(andrew): changing things around here, i might goof it up
+				currentEnemy.setBattleImageView(new ImageView());
+				VBox mainContainer = new VBox(currentEnemy.getBattleImageView(), enemyName, enemyHealth);
 				child.getChildren().add(mainContainer);
 				child.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
@@ -553,7 +568,7 @@ public class GameGUI extends Application {
 						case W:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.UP)) {
-									playAnimation(Direction.UP);
+									playMoveAnimation(Direction.UP);
 									// GameEngine.updatePlayerPosition(Direction.UP);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
 								}else if (!isAnimating){
@@ -567,7 +582,7 @@ public class GameGUI extends Application {
 						case S:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.DOWN)) {
-									playAnimation(Direction.DOWN);
+									playMoveAnimation(Direction.DOWN);
 									// GameEngine.updatePlayerPosition(Direction.DOWN);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
 								} else if (!isAnimating) {
@@ -582,7 +597,7 @@ public class GameGUI extends Application {
 						case A:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.LEFT)) {
-									playAnimation(Direction.LEFT);
+									playMoveAnimation(Direction.LEFT);
 									// GameEngine.updatePlayerPosition(Direction.LEFT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
 								}else if (!isAnimating){
@@ -596,7 +611,7 @@ public class GameGUI extends Application {
 						case D:
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.RIGHT)) {
-									playAnimation(Direction.RIGHT);
+									playMoveAnimation(Direction.RIGHT);
 									// GameEngine.updatePlayerPosition(Direction.RIGHT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
 								} else if (!isAnimating) {
@@ -816,20 +831,20 @@ public class GameGUI extends Application {
 		switch (currentFloor.getPlayer().getDirectionFacing()) {
 
 		case UP:
-			currentImageIndex = Math.abs((offsetY % 32) / 8);
+			currentImageIndex = Math.abs((offsetY % 32) / 16);
 			imageRow = 0;
 			break;
 		case DOWN:
-			currentImageIndex = Math.abs((offsetY % 32) / 8);
+			currentImageIndex = Math.abs((offsetY % 32) / 16);
 			imageRow = 2;
 			break;
 
 		case LEFT:
-			currentImageIndex = Math.abs((offsetX % 32) / 8);
+			currentImageIndex = Math.abs((offsetX % 32) / 16);
 			imageRow = 3;
 			break;
 		case RIGHT:
-			currentImageIndex = Math.abs((offsetX % 32) / 8);
+			currentImageIndex = Math.abs((offsetX % 32) / 16);
 			imageRow = 1;
 			break;
 		}
@@ -977,7 +992,8 @@ public class GameGUI extends Application {
 
 	}
 
-	public void playAnimation(Direction direction) {
+	public void playMoveAnimation(Direction direction) {
+		int speed = 4;
 		if (!isAnimating) {
 			switch (direction) {
 			case UP:
@@ -987,7 +1003,7 @@ public class GameGUI extends Application {
 
 					@Override
 					public void handle(long currentNanoTime) {
-						y += 2;
+						y += speed;
 						int temp = y % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
 								y);
@@ -1009,7 +1025,7 @@ public class GameGUI extends Application {
 
 					@Override
 					public void handle(long currentNanoTime) {
-						x -= 2;
+						x -= speed;
 						int temp = x % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), x,
 								0);
@@ -1032,7 +1048,7 @@ public class GameGUI extends Application {
 
 					@Override
 					public void handle(long currentNanoTime) {
-						y -= 2;
+						y -= speed;
 						int temp = y % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
 								y);
@@ -1057,7 +1073,7 @@ public class GameGUI extends Application {
 
 					@Override
 					public void handle(long currentNanoTime) {
-						x += 2;
+						x += speed;
 						int temp = x % 64;
 						drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), x,
 								0);
@@ -1079,6 +1095,54 @@ public class GameGUI extends Application {
 			}
 		}
 	}
+	
+	public void playTakeDamageAnimation(Image animation, Character character){
+		
+		PixelReader reader = animation.getPixelReader();
+		ImageView view = character.getBattleImageView();
+		Image temp = character.getBattleImage();
+		int widthOfFrame = (int) temp.getWidth();
+		int heightOfFrame = (int) temp.getHeight();
+		int numOfFrames = (int) (animation.getWidth() / widthOfFrame);
+		int framesPlayedPerAnimationFrame = 4;
+		while(character.isBattleAnimating()){
+			try {
+				synchronized(animationLock){
+					animationLock.wait();
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		character.setIsBattleAnimating(true);
+		Platform.runLater(new Runnable(){
+
+			@Override
+			public void run() {
+				
+				new AnimationTimer(){
+					int x = -1;
+					@Override
+					public void handle(long now) {
+						x += 1;
+						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0, widthOfFrame, heightOfFrame);
+						view.setImage(currentFrame);
+						if(x > numOfFrames * framesPlayedPerAnimationFrame){
+							
+							view.setImage(character.getBattleImage());
+							synchronized(animationLock){
+								character.setIsBattleAnimating(false);
+								animationLock.notifyAll();
+							}
+							this.stop();
+						}
+					}
+					
+				}.start();
+			}
+		});
+	}
+	
 
 	@FXML
 	private RadioButton boyRadioButton;
