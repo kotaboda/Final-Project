@@ -57,6 +57,7 @@ public class Player extends Character {
 			battleImage = new Image(getClass().getResourceAsStream("/images/malebattleicon.png"));
 			worldIcon = new Image(getClass().getResourceAsStream("/images/maleicon.png"));
 			takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/maletakedamage.png"));
+			attackAnimation = new Image(getClass().getResourceAsStream("/images/maleattack.png"));
 			break;
 		case GIRL:
 			sex = Genders.GIRL;
@@ -64,6 +65,7 @@ public class Player extends Character {
 			battleImage = new Image(getClass().getResourceAsStream("/images/femalebattleicon.png"));
 			worldIcon = new Image(getClass().getResourceAsStream("/images/femaleicon.png"));
 			takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/femaletakedamage.png"));
+			attackAnimation = new Image(getClass().getResourceAsStream("/images/femaleattack.png"));
 			break;
 		default:
 			sex = Genders.BOY;
@@ -99,7 +101,7 @@ public class Player extends Character {
 
 	@Override
 	public int attack() {
-//		GameEngine.playAttackAnimation(attackAnimation, this);
+		GameEngine.playAttackAnimation(attackAnimation, this);
 		int damage = 0;
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
@@ -160,12 +162,14 @@ public class Player extends Character {
 			battleImage = new Image(getClass().getResourceAsStream("/images/malebattleicon.png"));
 			worldIcon = new Image(getClass().getResourceAsStream("/images/maleicon.png"));
 			takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/maletakedamage.png"));
+			attackAnimation = new Image(getClass().getResourceAsStream("/images/maleattack.png"));
 			break;
 		case GIRL:
 			worldImage = new Image(getClass().getResourceAsStream("/images/FemaleWalk.png"));
 			battleImage = new Image(getClass().getResourceAsStream("/images/femalebattleicon.png"));
 			worldIcon = new Image(getClass().getResourceAsStream("/images/femaleicon.png"));
 			takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/femaletakedamage.png"));
+			attackAnimation = new Image(getClass().getResourceAsStream("/images/femaleattack.png"));
 			break;
 		default:
 			break;

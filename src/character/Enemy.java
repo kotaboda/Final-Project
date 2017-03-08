@@ -80,7 +80,7 @@ public class Enemy extends Character {
 
 	@Override
 	public int attack() {
-		//GameEngine.playAttackAnimation(attackAnimation, this);
+//		GameEngine.playAttackAnimation(attackAnimation, this);
 		int damage = 0;
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
