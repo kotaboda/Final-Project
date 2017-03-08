@@ -148,21 +148,28 @@ public class Player extends Character {
 	protected void levelUp(int level) {
 		if (level > 0) {
 			this.level += level;
+			int currentMot = stats.get(Stats.MOTIVATION);
+			int currentInt = stats.get(Stats.INTELLIGIENCE);
+			int currentWit = stats.get(Stats.WIT);
+			int currentEnd = stats.get(Stats.ENDURANCE);
+			int currentSta = stats.get(Stats.STAMINA);
+			this.stats.put(Stats.MOTIVATION, currentMot + 2);
+			this.stats.put(Stats.INTELLIGIENCE, currentInt + 2);
+			this.stats.put(Stats.WIT, currentWit + 2);
+			this.stats.put(Stats.ENDURANCE, currentEnd + 2);
+			this.stats.put(Stats.STAMINA, currentSta + 2);
 		}
 		if(this.level == 5){
-			System.out.println("Added PullAnAllNighter");
 			ABILITIES.add(new PullAnAllNighter());
 		}
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
-		System.out.println(NAME + " "+ energy + "/"+ maxEnergy);
 		out.defaultWriteObject();
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		System.out.println(NAME + " "+energy+"/" + maxEnergy);
 		hpProperty = new SimpleIntegerProperty(hitPoints);
 		maxHPProperty = new SimpleIntegerProperty(hitPoints);
 		energyProperty = new SimpleIntegerProperty(energy);

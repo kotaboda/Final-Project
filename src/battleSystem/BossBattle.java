@@ -109,7 +109,7 @@ public class BossBattle extends Battle {
 			}
 		} while (battleOngoing);
 		isCompleted = true;
-		GameEngine.displayEndBattle(this);
+		GameEngine.displayEndBattle(this, leveledUp);
 	}
 
 	protected Character[] createTurnList() {

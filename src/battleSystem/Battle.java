@@ -22,6 +22,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3115042468203904551L;
+	protected boolean leveledUp = false;
 	protected Player player;
 	protected Enemy[] enemies;
 	private Coordinates place = new Coordinates(0, 0);
@@ -98,7 +99,6 @@ public class Battle implements Subscribable<Battle>, Serializable {
 
 	public void start() {
 		Character[] turnList = createTurnList();
-		boolean leveledUp = false;
 		boolean battleOngoing = true;
 		boolean allEnemiesDead = false;
 		do {

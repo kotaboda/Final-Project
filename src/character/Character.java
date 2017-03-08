@@ -49,7 +49,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	protected int maxEnergy = 100;
 	protected transient IntegerProperty maxEnergyProperty = new SimpleIntegerProperty(energy);
 	protected transient IntegerProperty energyProperty = new SimpleIntegerProperty(energy);
-	protected ImageView battleImageView;
+	protected transient ImageView battleImageView;
 	protected boolean isBattleAnimating = false;
 
 	public Character(String name, int tileSheetNum) {

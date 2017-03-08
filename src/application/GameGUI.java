@@ -1183,7 +1183,6 @@ public void playAttackAnimation(Image animation, Character character){
 				}
 
 			});
-			;
 
 			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);

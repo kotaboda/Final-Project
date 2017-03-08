@@ -89,7 +89,7 @@ public class KrebsBattle extends BossBattle {
 		} while (battleOngoing);
 		// System.out.println(Thread.currentThread().getName());
 		isCompleted = true;
-		GameEngine.displayEndBattle(this);
+		GameEngine.displayEndBattle(this, leveledUp);
 	}
 
 }
