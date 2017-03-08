@@ -229,8 +229,8 @@ public class GameEngine {
 		return game.getPlayer().modifyInventory(InventoryAction.GIVE, item);
 	}
 	
-	public static void displayEndBattle(Battle b){
-		view.displayEndBattle(b);
+	public static void displayEndBattle(Battle b, boolean leveledUp){
+		view.displayEndBattle(b, leveledUp);
 	}
 
 	public static void setGame(Game g) {

@@ -7,6 +7,7 @@ package application;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 import abilityInterfaces.Ability;
 import battleSystem.Battle;
@@ -689,7 +690,7 @@ public class GameGUI extends Application {
 		});
 	}
 
-	public void displayEndBattle(Battle b) {
+	public void displayEndBattle(Battle b, boolean leveledUp) {
 		Player player = b.getPlayer();
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
@@ -698,7 +699,17 @@ public class GameGUI extends Application {
 			for (Item i : b.getItemDrops()) {
 				itemsDropped += i.NAME + "\n";
 			}
-			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + itemsDropped);
+			String levelUp = "";
+			if(leveledUp){
+				levelUp += "\n";
+				levelUp += "You leveled up! Here are your new stats!\n";
+				Set<Stats> keys = b.getPlayer().getStats().keySet();
+				Stats[] stats = keys.toArray(new Stats[0]);
+				for(int i = 0; i < stats.length; i++){
+					levelUp += stats[i] + ": " + b.getPlayer().getStat(stats[i]) + "\n";
+				}
+			}
+			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + itemsDropped);
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.

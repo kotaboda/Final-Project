@@ -98,7 +98,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 
 	public void start() {
 		Character[] turnList = createTurnList();
-
+		boolean leveledUp = false;
 		boolean battleOngoing = true;
 		boolean allEnemiesDead = false;
 		do {
@@ -128,14 +128,16 @@ public class Battle implements Subscribable<Battle>, Serializable {
 						allEnemiesDead = false;
 					}
 				}
-
+				
 				if (allEnemiesDead) {
 					battleOngoing = false;
 					for (int j = 0; j < enemies.length; j++) {
 						Item[] loot = enemies[j].getInventoryContents();
 						player.modifyInventory(InventoryAction.GIVE, loot);
 						itemsDropped.addAll(Arrays.asList(loot));
-						player.giveCredits(enemies[j].getCreditDrop());
+						if(player.giveCredits(enemies[j].getCreditDrop())){
+							leveledUp = true;
+						}
 						creditsDropped += enemies[j].getCreditDrop();
 					}
 
@@ -146,7 +148,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		} while (battleOngoing);
 		subscribers.clear();
 		isCompleted = true;
-		GameEngine.displayEndBattle(this);
+		GameEngine.displayEndBattle(this, leveledUp);
 	}
 
 	public boolean isCompleted() {
