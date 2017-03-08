@@ -42,7 +42,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	protected transient Image worldImage;
 	protected transient Image battleImage;
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
-	private int maxHitPoints = 100;
+	protected int maxHitPoints = 100;
 	protected int maxEnergy = 100;
 	protected transient IntegerProperty maxEnergyProperty = new SimpleIntegerProperty(energy);
 	protected transient IntegerProperty energyProperty = new SimpleIntegerProperty(energy);
@@ -64,6 +64,8 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		this.NAME = name;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
+		energyProperty.set(energy);
+		maxEnergyProperty.set(maxEnergy);
 		
 		//TODO Complete Paths to Image Files.
 //		try {

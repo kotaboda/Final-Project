@@ -45,7 +45,9 @@ public class Player extends Character {
 		this.stats.put(Stats.INTELLIGIENCE, 100);
 		this.stats.put(Stats.MOTIVATION, 100);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
+		this.maxHitPoints = hitPoints;
 		this.energy = stats.get(Stats.STAMINA) * 10;
+		this.maxEnergy = energy;
 		energyProperty.set(energy);
 		maxEnergyProperty.set(energy);
 		hpProperty.set(hitPoints);
@@ -141,11 +143,13 @@ public class Player extends Character {
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
+		System.out.println(NAME + " "+ energy + "/"+ maxEnergy);
 		out.defaultWriteObject();
 	}
 
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
+		System.out.println(NAME + " "+energy+"/" + maxEnergy);
 		hpProperty = new SimpleIntegerProperty(hitPoints);
 		maxHPProperty = new SimpleIntegerProperty(hitPoints);
 		energyProperty = new SimpleIntegerProperty(energy);
