@@ -55,30 +55,7 @@ public class BossBattle extends Battle {
 				// validated before it is used
 				allEnemiesDead = true;
 				if (turnList[i] instanceof Player) {
-					GameEngine.playerBattleInput(this);
-					if (playerNextAbility != null) {
-						// NOTE(andrew): If the player selected an ability this
-						// branch should run
-						player.ability(playerNextAbility, playerTarget);
-						loggedAction = player.NAME + ": Used " + playerNextAbility;
-						notifySubscribers();
-					} else if (playerNextItemUse != null) {
-						// TODO(andrew): this method will take playerTarget,
-						// which needs to be possible to be the player itself,
-						// so in the GameGui class we need
-						// to allow selection of the player itself.
-						// NOTE(andrew): this branch runs if the player uses an
-						// item
-						playerNextItemUse.use(turnList[i]);
-						loggedAction = player.NAME + ": Used " + (playerNextItemUse);
-						notifySubscribers();
-					} else if (playerTarget != null) {
-						// NOTE(andrew): this branch runs if the player selected
-						// attack
-						playerTarget.takeDmg(player.attack());
-						loggedAction = player.NAME + ": Attacked " + playerTarget.NAME;
-						notifySubscribers();
-					}
+					playerTakesTurn();
 				} else if (turnList[i] instanceof Boss) {
 					if (turnList[i].getHPProperty().get() > 0) {
 						Random r = new Random();

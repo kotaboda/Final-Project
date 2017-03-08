@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import abilities.ExpertTimeManagement;
 import abilities.Procrastinate;
 import abilities.PullAnAllNighter;
 import abilityInterfaces.Ability;
@@ -40,8 +42,7 @@ public class Player extends Character {
 
 	public Player(String name, Genders gender, int tileSheetNum) {
 		super(name, tileSheetNum);
-		ABILITIES.add(new PullAnAllNighter());
-		ABILITIES.add(new Procrastinate());
+		ABILITIES.addAll(Arrays.asList(new PullAnAllNighter(), (new Procrastinate()), (new ExpertTimeManagement())));
 		this.stats.put(Stats.INTELLIGIENCE, 100);
 		this.stats.put(Stats.MOTIVATION, 100);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
@@ -76,8 +77,8 @@ public class Player extends Character {
 	public Player() {
 		super();
 		sex = Genders.BOY;
-		ABILITIES.add(new PullAnAllNighter());
-		ABILITIES.add(new Procrastinate());
+		ABILITIES.addAll(Arrays.asList(new PullAnAllNighter(), (new Procrastinate()), (new ExpertTimeManagement())));
+
 		this.stats.put(Stats.INTELLIGIENCE, 100);
 		this.stats.put(Stats.MOTIVATION, 100);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
@@ -104,9 +105,9 @@ public class Player extends Character {
 		return damage;
 	}
 
-	public boolean ability(Ability ability, Character targets) {
+	public boolean ability(Ability ability, Character... enemies) {
 		if (ability instanceof AttackAbility) {
-			return ability.use(this, targets);
+			return ability.use(this, enemies);
 		} else if (ability instanceof BuffAbility) {
 			return ability.use(this, this);
 		}

@@ -24,7 +24,7 @@ public abstract class Ability implements Serializable{
 	 * @param targets The target of the ability.
 	 * @return A boolean value representing the success of the ability's use.
 	 */
-	public abstract boolean use(Character user, Character targets);
+	public abstract boolean use(Character user, Character... targets);
 	public abstract String getDescription();
 	
 	@Override

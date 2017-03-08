@@ -57,9 +57,7 @@ public abstract class Floor implements Paintable, Serializable{
 		for(int i = 0; i < tiles.length; i++){
 			for(int j = 0; j < tiles[i].length; j++){
 				if(tiles[i][j] instanceof Noteable){
-					System.out.println(tiles[i][j].getClass().getName());
 					((Noteable) tiles[i][j]).setNote(notesTemp[noteCounter]);
-					System.out.println(((Noteable) tiles[i][j]).getMessage());
 					noteCounter++;
 				}
 				if(tiles[i][j] instanceof Lootable){

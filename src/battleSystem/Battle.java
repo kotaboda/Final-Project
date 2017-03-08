@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import abilityInterfaces.Ability;
+import abilityInterfaces.GroupAbility;
 import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
 import characterEnums.InventoryAction;
-import publisherSubscriberInterfaces.Listener;
-import publisherSubscriberInterfaces.Subscribable;
 import itemSystem.Item;
 import itemSystem.Usable;
 import models.Coordinates;
+import publisherSubscriberInterfaces.Listener;
+import publisherSubscriberInterfaces.Subscribable;
 
 public class Battle implements Subscribable<Battle>, Serializable {
 	/**
@@ -59,6 +60,42 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		this.playerNextItemUse = playerNextItemUse;
 		this.playerNextAbility = null;
 	}
+	
+	protected void playerTakesTurn(){
+		GameEngine.playerBattleInput(this);
+		if (playerNextAbility != null) {
+			// NOTE(andrew): If the player selected an ability this
+			// branch should run
+			boolean successfulAbilityUse = false;
+			if(playerNextAbility instanceof GroupAbility){
+				successfulAbilityUse = player.ability(playerNextAbility, enemies);
+			}else{
+				successfulAbilityUse = player.ability(playerNextAbility, playerTarget);
+			}
+			if(successfulAbilityUse){
+				loggedAction = player.NAME + ": Used " + playerNextAbility;							
+			} else{
+				loggedAction = player.NAME + ": Used " + playerNextAbility + " but it failed!";				
+			}
+			notifySubscribers();
+		} else if (playerNextItemUse != null) {
+			// TODO(andrew): this method will take playerTarget,
+			// which needs to be possible to be the player itself,
+			// so in the GameGui class we need
+			// to allow selection of the player itself.
+			// NOTE(andrew): this branch runs if the player uses an
+			// item
+			playerNextItemUse.use(player);
+			loggedAction = player.NAME + ": Used " + (playerNextItemUse);
+			notifySubscribers();
+		} else if (playerTarget != null) {
+			// NOTE(andrew): this branch runs if the player selected
+			// attack
+			playerTarget.takeDmg(player.attack());
+			loggedAction = player.NAME + ": Attacked " + playerTarget.NAME;
+			notifySubscribers();
+		}
+	}
 
 	public void start() {
 		Character[] turnList = createTurnList();
@@ -71,33 +108,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 				// validated before it is used
 				allEnemiesDead = true;
 				if (turnList[i] instanceof Player) {
-					GameEngine.playerBattleInput(this);
-					if (playerNextAbility != null) {
-						// NOTE(andrew): If the player selected an ability this
-						// branch should run
-						if(player.ability(playerNextAbility, playerTarget)){
-							loggedAction = player.NAME + ": Used " + playerNextAbility;							
-						} else{
-							loggedAction = player.NAME + ": Used " + playerNextAbility + " but it failed!";				
-						}
-						notifySubscribers();
-					} else if (playerNextItemUse != null) {
-						// TODO(andrew): this method will take playerTarget,
-						// which needs to be possible to be the player itself,
-						// so in the GameGui class we need
-						// to allow selection of the player itself.
-						// NOTE(andrew): this branch runs if the player uses an
-						// item
-						playerNextItemUse.use(player);
-						loggedAction = player.NAME + ": Used " + (playerNextItemUse);
-						notifySubscribers();
-					} else if (playerTarget != null) {
-						// NOTE(andrew): this branch runs if the player selected
-						// attack
-						playerTarget.takeDmg(player.attack());
-						loggedAction = player.NAME + ": Attacked " + playerTarget.NAME;
-						notifySubscribers();
-					}
+					playerTakesTurn();
 				} else {
 					// NOTE(andrew): this branch runs if it's the enemies turn,
 					// this should probably be changed, not totally sure,

@@ -18,7 +18,7 @@ public class PlayEnchantment extends BuffAbility {
 	}
 
 	@Override
-	public boolean use(Character user, Character targets) {
+	public boolean use(Character user, Character... targets) {
 		boolean successful = true;
 		if(!usedBuff) {
 			user.modifyField(ModifiableFields.HITPOINTS, 20);

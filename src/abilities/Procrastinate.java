@@ -15,7 +15,7 @@ public class Procrastinate extends BuffAbility{
 	}
 
 	@Override
-	public boolean use(Character user, Character targets) {
+	public boolean use(Character user, Character... targets) {
 		if(user.getHPProperty().get() > 30) {
 			user.takeDmg(30);
 			user.gainEnergy(30);

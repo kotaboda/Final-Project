@@ -1075,7 +1075,7 @@ public class GameGUI extends Application {
 			displayBattleView(b);
 
 		} else if (TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getTiles()
-				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4) {
+				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4 && TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).bossIsDefeated()) {
 			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
 			TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
 					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)

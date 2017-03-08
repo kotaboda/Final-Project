@@ -15,9 +15,9 @@ public class PullAnAllNighter extends AttackAbility {
 	}
 
 	@Override
-	public boolean use(Character user, Character targets) {
+	public boolean use(Character user, Character... targets) {
 		if(user.getEnergy() > 3 && user.useEnergy(user.getEnergyProperty().get())){
-			targets.takeDmg(user.attack() * 3);
+			targets[0].takeDmg(user.attack() * 3);
 			return true;
 		}
 		return false;
