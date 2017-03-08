@@ -42,7 +42,8 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	protected ArrayList<Listener<Character>> subscribers = new ArrayList<>();
 	protected transient Image worldImage;
 	protected transient Image battleImage;
-	protected Image takeDamageAnimation;
+	protected transient Image takeDamageAnimation;
+	protected transient Image attackAnimation;
 	protected HashMap<Stats, Integer> stats = new HashMap<>();
 	protected int maxHitPoints = 100;
 	protected int maxEnergy = 100;
@@ -70,14 +71,6 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		energyProperty.set(energy);
 		maxEnergyProperty.set(maxEnergy);
 		
-		//TODO Complete Paths to Image Files.
-//		try {
-//			worldImage = ImageIO.read(new File("Images/World Images/"));
-//			battleImage = ImageIO.read(new File("Images/Battle Images/"));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 	}
 	
@@ -99,6 +92,16 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	protected void levelUp(int level) {
 		if (level > 0) {
 			this.level += level;
+			int currentMot = stats.get(Stats.MOTIVATION);
+			int currentInt = stats.get(Stats.INTELLIGIENCE);
+			int currentWit = stats.get(Stats.WIT);
+			int currentEnd = stats.get(Stats.ENDURANCE);
+			int currentSta = stats.get(Stats.STAMINA);
+			this.stats.put(Stats.MOTIVATION, currentMot + 2);
+			this.stats.put(Stats.INTELLIGIENCE, currentInt + 2);
+			this.stats.put(Stats.WIT, currentWit + 2);
+			this.stats.put(Stats.ENDURANCE, currentEnd + 2);
+			this.stats.put(Stats.STAMINA, currentSta + 2);
 		}
 	}
 
@@ -277,6 +280,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		maxHPProperty = new SimpleIntegerProperty(hitPoints);
 		energyProperty = new SimpleIntegerProperty(energy);
 		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
+		
 	}
 
 	public boolean useEnergy(int i) {
@@ -289,7 +293,6 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	}
 
 	public int getEnergy() {
-		// TODO Auto-generated method stub
 		return energy;
 	}
 

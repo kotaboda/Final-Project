@@ -1,6 +1,10 @@
 package character;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import characterEnums.Stats;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 import models.Coordinates;
 
@@ -20,5 +24,17 @@ public class Lab extends Enemy {
 		this.stats.put(Stats.ENDURANCE, 11);
 		this.stats.put(Stats.STAMINA, 10);
 		battleImage = new Image(getClass().getResourceAsStream("/images/lab.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/labtakedamage.png"));
+	}
+	
+
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+		in.defaultReadObject();		
+		hpProperty = new SimpleIntegerProperty(hitPoints);
+		maxHPProperty = new SimpleIntegerProperty(hitPoints);
+		energyProperty = new SimpleIntegerProperty(energy);
+		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
+		battleImage = new Image(getClass().getResourceAsStream("/images/lab.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/labtakedamage.png"));
 	}
 }

@@ -2,6 +2,7 @@ package character;
 
 import java.util.Random;
 
+import application.GameEngine;
 import characterEnums.Stats;
 import itemSystem.Coffee;
 import itemSystem.Doritos;
@@ -69,14 +70,17 @@ public class Enemy extends Character {
 
 	@Override
 	public int takeDmg(int dmg) {
+		GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
 		hitPoints -= (dmg - getStat(Stats.ENDURANCE) + 2);
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
+		
 		return dmg;
 	}
 
 	@Override
 	public int attack() {
+		//GameEngine.playAttackAnimation(attackAnimation, this);
 		int damage = 0;
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;

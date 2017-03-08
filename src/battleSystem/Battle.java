@@ -30,7 +30,6 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	protected Usable playerNextItemUse = null;
 	protected boolean isCompleted = false;
 	protected String loggedAction = null;
-	// TODO(andrew): this might need to be an array or array list
 	protected Character playerTarget = null;
 	protected int creditsDropped;
 	private ArrayList<Item> itemsDropped = new ArrayList<Item>();
@@ -145,7 +144,6 @@ public class Battle implements Subscribable<Battle>, Serializable {
 
 			}
 		} while (battleOngoing);
-		// System.out.println(Thread.currentThread().getName());
 		subscribers.clear();
 		isCompleted = true;
 		GameEngine.displayEndBattle(this);
@@ -220,7 +218,6 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	}
 
 	public int getCreditsDropped() {
-		// TODO Auto-generated method stub
 		return creditsDropped;
 	}
 

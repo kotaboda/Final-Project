@@ -38,7 +38,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -79,17 +78,19 @@ public class GameGUI extends Application {
 	private Game TESTINGGAME = GameEngine.getGame();
 	private boolean isPlayersTurn = false;
 	private Object lock = new Object();
-	private Object animationLock = new Object();
+	private Object takeDamageAnimationLock = new Object();
+	private Object attackAnimationLock = new Object();
 	private Parent p;
 	private TextArea displayText = new TextArea("");
 	private boolean isAnimating = false;
 	{
 		displayText.setId("displayText");
-		// displayText.setMouseTransparent(true);
 		displayText.setWrapText(true);
 		displayText.setFocusTraversable(false);
 		displayText.setEditable(false);
 	}
+	
+	@FXML ImageView characterView;
 
 	@FXML
 	private Canvas playerBattleCanvas;
@@ -157,7 +158,6 @@ public class GameGUI extends Application {
 				@Override
 				public void handle(ActionEvent event) {
 					displayCharacterCreation();
-					// displayGeneralView();
 				}
 			});
 
@@ -198,7 +198,6 @@ public class GameGUI extends Application {
 	private Button characterButton;
 
 	public void displayPauseMenu() {
-		// TODO Auto-generated method stub
 		this.currentLayout = GUILayouts.PAUSE;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/PauseView.fxml"));
 		loader.setController(this);
@@ -268,9 +267,9 @@ public class GameGUI extends Application {
 	private Pane rightBattleVBox;
 	@FXML
 	private ListView<String> leftActionList;
-	//
+	
 	private ListView<Ability> abilityList;
-	//
+	
 	@FXML
 	private Button submitButton;
 	@FXML
@@ -293,12 +292,9 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-//			GraphicsContext pgc = playerBattleCanvas.getGraphicsContext2D();
 			TESTINGGAME.getPlayer().setBattleImageView(playerImageView);
 			Image playerBattleImage = TESTINGGAME.getPlayer().getBattleImage();
 			playerImageView.setImage(playerBattleImage);
-//			playerBattleCanvas.snapshot(new SnapshotParameters() , new WritableImage(10,10));
-//			pgc.drawImage(playerBattleImage, 0, 0, playerBattleImage.getWidth() / 3, playerBattleImage.getHeight() / 3);
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			enemies.setAlignment(Pos.CENTER);
 			Listener<Battle> s = new Listener<Battle>() {
@@ -323,8 +319,8 @@ public class GameGUI extends Application {
 				Enemy currentEnemy = b.getEnemies()[i];
 				ImageView enemyImage = new ImageView();
 				enemyImage.setImage(currentEnemy.getBattleImage());
-				enemyImage.setFitHeight(150);
-				enemyImage.setFitWidth(150);
+				enemyImage.setFitHeight(100);
+				enemyImage.setFitWidth(100);
 				enemyImage.setPreserveRatio(true);
 				Label enemyName = new Label(currentEnemy.NAME);
 				enemyNames.add(enemyName);
@@ -338,6 +334,15 @@ public class GameGUI extends Application {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 							Number newValue) {
+						while(currentEnemy.isBattleAnimating()){
+							try{
+								synchronized(takeDamageAnimationLock){
+									takeDamageAnimationLock.wait();
+								}
+							}catch(InterruptedException e){
+								e.printStackTrace();
+							}
+						}
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
@@ -357,8 +362,7 @@ public class GameGUI extends Application {
 						});
 					}
 				});
-				//NOTE(andrew): changing things around here, i might goof it up
-				currentEnemy.setBattleImageView(new ImageView());
+				currentEnemy.setBattleImageView(enemyImage);
 				VBox mainContainer = new VBox(currentEnemy.getBattleImageView(), enemyName, enemyHealth);
 				child.getChildren().add(mainContainer);
 				child.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -377,9 +381,7 @@ public class GameGUI extends Application {
 					;
 				}
 			}
-			//
 			submitButton.setDisable(true);
-			//
 			leftActionList.setItems(FXCollections.observableArrayList("Attack", "Abilities", "Items"));
 			leftActionList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -392,19 +394,15 @@ public class GameGUI extends Application {
 						case 0:
 							middleBattleVBox.getChildren().clear();
 							rightBattleVBox.getChildren().clear();
-							//
 							if (isPlayersTurn) {
 								submitButton.setDisable(false);
 								abilityList = null;
 							}
-							//
 							break;
 						case 1:
-							//
 							if (isPlayersTurn) {
 								submitButton.setDisable(true);
 							}
-							//
 							middleBattleVBox.getChildren().clear();
 							abilityList = new ListView<>(TESTINGGAME.getPlayer().getAbilities());
 							middleBattleVBox.getChildren().add(abilityList);
@@ -420,25 +418,19 @@ public class GameGUI extends Application {
 														.getSelectedItem().getDescription());
 												abilityDescription.wrapTextProperty().set(true);
 												rightBattleVBox.getChildren().add(abilityDescription);
-												//
 												if (isPlayersTurn) {
 													submitButton.setDisable(false);
 												}
-												//
 											}
 										}
-										//
 									});
 							abilityList.getSelectionModel().selectFirst();
 							break;
 						case 2:
-							//
 							if (isPlayersTurn) {
 								submitButton.setDisable(true);
 								abilityList = null;
 							}
-
-							//
 							middleBattleVBox.getChildren().clear();
 							rightBattleVBox.getChildren().clear();
 							ArrayList<Usable> usable = new ArrayList<>();
@@ -475,14 +467,10 @@ public class GameGUI extends Application {
 				}
 			});
 
-			// submitButton.setDisable(true);
 			submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// Ability a =
-					// abilityList.getSelectionModel().getSelectedItem();
-					// Tell Game Engine about selections here.
 					submitButton.setDisable(true);
 					isPlayersTurn = false;
 					synchronized (lock) {
@@ -573,7 +561,6 @@ public class GameGUI extends Application {
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.UP)) {
 									playMoveAnimation(Direction.UP);
-									// GameEngine.updatePlayerPosition(Direction.UP);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
 								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
@@ -587,7 +574,6 @@ public class GameGUI extends Application {
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.DOWN)) {
 									playMoveAnimation(Direction.DOWN);
-									// GameEngine.updatePlayerPosition(Direction.DOWN);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
 								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
@@ -602,7 +588,6 @@ public class GameGUI extends Application {
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.LEFT)) {
 									playMoveAnimation(Direction.LEFT);
-									// GameEngine.updatePlayerPosition(Direction.LEFT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
 								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
@@ -616,7 +601,6 @@ public class GameGUI extends Application {
 							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
 								if (!isAnimating && GameEngine.checkMovement(Direction.RIGHT)) {
 									playMoveAnimation(Direction.RIGHT);
-									// GameEngine.updatePlayerPosition(Direction.RIGHT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
 								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
@@ -668,62 +652,6 @@ public class GameGUI extends Application {
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
 			playerName.setText(TESTINGGAME.getPlayer().NAME);
-
-			// Drawing testing
-			// GraphicsContext gc = canvas.getGraphicsContext2D();
-			// NOTE(andrew): animation testing!!
-			// drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()
-			// - 1]);
-			// Animation testing
-			// isAnimating = true;
-			// Timeline gameLoop = new Timeline();
-			// gameLoop.setCycleCount( 64 );
-			//
-			// KeyFrame kf = new KeyFrame(
-			// Duration.seconds(0.01666667), // 60 FPS
-			// new EventHandler<ActionEvent>()
-			// {
-			// int x = 0;
-			// public void handle(ActionEvent ae)
-			// {
-			// x += 1;
-			// int tempX = x % 64;
-			// drawToGeneralCanvas(TESTINGGAME.getFloors()[TESTINGGAME.getPlayer().getFloorNum()
-			// - 1], x, 0);
-			// if(tempX == 0){
-			// x = 0;
-			// isAnimating = false;
-			// }
-			// }
-			// }
-			// );
-			// gameLoop.getKeyFrames().add( kf );
-			// gameLoop.play();
-			// gameLoop.getKeyFrames().add( kf );
-			// gameLoop.play();
-			// split
-			// new AnimationTimer()
-			// {
-			// int x = 0;
-			// public void handle(long currentNanoTime)
-			// {
-			// x -= 1;
-			// int tempX = x % 64;
-			// gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-			// if(tempX == 0){
-			// playerSummary.coordinates.setX(playerSummary.coordinates.getX() +
-			// 1);
-			// x = 0;
-			// }
-			// WritableImage image =
-			// TileManager.getImageToDraw(currentFloor.getTiles(),
-			// playerSummary.coordinates);
-			// gc.drawImage(image, tempX - 64, 0, image.getWidth() * 2,
-			// image.getHeight() * 2);
-			//
-			//
-			// }
-			// }.start();
 			Scene scene = new Scene(p);
 			String css = getClass().getResource("application.css").toExternalForm();
 			scene.getStylesheets().add(css);
@@ -753,8 +681,6 @@ public class GameGUI extends Application {
 				p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 					if ((event.getCode().equals(KeyCode.ESCAPE) || event.getCode().equals(KeyCode.E))
 							&& currentLayout.equals(GUILayouts.BATTLE)) {
-						// ((AnchorPane)
-						// primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 						displayGeneralView();
 					}
 				});
@@ -765,7 +691,6 @@ public class GameGUI extends Application {
 
 	public void displayEndBattle(Battle b) {
 		Player player = b.getPlayer();
-		// Enemy[] enemiesArray = b.getEnemies();
 		if (player.getHPProperty().get() > 0) {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
@@ -832,18 +757,9 @@ public class GameGUI extends Application {
 			break;
 		}
 		Image playerImg = currentFloor.getPlayer().getWorldImage();
-		// gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() *
-		// (canvas.getWidth() / image.getWidth()),
-		// image.getHeight() * (canvas.getHeight() / image.getHeight()));
 		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
-		// gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16,
-		// (canvas.getHeight() / 2) - 16, 32, 32);
-		// gc.drawImage(playerImg, (canvas.getWidth() / 2) - 32,
-		// (canvas.getHeight() / 2) - 32, 64, 64);
 		gc.drawImage(playerImg, currentImageIndex * 32, imageRow * 32, 32, 32, (canvas.getWidth() / 2) - 32,
 				(canvas.getHeight() / 2) - 32, 64, 64);
-		// System.out.println(currentFloor.getPlayer().getCoordinates());
-		// System.out.println("X: " + offsetX + "Y: " + offsetY);
 	}
 
 	public void displayCharacterManager() {
@@ -875,7 +791,7 @@ public class GameGUI extends Application {
 					displayPauseMenu();
 				}
 			});
-
+			characterView.setImage(TESTINGGAME.getPlayer().getWorldIcon());
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
@@ -927,9 +843,6 @@ public class GameGUI extends Application {
 			p = loader.load();
 
 			for (int i = 0; i < l.obtainLoot().length; i++) {
-				// Label item = new Label(l.obtainLoot()[i].toString() + ": " +
-				// l.obtainLoot()[i].getDescription());
-				// GridPane.setHalignment(item, HPos.CENTER);
 				otherInventoryGrid.getItems().add(l.obtainLoot()[i]);
 
 			}
@@ -1084,7 +997,7 @@ public class GameGUI extends Application {
 		}
 	}
 	
-	public void playTakeDamageAnimation(Image animation, Character character){
+public void playAttackAnimation(Image animation, Character character){
 		
 		PixelReader reader = animation.getPixelReader();
 		ImageView view = character.getBattleImageView();
@@ -1095,8 +1008,8 @@ public class GameGUI extends Application {
 		int framesPlayedPerAnimationFrame = 4;
 		while(character.isBattleAnimating()){
 			try {
-				synchronized(animationLock){
-					animationLock.wait();
+				synchronized(attackAnimationLock){
+					attackAnimationLock.wait();
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -1118,9 +1031,56 @@ public class GameGUI extends Application {
 						if(x > numOfFrames * framesPlayedPerAnimationFrame){
 							
 							view.setImage(character.getBattleImage());
-							synchronized(animationLock){
+							synchronized(attackAnimationLock){
 								character.setIsBattleAnimating(false);
-								animationLock.notifyAll();
+								attackAnimationLock.notifyAll();
+							}
+							this.stop();
+						}
+					}
+					
+				}.start();
+			}
+		});
+	}
+	
+	public void playTakeDamageAnimation(Image animation, Character character){
+		
+		PixelReader reader = animation.getPixelReader();
+		ImageView view = character.getBattleImageView();
+		Image temp = character.getBattleImage();
+		int widthOfFrame = (int) temp.getWidth();
+		int heightOfFrame = (int) temp.getHeight();
+		int numOfFrames = (int) (animation.getWidth() / widthOfFrame);
+		int framesPlayedPerAnimationFrame = 4;
+		while(character.isBattleAnimating()){
+			try {
+				synchronized(takeDamageAnimationLock){
+					takeDamageAnimationLock.wait();
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		character.setIsBattleAnimating(true);
+		Platform.runLater(new Runnable(){
+
+			@Override
+			public void run() {
+				
+				new AnimationTimer(){
+					int x = -1;
+					@Override
+					public void handle(long now) {
+						x += 1;
+						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0, widthOfFrame, heightOfFrame);
+						view.setImage(currentFrame);
+						if(x > numOfFrames * framesPlayedPerAnimationFrame){
+							
+							view.setImage(character.getBattleImage());
+							synchronized(takeDamageAnimationLock){
+								character.setIsBattleAnimating(false);
+								takeDamageAnimationLock.notifyAll();
 							}
 							this.stop();
 						}
@@ -1134,7 +1094,6 @@ public class GameGUI extends Application {
 
 	private void chanceBattle() {
 		Battle b = GameEngine.checkForBattle();
-		// String message = GameEngine.checkNote();
 
 		Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
 		if (b != null) {
