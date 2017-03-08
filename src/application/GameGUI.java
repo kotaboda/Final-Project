@@ -561,7 +561,7 @@ public class GameGUI extends Application {
 									playAnimation(Direction.UP);
 									// GameEngine.updatePlayerPosition(Direction.UP);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
-								}else if (!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
 									drawToGeneralCanvas(
 											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
@@ -590,7 +590,7 @@ public class GameGUI extends Application {
 									playAnimation(Direction.LEFT);
 									// GameEngine.updatePlayerPosition(Direction.LEFT);
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
-								}else if (!isAnimating){
+								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
 									drawToGeneralCanvas(
 											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
@@ -606,7 +606,9 @@ public class GameGUI extends Application {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
 								} else if (!isAnimating) {
 									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
-									drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+									drawToGeneralCanvas(
+											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
+											0);
 								}
 							}
 							break;
@@ -629,7 +631,7 @@ public class GameGUI extends Application {
 						}
 						// NOTE(andrew): added this if statement to ensure that
 						// this code only runs when it needs to.
-			
+
 					}
 				}
 			});
@@ -754,7 +756,7 @@ public class GameGUI extends Application {
 			// TODO(andrew): pop a text view displaying loot and exp/level gain
 			// stats
 			String itemsDropped = "Item Drops:\n";
-			for(Item i : b.getItemDrops()){
+			for (Item i : b.getItemDrops()) {
 				itemsDropped += i.NAME + "\n";
 			}
 			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + itemsDropped);
@@ -816,8 +818,9 @@ public class GameGUI extends Application {
 			break;
 		}
 		Image playerImg = currentFloor.getPlayer().getWorldImage();
-//		gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() * (canvas.getWidth() / image.getWidth()),
-//				image.getHeight() * (canvas.getHeight() / image.getHeight()));
+		// gc.drawImage(image, 0 + offsetX, 0 + offsetY, image.getWidth() *
+		// (canvas.getWidth() / image.getWidth()),
+		// image.getHeight() * (canvas.getHeight() / image.getHeight()));
 		gc.drawImage(image, -64 + offsetX, -64 + offsetY, image.getWidth() * 2, image.getHeight() * 2);
 		// gc.drawImage(playerImg, (canvas.getWidth() / 2) - 16,
 		// (canvas.getHeight() / 2) - 16, 32, 32);
@@ -1065,8 +1068,8 @@ public class GameGUI extends Application {
 			}
 		}
 	}
-	
-	private void chanceBattle(){
+
+	private void chanceBattle() {
 		Battle b = GameEngine.checkForBattle();
 		// String message = GameEngine.checkNote();
 
@@ -1075,15 +1078,13 @@ public class GameGUI extends Application {
 			displayBattleView(b);
 
 		} else if (TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getTiles()
-				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4 && TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).bossIsDefeated()) {
+				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4
+				&& TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).bossIsDefeated()) {
 			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
 			TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
-					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)
-							.getPlayerStart().getX(),
-					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1)
-							.getPlayerStart().getY());
-			drawToGeneralCanvas(
-					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getPlayerStart().getX(),
+					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getPlayerStart().getY());
+			drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 		}
 	}
 
