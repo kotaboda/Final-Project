@@ -38,7 +38,7 @@ public class Player extends Character {
 	
 	public Player(String name, Genders gender, int tileSheetNum) {
 		super(name, tileSheetNum);
-		ABILITIES.addAll(Arrays.asList(new PullAnAllNighter(), (new Procrastinate()), (new ExpertTimeManagement())));
+		ABILITIES.addAll(Arrays.asList((new Procrastinate()), (new ExpertTimeManagement())));
 		this.stats.put(Stats.INTELLIGIENCE, 100);
 		this.stats.put(Stats.MOTIVATION, 100);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
@@ -142,6 +142,17 @@ public class Player extends Character {
 	
 	public Image getWorldIcon() {
 		return worldIcon;
+	}
+	
+	@Override
+	protected void levelUp(int level) {
+		if (level > 0) {
+			this.level += level;
+		}
+		if(this.level == 5){
+			System.out.println("Added PullAnAllNighter");
+			ABILITIES.add(new PullAnAllNighter());
+		}
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {

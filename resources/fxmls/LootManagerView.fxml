@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="500.0" prefWidth="500.0">
          <center>
@@ -50,14 +51,18 @@
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="30.0" text="Inventory" />
                               <Separator prefWidth="200.0" />
-                              <GridPane fx:id="playerInventoryGrid" alignment="CENTER" prefHeight="210.0" prefWidth="500.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
+                              <ScrollPane hbarPolicy="NEVER" maxHeight="165.0" minWidth="165.0" prefHeight="165.0" prefWidth="500.0">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
-                              </GridPane>
+                                 <content>
+                                    <GridPane fx:id="playerInventoryGrid" alignment="CENTER" prefHeight="170.0" prefWidth="500.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </VBox>
                      </children>
