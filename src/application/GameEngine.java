@@ -271,4 +271,8 @@ public class GameEngine {
 		view.playTakeDamageAnimation(animation, character);
 	}
 	
+	public static void playAttackAnimation(Image animation, Character character){
+		view.playTakeDamageAnimation(animation, character);
+	}
+	
 }

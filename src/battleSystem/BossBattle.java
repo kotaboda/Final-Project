@@ -108,7 +108,6 @@ public class BossBattle extends Battle {
 
 			}
 		} while (battleOngoing);
-		// System.out.println(Thread.currentThread().getName());
 		isCompleted = true;
 		GameEngine.displayEndBattle(this);
 	}
