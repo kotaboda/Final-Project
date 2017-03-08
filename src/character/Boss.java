@@ -21,7 +21,7 @@ public abstract class Boss extends Enemy implements Interactable {
 	private ArrayList<Ability> abilities = new ArrayList<>();
 
 	public Boss(String name, int creditDrop, int tileSheetNum, Ability... abilities) {
-		super(name, 600, tileSheetNum);
+		super(name, creditDrop, tileSheetNum);
 		this.abilities.addAll(Arrays.asList(abilities));
 	}
 	
