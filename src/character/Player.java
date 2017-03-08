@@ -68,8 +68,7 @@ public class Player extends Character {
 			worldImage = new Image(getClass().getResourceAsStream("/images/FemaleWalk.png"));
 			battleImage = new Image(getClass().getResourceAsStream("/images/femalebattleicon.png"));
 			worldIcon = new Image(getClass().getResourceAsStream("/images/femaleicon.png"));
-			//TODO(andrew): we need to add the female battleImage and takeDamageAnimation
-			battleImage = new Image(getClass().getResourceAsStream("images/"));
+			takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/femaletakedamage.png"));
 			break;
 		default:
 			sex = Genders.BOY;
