@@ -7,7 +7,7 @@ import character.Boss;
 import character.Character;
 import character.Krebsinator;
 import character.Player;
-import characterEnums.InventoryAction;
+import enums.Character.InventoryAction;
 import itemSystem.Item;
 
 public class KrebsBattle extends BossBattle {

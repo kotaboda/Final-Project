@@ -1,9 +1,9 @@
 package abilities;
 
-import abilityInterfaces.BuffAbility;
 import character.Character;
-import characterEnums.ModifiableFields;
-import characterEnums.Stats;
+import enums.Character.ModifiableFields;
+import enums.Character.Stats;
+import interfaces.ability.BuffAbility;
 
 public class AddValue extends BuffAbility {
 	

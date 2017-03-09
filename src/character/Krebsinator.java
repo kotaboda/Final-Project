@@ -1,6 +1,6 @@
 package character;
 
-import abilityInterfaces.Ability;
+import interfaces.ability.Ability;
 
 public class Krebsinator extends Boss {
 	

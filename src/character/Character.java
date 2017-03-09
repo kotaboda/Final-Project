@@ -7,9 +7,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import characterEnums.InventoryAction;
-import characterEnums.ModifiableFields;
-import characterEnums.Stats;
+import enums.Character.InventoryAction;
+import enums.Character.ModifiableFields;
+import enums.Character.Stats;
+import interfaces.publisherSubscriber.Listener;
+import interfaces.publisherSubscriber.Subscribable;
+import interfaces.tile.Collidable;
 import itemSystem.Inventory;
 import itemSystem.Item;
 import javafx.beans.property.IntegerProperty;
@@ -17,9 +20,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import models.Coordinates;
-import publisherSubscriberInterfaces.Listener;
-import publisherSubscriberInterfaces.Subscribable;
-import tileinterfaces.Collidable;
 import tiles.Tile;
 
 public abstract class Character extends Tile implements Subscribable<Character>, Serializable, Collidable {

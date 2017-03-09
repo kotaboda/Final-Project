@@ -1,7 +1,7 @@
 package abilities;
 
-import abilityInterfaces.AttackAbility;
 import character.Character;
+import interfaces.ability.AttackAbility;
 
 public class AssignATeamAssignment extends AttackAbility {
 

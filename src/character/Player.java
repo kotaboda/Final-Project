@@ -6,16 +6,17 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import abilities.AnExcuse;
 import abilities.ExpertTimeManagement;
 import abilities.Procrastinate;
 import abilities.PullAnAllNighter;
-import abilityInterfaces.Ability;
-import abilityInterfaces.AttackAbility;
-import abilityInterfaces.BuffAbility;
 import application.GameEngine;
-import characterEnums.Direction;
-import characterEnums.Stats;
-import enums.Genders;
+import enums.Character.Direction;
+import enums.Character.Genders;
+import enums.Character.Stats;
+import interfaces.ability.Ability;
+import interfaces.ability.AttackAbility;
+import interfaces.ability.BuffAbility;
 import itemSystem.Coffee;
 import itemSystem.Doritos;
 import itemSystem.MountainDew;
@@ -38,7 +39,7 @@ public class Player extends Character {
 	
 	public Player(String name, Genders gender, int tileSheetNum) {
 		super(name, tileSheetNum);
-		ABILITIES.addAll(Arrays.asList((new Procrastinate()), (new ExpertTimeManagement())));
+		ABILITIES.addAll(Arrays.asList((new Procrastinate()), (new ExpertTimeManagement()), (new AnExcuse())));
 		this.stats.put(Stats.INTELLIGIENCE, 15);
 		this.stats.put(Stats.MOTIVATION, 20);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;

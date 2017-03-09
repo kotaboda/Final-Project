@@ -1,4 +1,4 @@
-package enums;
+package enums.Character;
 
 public enum Genders {
 	

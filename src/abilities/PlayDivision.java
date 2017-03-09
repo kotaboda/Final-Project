@@ -1,8 +1,8 @@
 package abilities;
 
-import abilityInterfaces.BuffAbility;
 import character.Character;
-import characterEnums.ModifiableFields;
+import enums.Character.ModifiableFields;
+import interfaces.ability.BuffAbility;
 
 public class PlayDivision extends BuffAbility {
 

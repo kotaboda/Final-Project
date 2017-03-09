@@ -1,8 +1,8 @@
 package abilities;
 
-import abilityInterfaces.AttackAbility;
-import abilityInterfaces.GroupAbility;
 import character.Character;
+import interfaces.ability.AttackAbility;
+import interfaces.ability.GroupAbility;
 
 public class ExpertTimeManagement extends AttackAbility implements GroupAbility {
 

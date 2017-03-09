@@ -9,23 +9,21 @@ import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import battleSystem.Battle;
-import character.Character;
 import character.Boss;
+import character.Character;
 import character.Enemy;
 import character.Exercise;
 import character.Lab;
 import character.Player;
 import character.Project;
-import characterEnums.Direction;
-import characterEnums.InventoryAction;
-import characterInterfaces.Lootable;
-import itemSystem.Item;
+import enums.Character.Direction;
+import interfaces.note.Noteable;
+import interfaces.tile.Collidable;
+import interfaces.tile.Lootable;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import models.Coordinates;
-import noteInterface.Noteable;
-import tileinterfaces.Collidable;
 import tiles.Chest;
 import tiles.GroundTile;
 import tiles.Tile;
@@ -62,7 +60,9 @@ public class GameEngine {
 	}
 
 	public static void setView(GameGUI newView) {
-		view = newView;
+		if (newView != null) {
+			view = newView;
+		}
 	}
 
 	public static Game getGame() {
@@ -123,7 +123,7 @@ public class GameEngine {
 						.get(c.getX() + x) instanceof Collidable));
 	}
 
-	public static Battle checkForBattle() {
+	public static Battle chanceABattle() {
 		Random r = new Random();
 		Battle battle = null;
 		if(r.nextInt(100) + 1 <= BATTLE_CHANCE){
@@ -231,10 +231,6 @@ public class GameEngine {
 		};
 
 		battleService.start();
-	}
-
-	public static boolean givePlayerItem(Item item) {
-		return game.getPlayer().modifyInventory(InventoryAction.GIVE, item);
 	}
 
 	public static void displayEndBattle(Battle b, boolean leveledUp) {

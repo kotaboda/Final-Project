@@ -1,4 +1,4 @@
-package tileinterfaces;
+package interfaces.tile;
 
 public interface Collidable {
 

@@ -3,13 +3,13 @@ package character;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import abilityInterfaces.Ability;
-import abilityInterfaces.AttackAbility;
-import abilityInterfaces.BuffAbility;
-import characterEnums.Stats;
+import enums.Character.Stats;
+import interfaces.ability.Ability;
+import interfaces.ability.AttackAbility;
+import interfaces.ability.BuffAbility;
+import interfaces.tile.Interactable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import tileinterfaces.Interactable;
 
 public abstract class Boss extends Enemy implements Interactable {
 	

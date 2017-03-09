@@ -1,4 +1,4 @@
-package enums;
+package enums.gui;
 
 public enum GUILayouts {
 	

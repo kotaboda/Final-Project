@@ -6,7 +6,7 @@ import application.GameEngine;
 import character.Boss;
 import character.Character;
 import character.Player;
-import characterEnums.InventoryAction;
+import enums.Character.InventoryAction;
 import itemSystem.Item;
 
 public class PayBattle extends BossBattle {

@@ -4,18 +4,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import abilityInterfaces.Ability;
-import abilityInterfaces.GroupAbility;
 import application.GameEngine;
 import character.Character;
 import character.Enemy;
 import character.Player;
-import characterEnums.InventoryAction;
+import enums.Character.InventoryAction;
+import interfaces.ability.Ability;
+import interfaces.ability.GroupAbility;
+import interfaces.item.Usable;
+import interfaces.publisherSubscriber.Listener;
+import interfaces.publisherSubscriber.Subscribable;
 import itemSystem.Item;
-import itemSystem.Usable;
 import models.Coordinates;
-import publisherSubscriberInterfaces.Listener;
-import publisherSubscriberInterfaces.Subscribable;
 
 public class Battle implements Subscribable<Battle>, Serializable {
 	/**

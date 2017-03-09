@@ -3,7 +3,7 @@ package character;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import characterEnums.Stats;
+import enums.Character.Stats;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 import models.Coordinates;

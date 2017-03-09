@@ -9,7 +9,7 @@ import character.Boss;
 import character.Character;
 import character.Enemy;
 import character.Player;
-import characterEnums.InventoryAction;
+import enums.Character.InventoryAction;
 import itemSystem.Item;
 
 public class BossBattle extends Battle {
@@ -51,11 +51,13 @@ public class BossBattle extends Battle {
 		boolean allEnemiesDead = false;
 		do {
 			for (int i = 0; i < turnList.length; i++) {
-				// NOTE(andrew): initialize this to true, but it will be
-				// validated before it is used
 				allEnemiesDead = true;
+				
+				//If the characters turn 
 				if (turnList[i] instanceof Player) {
 					playerTakesTurn();
+					
+					//If Bosses turn
 				} else if (turnList[i] instanceof Boss) {
 					if (turnList[i].getHPProperty().get() > 0) {
 						Random r = new Random();

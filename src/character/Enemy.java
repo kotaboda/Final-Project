@@ -3,7 +3,7 @@ package character;
 import java.util.Random;
 
 import application.GameEngine;
-import characterEnums.Stats;
+import enums.Character.Stats;
 import itemSystem.Coffee;
 import itemSystem.Doritos;
 import itemSystem.Inventory;

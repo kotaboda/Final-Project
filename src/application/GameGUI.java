@@ -9,20 +9,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
-import abilityInterfaces.Ability;
 import battleSystem.Battle;
 import character.Character;
 import character.Enemy;
 import character.Player;
-import characterEnums.Direction;
-import characterEnums.InventoryAction;
-import characterEnums.Stats;
-import characterInterfaces.Lootable;
-import enums.GUILayouts;
-import enums.Genders;
+import enums.Character.Direction;
+import enums.Character.Genders;
+import enums.Character.InventoryAction;
+import enums.Character.Stats;
+import enums.gui.GUILayouts;
 import floors.Floor;
+import interfaces.ability.Ability;
+import interfaces.item.Usable;
+import interfaces.publisherSubscriber.Listener;
+import interfaces.tile.Lootable;
 import itemSystem.Item;
-import itemSystem.Usable;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -69,7 +70,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Coordinates;
-import publisherSubscriberInterfaces.Listener;
 import tiles.TileManager;
 
 public class GameGUI extends Application {
@@ -872,7 +872,7 @@ public class GameGUI extends Application {
 					Item item = otherInventoryGrid.getSelectionModel().getSelectedItem();
 					boolean successful = false;
 					if (item != null) {
-						successful = GameEngine.givePlayerItem(item);
+						successful = TESTINGGAME.getPlayer().modifyInventory(InventoryAction.GIVE, item);
 					}
 					if (!successful && !((AnchorPane) p).getChildren().contains(displayText)) {
 						displayMessage("You can't take the item!");
@@ -1127,7 +1127,7 @@ public void playAttackAnimation(Image animation, Character character){
 	}
 
 	private void chanceBattle() {
-		Battle b = GameEngine.checkForBattle();
+		Battle b = GameEngine.chanceABattle();
 
 		Coordinates playerCoord = TESTINGGAME.getPlayer().getCoordinates();
 		if (b != null) {

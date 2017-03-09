@@ -1,4 +1,4 @@
-package drawinterfaces;
+package interfaces.draw;
 
 import javafx.scene.image.Image;
 

@@ -1,4 +1,4 @@
-package itemSystem;
+package interfaces.item;
 
 import java.io.Serializable;
 

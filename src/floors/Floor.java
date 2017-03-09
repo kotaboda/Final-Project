@@ -10,12 +10,12 @@ import java.util.List;
 import battleSystem.BossBattle;
 import character.Boss;
 import character.Player;
-import characterInterfaces.Lootable;
-import drawinterfaces.Paintable;
+import interfaces.draw.Paintable;
+import interfaces.note.Noteable;
+import interfaces.tile.Lootable;
 import itemSystem.Item;
 import javafx.scene.image.Image;
 import models.Coordinates;
-import noteInterface.Noteable;
 import tiles.Tile;
 
 public abstract class Floor implements Paintable, Serializable{

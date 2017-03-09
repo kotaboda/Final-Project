@@ -1,4 +1,4 @@
-package abilityInterfaces;
+package interfaces.ability;
 
 public abstract class AttackAbility extends Ability {
 

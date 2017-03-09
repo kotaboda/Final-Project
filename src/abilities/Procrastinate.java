@@ -1,7 +1,7 @@
 package abilities;
 
-import abilityInterfaces.BuffAbility;
 import character.Character;
+import interfaces.ability.BuffAbility;
 
 public class Procrastinate extends BuffAbility{
 

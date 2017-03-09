@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import character.Player;
-import characterInterfaces.Lootable;
 import floors.Note;
+import interfaces.note.Noteable;
+import interfaces.tile.Collidable;
+import interfaces.tile.Interactable;
+import interfaces.tile.Lootable;
 import itemSystem.Item;
-import noteInterface.Noteable;
-import tileinterfaces.Collidable;
-import tileinterfaces.Interactable;
 
 public class Chest extends Tile implements Interactable, Collidable, Lootable, Noteable {
 

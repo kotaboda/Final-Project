@@ -1,4 +1,4 @@
-package abilityInterfaces;
+package interfaces.ability;
 
 public interface GroupAbility {
 

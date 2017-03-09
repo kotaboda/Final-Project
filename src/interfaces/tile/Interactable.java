@@ -1,4 +1,4 @@
-package tileinterfaces;
+package interfaces.tile;
 
 import character.Player;
 

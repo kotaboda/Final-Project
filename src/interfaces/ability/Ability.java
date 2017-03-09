@@ -1,4 +1,4 @@
-package abilityInterfaces;
+package interfaces.ability;
 
 import java.io.Serializable;
 

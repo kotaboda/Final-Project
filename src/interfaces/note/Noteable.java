@@ -1,4 +1,4 @@
-package noteInterface;
+package interfaces.note;
 
 import floors.Note;
 

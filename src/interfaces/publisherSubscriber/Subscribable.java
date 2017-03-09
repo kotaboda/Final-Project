@@ -1,4 +1,4 @@
-package publisherSubscriberInterfaces;
+package interfaces.publisherSubscriber;
 
 public interface Subscribable<T> {
 	

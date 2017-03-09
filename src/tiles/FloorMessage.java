@@ -2,8 +2,8 @@ package tiles;
 
 import character.Player;
 import floors.Note;
-import noteInterface.Noteable;
-import tileinterfaces.Interactable;
+import interfaces.note.Noteable;
+import interfaces.tile.Interactable;
 
 public class FloorMessage extends Tile implements Interactable, Noteable{
 
