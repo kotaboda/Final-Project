@@ -350,11 +350,10 @@ public class GameGUI extends Application {
 							@Override
 							public void run() {
 								if (newValue.doubleValue() <= 0) {
-									int newSelection = enemies.getChildren().indexOf(child);
 									enemies.getChildren().remove(child);
 									Node n = null;
 									try {
-										n = enemies.getChildren().get(newSelection);
+										n = enemies.getChildren().get(0);
 									} catch (IndexOutOfBoundsException e) {
 									}
 									if (n != null) {
@@ -812,6 +811,7 @@ public class GameGUI extends Application {
 				}
 			});
 			characterView.setImage(TESTINGGAME.getPlayer().getWorldIcon());
+			characterView.setFitWidth(150);
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
