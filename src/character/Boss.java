@@ -3,6 +3,7 @@ package character;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import application.GameEngine;
 import enums.Character.Stats;
 import interfaces.ability.Ability;
 import interfaces.ability.AttackAbility;
@@ -55,6 +56,7 @@ public abstract class Boss extends Enemy implements Interactable {
 
 	@Override
 	public int takeDmg(int dmg) {
+		GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
 		int damage = dmg-getStat(Stats.ENDURANCE);
 		hitPoints -= damage;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
@@ -68,6 +70,7 @@ public abstract class Boss extends Enemy implements Interactable {
 
 	@Override
 	public int attack() {
+		GameEngine.playAttackAnimation(attackAnimation, this);
 		int damage = 0;
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;

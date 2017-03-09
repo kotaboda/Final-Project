@@ -8,6 +8,7 @@ import character.Boss;
 import character.Character;
 import character.Player;
 import enums.Character.InventoryAction;
+import interfaces.ability.Ability;
 import itemSystem.Item;
 
 public class GuardBattle extends BossBattle {
@@ -43,15 +44,23 @@ public class GuardBattle extends BossBattle {
 							if (boss.getAbilities().size() != 0) {
 								if (boss.getCurrentHealth() <= (boss.getMaxHealth() - 20)
 										&& !((PlayEnchantment) boss.getAbilities().get(1)).getUsedBuff()) {
-									boss.ability(boss.getAbilities().get(1), player);
+									Ability nextAbility = boss.getAbilities().get(1);
+									loggedAction = turnList[i].NAME + ": Used " + nextAbility;
+									notifySubscribers();
+									boss.ability(nextAbility, player);
 								} else {
-									boss.ability(boss.getAbilities().get(0), player);
+									Ability nextAbility = boss.getAbilities().get(0);
+									loggedAction = turnList[i].NAME + ": Used " + nextAbility;
+									notifySubscribers();
+									boss.ability(nextAbility, player);
 								}
 								break;
 							}
 						case 2:
 						case 3:
 						case 4:
+							loggedAction = turnList[i].NAME + ": Attacked " + player.NAME;
+							notifySubscribers();
 							player.takeDmg(boss.attack());
 							break;
 						default:

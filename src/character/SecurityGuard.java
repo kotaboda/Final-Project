@@ -7,6 +7,7 @@ import itemSystem.Coffee;
 import itemSystem.Doritos;
 import itemSystem.MountainDew;
 import itemSystem.Planeswalker;
+import javafx.scene.image.Image;
 
 public class SecurityGuard extends Boss {
 
@@ -28,6 +29,11 @@ public class SecurityGuard extends Boss {
 		this.stats.put(Stats.STAMINA, 13);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
 		this.energy = stats.get(Stats.STAMINA) * 10;
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
+		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/guarddamage.png"));
+		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));
 	}
 
 }

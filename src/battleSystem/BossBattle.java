@@ -43,76 +43,76 @@ public class BossBattle extends Battle {
 		this.boss = boss;
 	}
 
-	@Override
-	public void start() {
-		Character[] turnList = createTurnList();
-
-		boolean battleOngoing = true;
-		boolean allEnemiesDead = false;
-		do {
-			for (int i = 0; i < turnList.length; i++) {
-				allEnemiesDead = true;
-				
-				//If the characters turn 
-				if (turnList[i] instanceof Player) {
-					playerTakesTurn();
-					
-					//If Bosses turn
-				} else if (turnList[i] instanceof Boss) {
-					if (turnList[i].getHPProperty().get() > 0) {
-						Random r = new Random();
-						switch (r.nextInt(2)) {
-						case 0:
-							if (boss.getAbilities().size() != 0) {
-								boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
-								break;
-							}
-						case 1:
-							player.takeDmg(boss.attack());
-							break;
-						default:
-							break;
-						}
-					}
-
-				} else {
-					// NOTE(andrew): this branch runs if it's the enemies turn,
-					// this should probably be changed, not totally sure,
-					// because
-					// this AI is linear, the enemy will always attack
-					if (turnList[i].getHPProperty().get() > 0) {
-						player.takeDmg(turnList[i].attack());
-						// System.out.println("EnemyAttacked");
-					}
-				}
-				// NOTE(andrew): check if the player is dead
-				if (player.getHPProperty().get() <= 0) {
-					battleOngoing = false;
-				}
-				// NOTE(andrew): this validates that the enemies are dead
-				for (int j = 0; j < enemies.length; j++) {
-					if (enemies[j].getHPProperty().get() > 0) {
-						allEnemiesDead = false;
-					}
-				}
-
-				if (allEnemiesDead) {
-					battleOngoing = false;
-					for (int j = 0; j < enemies.length; j++) {
-						Item[] loot = enemies[j].getInventoryContents();
-						player.modifyInventory(InventoryAction.GIVE, loot);
-						player.giveCredits(enemies[j].getCreditDrop());
-						creditsDropped += enemies[j].getCreditDrop();
-					}
-
-					break;
-				}
-
-			}
-		} while (battleOngoing);
-		isCompleted = true;
-		GameEngine.displayEndBattle(this, leveledUp);
-	}
+//	@Override
+//	public void start() {
+//		Character[] turnList = createTurnList();
+//
+//		boolean battleOngoing = true;
+//		boolean allEnemiesDead = false;
+//		do {
+//			for (int i = 0; i < turnList.length; i++) {
+//				allEnemiesDead = true;
+//				
+//				//If the characters turn 
+//				if (turnList[i] instanceof Player) {
+//					playerTakesTurn();
+//					
+//					//If Bosses turn
+//				} else if (turnList[i] instanceof Boss) {
+//					if (turnList[i].getHPProperty().get() > 0) {
+//						Random r = new Random();
+//						switch (r.nextInt(2)) {
+//						case 0:
+//							if (boss.getAbilities().size() != 0) {
+//								boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
+//								break;
+//							}
+//						case 1:
+//							player.takeDmg(boss.attack());
+//							break;
+//						default:
+//							break;
+//						}
+//					}
+//
+//				} else {
+//					// NOTE(andrew): this branch runs if it's the enemies turn,
+//					// this should probably be changed, not totally sure,
+//					// because
+//					// this AI is linear, the enemy will always attack
+//					if (turnList[i].getHPProperty().get() > 0) {
+//						player.takeDmg(turnList[i].attack());
+//						// System.out.println("EnemyAttacked");
+//					}
+//				}
+//				// NOTE(andrew): check if the player is dead
+//				if (player.getHPProperty().get() <= 0) {
+//					battleOngoing = false;
+//				}
+//				// NOTE(andrew): this validates that the enemies are dead
+//				for (int j = 0; j < enemies.length; j++) {
+//					if (enemies[j].getHPProperty().get() > 0) {
+//						allEnemiesDead = false;
+//					}
+//				}
+//
+//				if (allEnemiesDead) {
+//					battleOngoing = false;
+//					for (int j = 0; j < enemies.length; j++) {
+//						Item[] loot = enemies[j].getInventoryContents();
+//						player.modifyInventory(InventoryAction.GIVE, loot);
+//						player.giveCredits(enemies[j].getCreditDrop());
+//						creditsDropped += enemies[j].getCreditDrop();
+//					}
+//
+//					break;
+//				}
+//
+//			}
+//		} while (battleOngoing);
+//		isCompleted = true;
+//		GameEngine.displayEndBattle(this, leveledUp);
+//	}
 
 	protected Character[] createTurnList() {
 		ArrayList<Character> c = new ArrayList<>(Arrays.asList(enemies));

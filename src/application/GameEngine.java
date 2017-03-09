@@ -9,6 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import battleSystem.Battle;
+import battleSystem.GuardBattle;
 import character.Boss;
 import character.Character;
 import character.Enemy;
@@ -222,7 +223,11 @@ public class GameEngine {
 				return new Task<Void>() {
 					@Override
 					protected Void call() throws Exception {
-						b.start();
+						if(b instanceof GuardBattle){
+							((GuardBattle) b).start();
+						}else{
+							b.start();
+						}
 						return null;
 					}
 				};
