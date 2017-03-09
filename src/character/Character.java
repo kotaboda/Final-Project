@@ -73,21 +73,6 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		
 		
 	}
-	
-	public Character() {
-		super(1);
-		this.NAME = "test";
-		floorNum = 1;
-		inv = new Inventory();
-		coordinates = new Coordinates(5,5);
-		hpProperty.set(hitPoints);
-		maxHPProperty.set(hitPoints);
-		this.stats.put(Stats.MOTIVATION, 1);
-		this.stats.put(Stats.INTELLIGIENCE, 1);
-		this.stats.put(Stats.WIT, 1);
-		this.stats.put(Stats.ENDURANCE, 1);
-		this.stats.put(Stats.STAMINA, 1);
-	}
 
 	protected void levelUp(int level) {
 		if (level > 0) {

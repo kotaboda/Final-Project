@@ -31,8 +31,9 @@ import tiles.GroundTile;
 import tiles.Tile;
 
 public class GameEngine {
+	private static final int BATTLE_CHANCE = 10;
 	private static GameGUI view;
-	private static Game game = new Game(new Player());
+	private static Game game;
 
 	public static Game loadGame() {
 		Game g = null;
@@ -72,7 +73,7 @@ public class GameEngine {
 		int x = 0;
 		int y = 0;
 		boolean success = false;
-		switch(direction){
+		switch (direction) {
 		case UP:
 			y = -1;
 			break;
@@ -91,15 +92,15 @@ public class GameEngine {
 			c.setX(c.getX() + x);
 			c.setY(c.getY() + y);
 			success = true;
-			
+
 		}
 		return success;
 	}
-	
-	public static boolean checkMovement(Direction direction){
+
+	public static boolean checkMovement(Direction direction) {
 		int x = 0;
 		int y = 0;
-		switch(direction){
+		switch (direction) {
 		case UP:
 			y = -1;
 			break;
@@ -114,44 +115,47 @@ public class GameEngine {
 			break;
 		}
 		Coordinates c = game.getPlayer().getCoordinates();
-		 return (((c.getX() + x) >= 0 && (c.getX() + x) < game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().get(0).size())
-				&& ((c.getY() + y) >= 0 && (c.getY() + y) < game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().size())
-				&& !(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().get(c.getY() + y).get(c.getX()
-						+ x) instanceof Collidable));
+		return (((c.getX() + x) >= 0
+				&& (c.getX() + x) < game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().get(0).size())
+				&& ((c.getY() + y) >= 0
+						&& (c.getY() + y) < game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().size())
+				&& !(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getTiles().get(c.getY() + y)
+						.get(c.getX() + x) instanceof Collidable));
 	}
 
 	public static Battle checkForBattle() {
 		Random r = new Random();
 		Battle battle = null;
-		if(r.nextInt(100) + 1 <= 15){
+		if(r.nextInt(100) + 1 <= BATTLE_CHANCE){
 			int numOfEnemies = r.nextInt(3) + 1;
 			Enemy[] enemies = new Enemy[numOfEnemies];
 			for(int i = 0; i < numOfEnemies; i++){
 				Enemy e = null;
-				switch(r.nextInt(3) + 1){
-				case 1:
+				int spawn = r.nextInt(100) + 1;
+				if(spawn >= 60){
 					e = new Exercise();
-					break;
-				case 2:
-					e = new Lab();
-					break;
-				case 3:
-					e = new Project();
-					break;
 				}
+				else if(spawn < 60 && spawn > 10){
+					e = new Lab();
+				}
+				else if(spawn <= 10){
+					e = new Project();
+				}
+				
 				enemies[i] = e;
 			}
 			battle = new Battle(game.getPlayer(), enemies);
 		}
 		return battle;
+
 	}
-	
+
 	public static String checkNote() {
 		Player p = GameEngine.getGame().getPlayer();
 		Direction d = p.getDirectionFacing();
 		int x = 0;
 		int y = 0;
-		switch(d){
+		switch (d) {
 		case UP:
 			y = -1;
 			break;
@@ -165,22 +169,24 @@ public class GameEngine {
 			x = -1;
 			break;
 		}
-		
-		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
-		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y).get(p.getCoordinates().getX() + x);
+
+		// TODO(andrew): null pointer on the second floor, and only the two in
+		// the top left corner display anything?
+		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y)
+				.get(p.getCoordinates().getX() + x);
 		if (t instanceof Noteable) {
 			// retreive the notes at those coordinates in order to display it
 			view.displayMessage(((Noteable) t).getMessage());
 		}
 		return null;
 	}
-	
+
 	public static String checkLoot() {
 		Player p = GameEngine.getGame().getPlayer();
 		Direction d = p.getDirectionFacing();
 		int x = 0;
 		int y = 0;
-		switch(d){
+		switch (d) {
 		case UP:
 			y = -1;
 			break;
@@ -194,12 +200,14 @@ public class GameEngine {
 			x = -1;
 			break;
 		}
-		
-		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
-		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y).get(p.getCoordinates().getX() + x);
-		if(t instanceof Chest){
-			view.displayLootManager((Lootable)t); 
-		} 
+
+		// TODO(andrew): null pointer on the second floor, and only the two in
+		// the top left corner display anything?
+		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y)
+				.get(p.getCoordinates().getX() + x);
+		if (t instanceof Chest) {
+			view.displayLootManager((Lootable) t);
+		}
 		return null;
 	}
 
@@ -225,11 +233,11 @@ public class GameEngine {
 		battleService.start();
 	}
 
-	public static boolean givePlayerItem(Item item){
+	public static boolean givePlayerItem(Item item) {
 		return game.getPlayer().modifyInventory(InventoryAction.GIVE, item);
 	}
-	
-	public static void displayEndBattle(Battle b, boolean leveledUp){
+
+	public static void displayEndBattle(Battle b, boolean leveledUp) {
 		view.displayEndBattle(b, leveledUp);
 	}
 
@@ -242,7 +250,7 @@ public class GameEngine {
 		Direction d = p.getDirectionFacing();
 		int x = 0;
 		int y = 0;
-		switch(d){
+		switch (d) {
 		case UP:
 			y = -1;
 			break;
@@ -256,23 +264,28 @@ public class GameEngine {
 			x = -1;
 			break;
 		}
-		
-		//TODO(andrew): null pointer on the second floor, and only the two in the top left corner display anything?
-		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y).get(p.getCoordinates().getX() + x);
-		if(t instanceof Boss && !game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle().isCompleted()){
+
+		// TODO(andrew): null pointer on the second floor, and only the two in
+		// the top left corner display anything?
+		Tile t = GameEngine.getGame().getFloors().get(p.getFloorNum() - 1).getTiles().get(p.getCoordinates().getY() + y)
+				.get(p.getCoordinates().getX() + x);
+		if (t instanceof Boss
+				&& !game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle().isCompleted()) {
 			view.displayBattleView(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle());
-			game.getFloors().get(p.getFloorNum() - 1).changeTile(game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getY() ,game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getX(), new GroundTile(5));
+			game.getFloors().get(p.getFloorNum() - 1).changeTile(
+					game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getY(),
+					game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getX(), new GroundTile(5));
 			return true;
 		}
 		return false;
 	}
-	
-	public static void playTakeDamageAnimation(Image animation, Character character){
+
+	public static void playTakeDamageAnimation(Image animation, Character character) {
 		view.playTakeDamageAnimation(animation, character);
 	}
-	
-	public static void playAttackAnimation(Image animation, Character character){
+
+	public static void playAttackAnimation(Image animation, Character character) {
 		view.playTakeDamageAnimation(animation, character);
 	}
-	
+
 }

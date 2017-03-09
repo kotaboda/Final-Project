@@ -23,6 +23,10 @@ public class Exercise extends Enemy{
 		this.stats.put(Stats.WIT, 10);
 		this.stats.put(Stats.ENDURANCE, 9);
 		this.stats.put(Stats.STAMINA, 10);
+		this.hitPoints = stats.get(Stats.MOTIVATION);
+		this.energy = stats.get(Stats.STAMINA);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 		battleImage = new Image(getClass().getResourceAsStream("/images/exercise.png"));
 		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/exercisetakedamage.png"));
 	}

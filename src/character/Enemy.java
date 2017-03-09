@@ -33,11 +33,7 @@ public class Enemy extends Character {
 		inv = genLoot();
 	}
 
-	public Enemy() {
-		super();
-	}
-	
-	public int getCreditDrop(){
+	public int getCreditDrop() {
 		return creditDrop;
 	}
 
@@ -45,9 +41,9 @@ public class Enemy extends Character {
 		Inventory tempInv = new Inventory();
 		Random xD = new Random();
 
-		int howMuchLoot = xD.nextInt(3)+1;
+		int howMuchLoot = xD.nextInt(3) + 1;
 		int item = xD.nextInt(4);
-		
+
 		for (int i = 0; i < howMuchLoot; i++) {
 			switch (item) {
 			case 0:
@@ -71,16 +67,20 @@ public class Enemy extends Character {
 	@Override
 	public int takeDmg(int dmg) {
 		GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
-		hitPoints -= (dmg - getStat(Stats.ENDURANCE) + 2);
+		if (dmg - getStat(Stats.ENDURANCE) <= 0) {
+			hitPoints -= 1;
+		} else {
+			hitPoints -= (dmg - getStat(Stats.ENDURANCE));
+		}
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hpProperty.set(hitPoints);
-		
+
 		return dmg;
 	}
 
 	@Override
 	public int attack() {
-//		GameEngine.playAttackAnimation(attackAnimation, this);
+		// GameEngine.playAttackAnimation(attackAnimation, this);
 		int damage = 0;
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;

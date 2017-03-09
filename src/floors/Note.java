@@ -11,7 +11,12 @@ public class Note implements Serializable{
 //	private final Coordinates coord;
 	
 	public Note(String message/*, Coordinates coord*/) {
-		this.message = message;
+		if (message != null) {
+			
+			this.message = message;
+		}else{
+			throw new IllegalArgumentException("A notes message cannot be null.");
+		}
 //		this.coord = coord;
 	}
 	

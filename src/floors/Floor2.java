@@ -43,8 +43,8 @@ public class Floor2 extends Floor {
 		
 		genNotes(notesTemp,floorLoot);
 	}
-	
-	public void genTiles() {
+	@Override
+	protected void genTiles() {
 		int[][] tileRefs = {
 				{56,54,54,54,54,54,54,54,60, 4,57},
 				{58, 5, 5, 5, 5, 5, 5, 5,59, 5,59},

@@ -51,7 +51,7 @@ public abstract class Floor implements Paintable, Serializable{
 		}
 	}
 	
-	public void genNotes(Note[] notesTemp, Item[][] floorLoot) {
+	protected void genNotes(Note[] notesTemp, Item[][] floorLoot) {
 		int noteCounter = 0;
 		int lootCounter = 0;
 		for(int i = 0; i < tiles.length; i++){
@@ -72,8 +72,10 @@ public abstract class Floor implements Paintable, Serializable{
 		return boss;
 	}
 	
-	public void setBoss(Boss boss) {
-		this.boss = boss;
+	protected void setBoss(Boss boss) {
+		if (boss != null) {
+			this.boss = boss;
+		}
 	}
 	
 	public Player getPlayer() {
@@ -81,15 +83,20 @@ public abstract class Floor implements Paintable, Serializable{
 	}
 	
 	public void setPlayer(Player player) {
-		this.player = player;
+		if (player != null) {
+			this.player = player;
+			
+		}
 	}
 	
 	public BossBattle getBossBattle() {
 		return bossBattle;
 	}
 
-	public void setBossBattle(BossBattle bossBattle) {
-		this.bossBattle = bossBattle;
+	protected void setBossBattle(BossBattle bossBattle) {
+		if (bossBattle != null) {
+			this.bossBattle = bossBattle;			
+		}
 	}
 
 	public HashMap<Coordinates, Note> getNotes() {
@@ -99,6 +106,8 @@ public abstract class Floor implements Paintable, Serializable{
 	public boolean bossIsDefeated(){
 		return boss.isDefeated();
 	}
+	
+	protected abstract void genTiles();
 
 	@Override
 	public Image getWorldImage() {

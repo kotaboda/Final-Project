@@ -23,6 +23,10 @@ public class Lab extends Enemy {
 		this.stats.put(Stats.WIT, 11);
 		this.stats.put(Stats.ENDURANCE, 11);
 		this.stats.put(Stats.STAMINA, 10);
+		this.hitPoints = stats.get(Stats.MOTIVATION);
+		this.energy = stats.get(Stats.STAMINA);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 		battleImage = new Image(getClass().getResourceAsStream("/images/lab.png"));
 		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/labtakedamage.png"));
 	}

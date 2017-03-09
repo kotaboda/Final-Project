@@ -18,7 +18,6 @@ public class PayBattle extends BossBattle {
 
 	public PayBattle(Player player, Boss boss) {
 		super(player, boss);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

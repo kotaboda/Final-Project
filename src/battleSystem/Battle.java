@@ -48,8 +48,8 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		this.enemies = enemies;
 		this.player = player;
 	}
-	
-	protected Battle(Player player){
+
+	protected Battle(Player player) {
 		if (player == null) {
 			throw new IllegalArgumentException("The player in a battle cannot be null");
 		}
@@ -60,46 +60,40 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		this.playerNextItemUse = playerNextItemUse;
 		this.playerNextAbility = null;
 	}
-	
-	protected void playerTakesTurn(){
+
+	protected void playerTakesTurn() {
 		GameEngine.playerBattleInput(this);
+
+		// Player chose to use an ability
 		if (playerNextAbility != null) {
-			// NOTE(andrew): If the player selected an ability this
-			// branch should run
-			//TODO(andrew): fix this heckin thing
-			
+
 			loggedAction = player.NAME + ": Used " + playerNextAbility;
 			notifySubscribers();
 			boolean successfulAbilityUse = false;
-			if(playerNextAbility instanceof GroupAbility){
+			if (playerNextAbility instanceof GroupAbility) {
 				successfulAbilityUse = player.ability(playerNextAbility, enemies);
-			}else{
+			} else {
 				successfulAbilityUse = player.ability(playerNextAbility, playerTarget);
 			}
-			if(!successfulAbilityUse){
+			if (!successfulAbilityUse) {
 				loggedAction = " but it failed!";
 				notifySubscribers();
 			}
-			
-			
+
+			// Player chose to use an item.
 		} else if (playerNextItemUse != null) {
-			// TODO(andrew): this method will take playerTarget,
-			// which needs to be possible to be the player itself,
-			// so in the GameGui class we need
-			// to allow selection of the player itself.
-			// NOTE(andrew): this branch runs if the player uses an
-			// item
 			loggedAction = player.NAME + ": Used " + (playerNextItemUse);
 			notifySubscribers();
 			playerNextItemUse.use(player);
-			
+
+			// If the player did not choose to use an ability or item but their
+			// target was not null.
+			// Attacks the target.
 		} else if (playerTarget != null) {
-			// NOTE(andrew): this branch runs if the player selected
-			// attack
 			loggedAction = player.NAME + ": Attacked " + playerTarget.NAME;
 			notifySubscribers();
 			playerTarget.takeDmg(player.attack());
-			
+
 		}
 	}
 
@@ -109,41 +103,38 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		boolean allEnemiesDead = false;
 		do {
 			for (int i = 0; i < turnList.length; i++) {
-				// NOTE(andrew): initialize this to true, but it will be
-				// validated before it is used
 				allEnemiesDead = true;
+				//If the player should take their turn
 				if (turnList[i] instanceof Player) {
 					playerTakesTurn();
+					
+					//Else the enemy next in line will take his turn.
 				} else {
-					// NOTE(andrew): this branch runs if it's the enemies turn,
-					// this should probably be changed, not totally sure,
-					// because
-					// this AI is linear, the enemy will always attack
 					if (turnList[i].getHPProperty().get() > 0) {
 						loggedAction = turnList[i].NAME + ": Attacked " + player.NAME;
 						notifySubscribers();
 						player.takeDmg(turnList[i].attack());
-						
+
 					}
 				}
 				// NOTE(andrew): check if the player is dead
 				if (player.getHPProperty().get() <= 0) {
 					battleOngoing = false;
 				}
-				// NOTE(andrew): this validates that the enemies are dead
+				// NOTE(andrew): checks that the enemies are dead
 				for (int j = 0; j < enemies.length; j++) {
 					if (enemies[j].getHPProperty().get() > 0) {
 						allEnemiesDead = false;
 					}
 				}
-				
+				//If all enemies are dead, Do necessary cleanup before exiting.
 				if (allEnemiesDead) {
 					battleOngoing = false;
 					for (int j = 0; j < enemies.length; j++) {
 						Item[] loot = enemies[j].getInventoryContents();
 						player.modifyInventory(InventoryAction.GIVE, loot);
 						itemsDropped.addAll(Arrays.asList(loot));
-						if(player.giveCredits(enemies[j].getCreditDrop())){
+						if (player.giveCredits(enemies[j].getCreditDrop())) {
 							leveledUp = true;
 						}
 						creditsDropped += enemies[j].getCreditDrop();
@@ -154,6 +145,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 
 			}
 		} while (battleOngoing);
+		//Clears any listener to the battle after it has ended
 		subscribers.clear();
 		isCompleted = true;
 		GameEngine.displayEndBattle(this, leveledUp);
@@ -167,12 +159,12 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		return enemies;
 	}
 
-	public void setEnemies(Enemy... enemies) {
+	protected void setEnemies(Enemy... enemies) {
 		this.enemies = enemies;
 	}
 
 	public Coordinates getCoordinates() {
-		return place;
+		return new Coordinates(place);
 	}
 
 	public void setPlayerNextAbility(Ability playerNextAbility) {
@@ -185,9 +177,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	}
 
 	private Character[] createTurnList() {
-		// NOTE(andrew): The turn list is initialized to an arraylist because it
-		// is much easier to manage initially. it is later cast to
-		// a traditional array
+		//Sorts the array based on each Characters wit stat.
 		ArrayList<Character> initial = new ArrayList<>();
 		initial.add(player);
 		initial.addAll(Arrays.asList(enemies));

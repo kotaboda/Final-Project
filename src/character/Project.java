@@ -23,6 +23,10 @@ public class Project extends Enemy{
 		this.stats.put(Stats.WIT, 12);
 		this.stats.put(Stats.ENDURANCE, 14);
 		this.stats.put(Stats.STAMINA, 12);
+		this.hitPoints = stats.get(Stats.MOTIVATION);
+		this.energy = stats.get(Stats.STAMINA);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 		battleImage = new Image(getClass().getResourceAsStream("/images/project.png"));
 		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/projecttakedamage.png"));
 	}

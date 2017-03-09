@@ -25,10 +25,6 @@ public abstract class Boss extends Enemy implements Interactable {
 		this.abilities.addAll(Arrays.asList(abilities));
 	}
 	
-	public Boss() {
-		super();
-	}
-	
 	public boolean isDefeated() {
 		return isDefeated;
 	}

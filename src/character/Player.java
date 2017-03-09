@@ -39,8 +39,8 @@ public class Player extends Character {
 	public Player(String name, Genders gender, int tileSheetNum) {
 		super(name, tileSheetNum);
 		ABILITIES.addAll(Arrays.asList((new Procrastinate()), (new ExpertTimeManagement())));
-		this.stats.put(Stats.INTELLIGIENCE, 100);
-		this.stats.put(Stats.MOTIVATION, 100);
+		this.stats.put(Stats.INTELLIGIENCE, 15);
+		this.stats.put(Stats.MOTIVATION, 20);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
 		this.maxHitPoints = hitPoints;
 		this.energy = stats.get(Stats.STAMINA) * 10;
@@ -73,23 +73,6 @@ public class Player extends Character {
 
 		}
 	}
-
-	public Player() {
-		super();
-		sex = Genders.BOY;
-		ABILITIES.addAll(Arrays.asList(new PullAnAllNighter(), (new Procrastinate()), (new ExpertTimeManagement())));
-
-		this.stats.put(Stats.INTELLIGIENCE, 100);
-		this.stats.put(Stats.MOTIVATION, 100);
-		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
-		this.energy = stats.get(Stats.STAMINA) * 10;
-		energyProperty.set(energy);
-		maxEnergyProperty.set(energy);
-		hpProperty.set(hitPoints);
-		maxHPProperty.set(hitPoints);
-		inv.addAllItems(new Coffee(), new Doritos(), new MountainDew());
-	}
-
 	@Override
 	public int takeDmg(int dmg) {
 		hitPoints -= (dmg - getStat(Stats.ENDURANCE));
@@ -102,9 +85,7 @@ public class Player extends Character {
 	@Override
 	public int attack() {
 		GameEngine.playAttackAnimation(attackAnimation, this);
-		int damage = 0;
-		damage = getStat(Stats.INTELLIGIENCE);
-		return damage;
+		return getStat(Stats.INTELLIGIENCE);
 	}
 
 	public boolean ability(Ability ability, Character... enemies) {
