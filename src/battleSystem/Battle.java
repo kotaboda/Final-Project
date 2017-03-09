@@ -66,18 +66,22 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		if (playerNextAbility != null) {
 			// NOTE(andrew): If the player selected an ability this
 			// branch should run
+			//TODO(andrew): fix this heckin thing
+			
+			loggedAction = player.NAME + ": Used " + playerNextAbility;
+			notifySubscribers();
 			boolean successfulAbilityUse = false;
 			if(playerNextAbility instanceof GroupAbility){
 				successfulAbilityUse = player.ability(playerNextAbility, enemies);
 			}else{
 				successfulAbilityUse = player.ability(playerNextAbility, playerTarget);
 			}
-			if(successfulAbilityUse){
-				loggedAction = player.NAME + ": Used " + playerNextAbility;							
-			} else{
-				loggedAction = player.NAME + ": Used " + playerNextAbility + " but it failed!";				
+			if(!successfulAbilityUse){
+				loggedAction = " but it failed!";
+				notifySubscribers();
 			}
-			notifySubscribers();
+			
+			
 		} else if (playerNextItemUse != null) {
 			// TODO(andrew): this method will take playerTarget,
 			// which needs to be possible to be the player itself,
@@ -85,15 +89,17 @@ public class Battle implements Subscribable<Battle>, Serializable {
 			// to allow selection of the player itself.
 			// NOTE(andrew): this branch runs if the player uses an
 			// item
-			playerNextItemUse.use(player);
 			loggedAction = player.NAME + ": Used " + (playerNextItemUse);
 			notifySubscribers();
+			playerNextItemUse.use(player);
+			
 		} else if (playerTarget != null) {
 			// NOTE(andrew): this branch runs if the player selected
 			// attack
-			playerTarget.takeDmg(player.attack());
 			loggedAction = player.NAME + ": Attacked " + playerTarget.NAME;
 			notifySubscribers();
+			playerTarget.takeDmg(player.attack());
+			
 		}
 	}
 
@@ -114,8 +120,10 @@ public class Battle implements Subscribable<Battle>, Serializable {
 					// because
 					// this AI is linear, the enemy will always attack
 					if (turnList[i].getHPProperty().get() > 0) {
+						loggedAction = turnList[i].NAME + ": Attacked " + player.NAME;
+						notifySubscribers();
 						player.takeDmg(turnList[i].attack());
-						// System.out.println("EnemyAttacked");
+						
 					}
 				}
 				// NOTE(andrew): check if the player is dead
@@ -192,7 +200,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	@Override
 	public void addSubscriber(Listener<Battle> sub) {
 		if (sub != null) {
-			sub.update();
+			sub.update(loggedAction);
 			subscribers.add(sub);
 		}
 	}
@@ -207,7 +215,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 	@Override
 	public void notifySubscribers() {
 		for (Listener<Battle> sub : subscribers) {
-			sub.update();
+			sub.update(loggedAction);
 		}
 	}
 
@@ -215,7 +223,7 @@ public class Battle implements Subscribable<Battle>, Serializable {
 		return player;
 	}
 
-	public String getLoggedAction() {
+	public synchronized String getLoggedAction() {
 		return loggedAction;
 	}
 

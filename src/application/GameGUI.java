@@ -302,11 +302,11 @@ public class GameGUI extends Application {
 			Listener<Battle> s = new Listener<Battle>() {
 
 				@Override
-				public void update() {
+				public void update(String loggedAction) {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							Text l = new Text(b.getLoggedAction());
+							Text l = new Text(loggedAction);
 							l.maxWidth(120);
 							l.setWrappingWidth(130);
 							battleLogVBox.getChildren().add(l);
@@ -709,6 +709,9 @@ public class GameGUI extends Application {
 				Stats[] stats = keys.toArray(new Stats[0]);
 				for(int i = 0; i < stats.length; i++){
 					levelUp += stats[i] + ": " + b.getPlayer().getStat(stats[i]) + "\n";
+				}
+				if(b.getPlayer().getLevel() == 5){
+					levelUp += "You learned a new ability!\n";
 				}
 			}
 			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + itemsDropped);
