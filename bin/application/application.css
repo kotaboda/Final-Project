@@ -131,3 +131,13 @@
 .menu-item:hover {
 	-fx-background-color: rgb(247.0,189.0,70.0);
 }
+
+#playerEnergyBar .bar{
+	-fx-background-color: rgb(254.0,170.0,56.0);
+	-fx-background-insets: 2.0px;
+}
+
+#playerEnergyBar .track {
+	-fx-background-color: rgb(209.0,145.0,10.0);
+}
+

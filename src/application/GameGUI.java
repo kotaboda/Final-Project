@@ -90,8 +90,9 @@ public class GameGUI extends Application {
 		displayText.setFocusTraversable(false);
 		displayText.setEditable(false);
 	}
-	
-	@FXML ImageView characterView;
+
+	@FXML
+	ImageView characterView;
 
 	@FXML
 	private Canvas playerBattleCanvas;
@@ -268,9 +269,9 @@ public class GameGUI extends Application {
 	private Pane rightBattleVBox;
 	@FXML
 	private ListView<String> leftActionList;
-	
+
 	private ListView<Ability> abilityList;
-	
+
 	@FXML
 	private Button submitButton;
 	@FXML
@@ -336,12 +337,12 @@ public class GameGUI extends Application {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
 							Number newValue) {
-						while(currentEnemy.isBattleAnimating()){
-							try{
-								synchronized(takeDamageAnimationLock){
+						while (currentEnemy.isBattleAnimating()) {
+							try {
+								synchronized (takeDamageAnimationLock) {
 									takeDamageAnimationLock.wait();
 								}
-							}catch(InterruptedException e){
+							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
 						}
@@ -654,6 +655,9 @@ public class GameGUI extends Application {
 			});
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
+			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty()
+					.divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
+			playerEnergyBar.setId("playerEnergyBar");
 			playerName.setText(TESTINGGAME.getPlayer().NAME);
 			Scene scene = new Scene(p);
 			String css = getClass().getResource("application.css").toExternalForm();
@@ -702,15 +706,15 @@ public class GameGUI extends Application {
 				itemsDropped += i.NAME + "\n";
 			}
 			String levelUp = "";
-			if(leveledUp){
+			if (leveledUp) {
 				levelUp += "\n";
 				levelUp += "You leveled up! Here are your new stats!\n";
 				Set<Stats> keys = b.getPlayer().getStats().keySet();
 				Stats[] stats = keys.toArray(new Stats[0]);
-				for(int i = 0; i < stats.length; i++){
+				for (int i = 0; i < stats.length; i++) {
 					levelUp += stats[i] + ": " + b.getPlayer().getStat(stats[i]) + "\n";
 				}
-				if(b.getPlayer().getLevel() == 5){
+				if (b.getPlayer().getLevel() == 5) {
 					levelUp += "You learned a new ability!\n";
 				}
 			}
@@ -1026,56 +1030,8 @@ public class GameGUI extends Application {
 			}
 		}
 	}
-	
-public void playAttackAnimation(Image animation, Character character){
-		
-		PixelReader reader = animation.getPixelReader();
-		ImageView view = character.getBattleImageView();
-		Image temp = character.getBattleImage();
-		int widthOfFrame = (int) temp.getWidth();
-		int heightOfFrame = (int) temp.getHeight();
-		int numOfFrames = (int) (animation.getWidth() / widthOfFrame);
-		int framesPlayedPerAnimationFrame = 4;
-		while(character.isBattleAnimating()){
-			try {
-				synchronized(attackAnimationLock){
-					attackAnimationLock.wait();
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		character.setIsBattleAnimating(true);
-		Platform.runLater(new Runnable(){
 
-			@Override
-			public void run() {
-				
-				new AnimationTimer(){
-					int x = -1;
-					@Override
-					public void handle(long now) {
-						x += 1;
-						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0, widthOfFrame, heightOfFrame);
-						view.setImage(currentFrame);
-						if(x > numOfFrames * framesPlayedPerAnimationFrame){
-							
-							view.setImage(character.getBattleImage());
-							synchronized(attackAnimationLock){
-								character.setIsBattleAnimating(false);
-								attackAnimationLock.notifyAll();
-							}
-							this.stop();
-						}
-					}
-					
-				}.start();
-			}
-		});
-	}
-	
-	public void playTakeDamageAnimation(Image animation, Character character){
-		
+	public void playAttackAnimation(Image animation, Character character) {
 
 		PixelReader reader = animation.getPixelReader();
 		ImageView view = character.getBattleImageView();
@@ -1086,7 +1042,56 @@ public void playAttackAnimation(Image animation, Character character){
 		int framesPlayedPerAnimationFrame = 4;
 		while (character.isBattleAnimating()) {
 			try {
-				synchronized(takeDamageAnimationLock){
+				synchronized (attackAnimationLock) {
+					attackAnimationLock.wait();
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		character.setIsBattleAnimating(true);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+
+				new AnimationTimer() {
+					int x = -1;
+
+					@Override
+					public void handle(long now) {
+						x += 1;
+						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0,
+								widthOfFrame, heightOfFrame);
+						view.setImage(currentFrame);
+						if (x > numOfFrames * framesPlayedPerAnimationFrame) {
+
+							view.setImage(character.getBattleImage());
+							synchronized (attackAnimationLock) {
+								character.setIsBattleAnimating(false);
+								attackAnimationLock.notifyAll();
+							}
+							this.stop();
+						}
+					}
+
+				}.start();
+			}
+		});
+	}
+
+	public void playTakeDamageAnimation(Image animation, Character character) {
+
+		PixelReader reader = animation.getPixelReader();
+		ImageView view = character.getBattleImageView();
+		Image temp = character.getBattleImage();
+		int widthOfFrame = (int) temp.getWidth();
+		int heightOfFrame = (int) temp.getHeight();
+		int numOfFrames = (int) (animation.getWidth() / widthOfFrame);
+		int framesPlayedPerAnimationFrame = 4;
+		while (character.isBattleAnimating()) {
+			try {
+				synchronized (takeDamageAnimationLock) {
 					takeDamageAnimationLock.wait();
 
 				}
@@ -1112,7 +1117,7 @@ public void playAttackAnimation(Image animation, Character character){
 						if (x > numOfFrames * framesPlayedPerAnimationFrame) {
 
 							view.setImage(character.getBattleImage());
-							synchronized(takeDamageAnimationLock){
+							synchronized (takeDamageAnimationLock) {
 
 								character.setIsBattleAnimating(false);
 								takeDamageAnimationLock.notifyAll();
