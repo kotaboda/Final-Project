@@ -1182,6 +1182,11 @@ public void playAttackAnimation(Image animation, Character character){
 								new Player(nameTextField.getText(), (Genders) tg.getSelectedToggle().getUserData(), 0));
 						GameEngine.setGame(TESTINGGAME);
 						displayGeneralView();
+						displayMessage("Use the 'E' key to interact with notes, backpacks, and bosses.\n"
+								+ "Also use 'E' to close these dialog boxes when you see them on the screen.\n"
+								+ "Use 'W' to move up	'S' to move down	'A' to move left	and 'D' to move right.\n"
+								+ "Pressing escape will bring you to the pause menu.\n"
+								+ "Walk around to get into battles, fight the enemies, and level up to defeat the bosses on each floor.");
 					}
 				}
 
