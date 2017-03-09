@@ -10,18 +10,22 @@ public class PlayDivision extends BuffAbility {
 	 * 
 	 */
 	private static final long serialVersionUID = 7103691996894286086L;
-	private boolean used = false;
+	private boolean usedBuff = false;
 	
 	public PlayDivision() {
 		super("Play Division");
 	}
 	
+	public boolean getUsedBuff() {
+		return usedBuff;
+	}
+	
 	@Override
 	public boolean use(Character user, Character... targets) {
 		boolean successful = true;
-		if(!used) {
+		if(!usedBuff) {
 			user.modifyField(ModifiableFields.HITPOINTS, 100);
-			used = true;
+			usedBuff = true;
 		}else {
 			successful = false;
 		}

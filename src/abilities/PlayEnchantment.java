@@ -16,6 +16,10 @@ public class PlayEnchantment extends BuffAbility {
 	public PlayEnchantment() {
 		super("Play Enchantment");
 	}
+	
+	public boolean getUsedBuff() {
+		return usedBuff;
+	}
 
 	@Override
 	public boolean use(Character user, Character... targets) {

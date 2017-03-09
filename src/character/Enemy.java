@@ -20,13 +20,6 @@ public class Enemy extends Character {
 
 	public Enemy(String name, int creditDrop, int tileSheetNum) {
 		super(name, tileSheetNum);
-		this.stats.put(Stats.MOTIVATION, 1);
-		this.stats.put(Stats.INTELLIGIENCE, 1);
-		this.stats.put(Stats.WIT, 1);
-		this.stats.put(Stats.ENDURANCE, 1);
-		this.stats.put(Stats.STAMINA, 1);
-		this.hitPoints = stats.get(Stats.MOTIVATION) * 5;
-		this.energy = stats.get(Stats.STAMINA) * 5;
 		this.creditDrop = creditDrop;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
@@ -41,7 +34,7 @@ public class Enemy extends Character {
 		Inventory tempInv = new Inventory();
 		Random xD = new Random();
 
-		int howMuchLoot = xD.nextInt(3) + 1;
+		int howMuchLoot = xD.nextInt(3);
 		int item = xD.nextInt(4);
 
 		for (int i = 0; i < howMuchLoot; i++) {
