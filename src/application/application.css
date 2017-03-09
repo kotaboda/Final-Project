@@ -68,29 +68,31 @@
 
 .progress-bar > .bar {
 	-fx-background-color: rgb(203.0,5.0,5.0);
-	-fx-background-insets: 2.0px;
+	-fx-background-insets: 2.0, 0.0;
 }
 .progress-bar > .track {
-	-fx-background-color: rgb(0,0,0);
-	-fx-padding: 5.0px;
-	-fx-background-insets: 15.0px;
+
+	-fx-background-color: rgb(0.0,0.0,0.0);
+	-fx-background-insets: 0.0, 1.0;
 }
 
 #xp > .bar {
 	-fx-background-color: rgb(139.0,220.0,141.0);
-	-fx-background-insets: 2.0px;
+	-fx-background-insets: 2.0, 0.0;
 }
 #xp > .track {
-	-fx-background-color: rgb(0,0,0);
+
+	-fx-background-color: rgb(0.0,0.0,0.0);
+	-fx-background-insets: 0.0,1.0;
 }
 #energy > .bar{
 	-fx-background-color: rgb(254.0,170.0,56.0);
-	-fx-background-insets: 2.0px;
+	-fx-background-insets: 2.0, 0.0;
+
 }
 #energy > .track {
-	-fx-background-color: rgb(0,0,0);
-	-fx-padding: 5.0px;
-	-fx-background-insets: 10.0px;
+	-fx-background-color: rgb(0.0,0.0,0.0);
+	-fx-background-insets: 0.0,1.0;
 }
 .list-cell {
 	-fx-font-family: "Orbitron-Bold";
@@ -131,13 +133,18 @@
 .menu-item:hover {
 	-fx-background-color: rgb(247.0,189.0,70.0);
 }
+.menu-item:focused{
+	-fx-background-color: rgb(247.0,189.0,70.0);
+	
+}
 
 #playerEnergyBar .bar{
 	-fx-background-color: rgb(254.0,170.0,56.0);
-	-fx-background-insets: 2.0px;
+	-fx-background-insets: 2.0, 0.0;
 }
 
-#playerEnergyBar > .track {
-	-fx-background-color: rgb(0,0,0);
+#playerEnergyBar .track {
+	-fx-background-color: rgb(0.0,0.0,0.0);
+    -fx-background-insets:  0.0, 1.0;
 }
 
