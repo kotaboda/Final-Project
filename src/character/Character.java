@@ -37,7 +37,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	protected int level = 1;
 	protected Coordinates coordinates = new Coordinates(0, 0);
 	protected int floorNum;
-	private int creditReq = 150;
+	private int creditReq = 500;
 	private int currentCredits = 0;
 	protected ArrayList<Listener<Character>> subscribers = new ArrayList<>();
 	protected transient Image worldImage;
