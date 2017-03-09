@@ -154,11 +154,13 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		case HITPOINTS:
 			hitPoints += modification;
 			hitPoints = hitPoints < 0 ? 0 : hitPoints;
+			hitPoints = hitPoints > maxHitPoints ? maxHitPoints : hitPoints;
 			hpProperty.set(hitPoints);
 			break;
 		case ENERGY:
 			energy += modification;
 			energy = energy < 0 ? 0 : energy;
+			energy = energy > maxEnergy ? maxEnergy : energy;
 			energyProperty.set(energy);
 			break;
 		}
