@@ -7,6 +7,7 @@ import character.Boss;
 import character.Character;
 import character.Player;
 import enums.Character.InventoryAction;
+import interfaces.ability.Ability;
 import itemSystem.Item;
 
 public class GuardBattle extends BossBattle {
@@ -38,11 +39,18 @@ public class GuardBattle extends BossBattle {
 						Random r = new Random();
 						switch (r.nextInt(2)) {
 						case 0:
+							
 							if (boss.getAbilities().size() != 0) {
-								boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
+								int num = r.nextInt(boss.getAbilities().size());
+								Ability nextAbility = boss.getAbilities().get(num);
+								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
+								notifySubscribers();
+								boss.ability(nextAbility, player);
 								break;
 							}
 						case 1:
+							loggedAction = turnList[i].NAME + ": Attacked " + player.NAME;
+							notifySubscribers();
 							player.takeDmg(boss.attack());
 							break;
 						default:

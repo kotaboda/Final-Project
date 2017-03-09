@@ -1,8 +1,8 @@
 package floors;
 
-import battleSystem.BossBattle;
-import character.Boss;
+import battleSystem.GuardBattle;
 import character.Player;
+import character.SecurityGuard;
 import itemSystem.Coffee;
 import itemSystem.Doritos;
 import itemSystem.Item;
@@ -20,14 +20,14 @@ public class Floor1 extends Floor {
 
 	public Floor1(Player player) {
 		genTiles();
-		setBoss(new Boss("Security Guard", 600, 0) {
+		setBoss(new SecurityGuard() {
 
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = -2926182399108237508L;
 		});
-		setBossBattle(new BossBattle(player, boss));
+		setBossBattle(new GuardBattle(player, boss));
 		getBoss().getCoordinates().setCoordinates(9, 1);
 		setPlayer(player);
 		getPlayer().getCoordinates().setCoordinates(9, 12);
