@@ -75,8 +75,8 @@ public class Battle implements Subscribable<Battle>, Serializable {
 			} else {
 				successfulAbilityUse = player.ability(playerNextAbility, playerTarget);
 			}
-			if (!successfulAbilityUse) {
-				loggedAction = " but it failed!";
+			if(!successfulAbilityUse){
+				loggedAction = "But it failed!";
 				notifySubscribers();
 			}
 
