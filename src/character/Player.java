@@ -78,6 +78,7 @@ public class Player extends Character {
 	public int takeDmg(int dmg) {
 		hitPoints -= (dmg - getStat(Stats.ENDURANCE));
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
+		hitPoints = maxHitPoints < hitPoints ? maxHitPoints : hitPoints;
 		hpProperty.set(hitPoints);
 		GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
 		return dmg;
