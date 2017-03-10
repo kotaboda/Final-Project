@@ -23,7 +23,7 @@ public class Game implements Serializable{
 	public Game(Player player) {
 		this.player = player;
 		this.player.setFloorNum(1);
-		this.floors = new Floor[] {new Floor1(player), new Floor2(player), new Floor3()};
+		this.floors = new Floor[] {new Floor1(player), new Floor2(player), new Floor3(player)};
 	}	
 	
 	public Player getPlayer(){
