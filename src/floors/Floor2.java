@@ -1,6 +1,6 @@
 package floors;
 
-import battleSystem.BossBattle;
+import battleSystem.PayBattle;
 import character.JerryPay;
 import character.Player;
 import itemSystem.Coffee;
@@ -23,7 +23,7 @@ public class Floor2 extends Floor {
 		genTiles();
 		setBoss(new JerryPay());
 		getBoss().getCoordinates().setCoordinates(1, 8);
-		setBossBattle(new BossBattle(player, getBoss()));
+		setBossBattle(new PayBattle(player, getBoss()));
 		setPlayer(player);
 		playerStart = new Coordinates(9,2);
 		genTiles();

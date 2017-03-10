@@ -10,6 +10,7 @@ import java.util.Random;
 
 import battleSystem.Battle;
 import battleSystem.GuardBattle;
+import battleSystem.PayBattle;
 import character.Boss;
 import character.Character;
 import character.Enemy;
@@ -225,6 +226,8 @@ public class GameEngine {
 					protected Void call() throws Exception {
 						if(b instanceof GuardBattle){
 							((GuardBattle) b).start();
+						}else if(b instanceof PayBattle){
+							((PayBattle) b).start();
 						}else{
 							b.start();
 						}

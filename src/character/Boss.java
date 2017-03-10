@@ -56,7 +56,9 @@ public abstract class Boss extends Enemy implements Interactable {
 
 	@Override
 	public int takeDmg(int dmg) {
-		GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
+		if(takeDamageAnimation != null){
+			GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
+		}
 		int damage = dmg-getStat(Stats.ENDURANCE);
 		hitPoints -= damage;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
@@ -70,7 +72,9 @@ public abstract class Boss extends Enemy implements Interactable {
 
 	@Override
 	public int attack() {
-		GameEngine.playAttackAnimation(attackAnimation, this);
+		if(attackAnimation != null){
+			GameEngine.playAttackAnimation(attackAnimation, this);
+		}
 		int damage = 0;
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;

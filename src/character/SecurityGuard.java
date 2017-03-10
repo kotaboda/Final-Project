@@ -1,5 +1,8 @@
 package character;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import abilities.MinionAssault;
 import abilities.PlayEnchantment;
 import enums.Character.Stats;
@@ -7,6 +10,7 @@ import itemSystem.Coffee;
 import itemSystem.Doritos;
 import itemSystem.MountainDew;
 import itemSystem.Planeswalker;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 
 public class SecurityGuard extends Boss {
@@ -27,10 +31,21 @@ public class SecurityGuard extends Boss {
 		this.stats.put(Stats.WIT, 15);
 		this.stats.put(Stats.ENDURANCE, 13);
 		this.stats.put(Stats.STAMINA, 13);
-		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
+		this.hitPoints = stats.get(Stats.MOTIVATION) * 6;
 		this.energy = stats.get(Stats.STAMINA) * 10;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
+		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/guarddamage.png"));
+		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));
+	}
+	
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
+		in.defaultReadObject();		
+		hpProperty = new SimpleIntegerProperty(hitPoints);
+		maxHPProperty = new SimpleIntegerProperty(hitPoints);
+		energyProperty = new SimpleIntegerProperty(energy);
+		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
 		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));
 		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/guarddamage.png"));
 		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));

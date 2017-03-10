@@ -2,11 +2,15 @@ package battleSystem;
 
 import java.util.Random;
 
+import abilities.AddValue;
+import abilities.AssignATeamAssignment;
+import abilities.ShowAPowerpoint;
 import application.GameEngine;
 import character.Boss;
 import character.Character;
 import character.Player;
 import enums.Character.InventoryAction;
+import interfaces.ability.Ability;
 import itemSystem.Item;
 
 public class PayBattle extends BossBattle {
@@ -36,13 +40,40 @@ public class PayBattle extends BossBattle {
 				} else if (turnList[i] instanceof Boss) {
 					if (turnList[i].getHPProperty().get() > 0) {
 						Random r = new Random();
-						switch (r.nextInt(2)) {
+						switch (r.nextInt(5)) {
 						case 0:
-							if (boss.getAbilities().size() != 0) {
-								boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
+						case 1:
+						case 2:
+							if (boss.getAbilities().size() != 0 &&
+									(((ShowAPowerpoint) boss.getAbilities().get(0)).getTimesForUse() > 0)) {
+								Ability nextAbility = boss.getAbilities().get(0);
+								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
+								notifySubscribers();
+								boss.ability(nextAbility, player);
+								break;
+							}else if((((AssignATeamAssignment) boss.getAbilities().get(1)).getTimesForUse() > 0)){
+								Ability nextAbility = boss.getAbilities().get(1);
+								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
+								notifySubscribers();
+								boss.ability(nextAbility, player);
+								break;
+							}else if(!((AddValue) boss.getAbilities().get(2)).getUsedBuff()){
+								Ability nextAbility = boss.getAbilities().get(2);
+								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
+								notifySubscribers();
+								boss.ability(nextAbility, player);
+								break;
+							}else{
+								Ability nextAbility = boss.getAbilities().get(3);
+								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
+								notifySubscribers();
+								boss.ability(nextAbility, player);
 								break;
 							}
-						case 1:
+						case 3:
+						case 4:
+							loggedAction = turnList[i].NAME + ": Attacked " + player.NAME;
+							notifySubscribers();
 							player.takeDmg(boss.attack());
 							break;
 						default:
@@ -50,15 +81,6 @@ public class PayBattle extends BossBattle {
 						}
 					}
 
-				} else {
-					// NOTE(andrew): this branch runs if it's the enemies turn,
-					// this should probably be changed, not totally sure,
-					// because
-					// this AI is linear, the enemy will always attack
-					if (turnList[i].getHPProperty().get() > 0) {
-						player.takeDmg(turnList[i].attack());
-						// System.out.println("EnemyAttacked");
-					}
 				}
 				// NOTE(andrew): check if the player is dead
 				if (player.getHPProperty().get() <= 0) {
