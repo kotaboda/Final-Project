@@ -21,17 +21,12 @@ import enums.gui.GUILayouts;
 import floors.Floor;
 import interfaces.ability.Ability;
 import interfaces.item.Usable;
-import interfaces.publisherSubscriber.Listener;
 import interfaces.tile.Lootable;
 import itemSystem.Item;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -60,8 +55,6 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -155,37 +148,28 @@ public class GameGUI extends Application {
 
 			p = loader.load();
 
-			newGameButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					displayCharacterCreation();
-				}
+			newGameButton.setOnAction(event -> {
+				displayCharacterCreation();
 			});
 
-			loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					TESTINGGAME = GameEngine.loadGame();
-					displayGeneralView();
-				}
+			loadGameButton.setOnAction(event -> {
+				TESTINGGAME = GameEngine.loadGame();
+				displayGeneralView();
 			});
 
-			exitButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					Platform.exit();
-				}
-
+			exitButton.setOnAction(event -> {
+				Platform.exit();
 			});
 			Scene scene = new Scene(p);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(
+
+					getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-		} catch (IOException e) {
+		} catch (
+
+		IOException e) {
 			e.printStackTrace();
 		}
 
@@ -205,54 +189,31 @@ public class GameGUI extends Application {
 		loader.setController(this);
 		try {
 			p = loader.load();
-			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
-				@Override
-				public void handle(KeyEvent event) {
-					KeyCode k = event.getCode();
-					switch (k) {
-					case ESCAPE:
-						displayGeneralView();
-						break;
-					default:
-						break;
-					}
-				}
-			});
-			mainMenuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
-					displayMainMenu();
-				}
-
-			});
-
-			saveGameButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
-					GameEngine.saveGame(TESTINGGAME);
-				}
-
-			});
-
-			characterButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
-					displayCharacterManager();
-				}
-
-			});
-
-			exitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
+			p.setOnKeyPressed(event -> {
+				KeyCode k = event.getCode();
+				switch (k) {
+				case ESCAPE:
 					displayGeneralView();
-
+					break;
+				default:
+					break;
 				}
 
+			});
+			mainMenuButton.setOnMouseClicked(event -> {
+				displayMainMenu();
+			});
+
+			saveGameButton.setOnMouseClicked(event -> {
+				GameEngine.saveGame(TESTINGGAME);
+			});
+
+			characterButton.setOnMouseClicked(event -> {
+				displayCharacterManager();
+			});
+
+			exitButton.setOnMouseClicked(event -> {
+				displayGeneralView();
 			});
 			Scene scene = new Scene(p);
 			String css = getClass().getResource("application.css").toExternalForm();
@@ -300,23 +261,15 @@ public class GameGUI extends Application {
 
 			playerName.setText(TESTINGGAME.getPlayer().NAME + " Lvl. " + TESTINGGAME.getPlayer().getLevel());
 			enemies.setAlignment(Pos.CENTER);
-			Listener<Battle> s = new Listener<Battle>() {
-
-				@Override
-				public void update(String loggedAction) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							Text l = new Text(loggedAction);
-							l.maxWidth(120);
-							l.setWrappingWidth(130);
-							battleLogVBox.getChildren().add(l);
-							bLogScrollPane.vvalueProperty().bind(battleLogVBox.heightProperty());
-						}
-					});
-				}
-			};
-			b.addSubscriber(s);
+			b.addSubscriber(loggedAction -> {
+				Platform.runLater(() -> {
+					Text l = new Text(loggedAction);
+					l.maxWidth(120);
+					l.setWrappingWidth(130);
+					battleLogVBox.getChildren().add(l);
+					bLogScrollPane.vvalueProperty().bind(battleLogVBox.heightProperty());
+				});
+			});
 			ArrayList<Label> enemyNames = new ArrayList<Label>();
 			for (int i = 0; i < b.getEnemies().length; i++) {
 				Enemy currentEnemy = b.getEnemies()[i];
@@ -332,52 +285,40 @@ public class GameGUI extends Application {
 						.bind(currentEnemy.getHPProperty().divide(currentEnemy.getMaxHPProperty().doubleValue()));
 				Group child = new Group();
 				enemies.getChildren().add(child);
-				enemyHealth.progressProperty().addListener(new ChangeListener<Number>() {
-
-					@Override
-					public void changed(ObservableValue<? extends Number> observable, Number oldValue,
-							Number newValue) {
-						while (currentEnemy.isBattleAnimating()) {
+				enemyHealth.progressProperty().addListener((observable, oldValue, newValue) -> {
+					while (currentEnemy.isBattleAnimating()) {
+						try {
+							synchronized (takeDamageAnimationLock) {
+								takeDamageAnimationLock.wait();
+							}
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					Platform.runLater(() -> {
+						if (newValue.doubleValue() <= 0) {
+							enemies.getChildren().remove(child);
+							Node n = null;
 							try {
-								synchronized (takeDamageAnimationLock) {
-									takeDamageAnimationLock.wait();
-								}
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+								n = enemies.getChildren().get(0);
+							} catch (IndexOutOfBoundsException e) {
+							}
+							if (n != null) {
+								n.getOnMouseClicked().handle(null);
 							}
 						}
-						Platform.runLater(new Runnable() {
-							@Override
-							public void run() {
-								if (newValue.doubleValue() <= 0) {
-									enemies.getChildren().remove(child);
-									Node n = null;
-									try {
-										n = enemies.getChildren().get(0);
-									} catch (IndexOutOfBoundsException e) {
-									}
-									if (n != null) {
-										n.getOnMouseClicked().handle(null);
-									}
-								}
-							}
-						});
-					}
+					});
 				});
 				currentEnemy.setBattleImageView(enemyImage);
 
 				VBox mainContainer = new VBox(currentEnemy.getBattleImageView(), enemyName, enemyHealth);
 				child.getChildren().add(mainContainer);
-				child.setOnMouseClicked(new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent event) {
-						b.setPlayerTarget(currentEnemy);
-
-						for (Label name : enemyNames) {
-							name.styleProperty().setValue("");
-						}
-						enemyName.setStyle("-fx-background-color : lightblue;");
-					};
+				child.setOnMouseClicked(event -> {
+					b.setPlayerTarget(currentEnemy);
+					for (Label name : enemyNames) {
+						name.styleProperty().setValue("");
+					}
+					enemyName.setStyle("-fx-background-color : lightblue;");
 				});
 				if (i == 0) {
 					child.getOnMouseClicked().handle(null);
@@ -386,101 +327,81 @@ public class GameGUI extends Application {
 			}
 			submitButton.setDisable(true);
 			leftActionList.setItems(FXCollections.observableArrayList("Attack", "Abilities", "Items"));
-			leftActionList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
-					MouseButton b = event.getButton();
-					switch (b) {
-					case PRIMARY:
-						switch (leftActionList.getSelectionModel().getSelectedIndex()) {
-						case 0:
-							middleBattleVBox.getChildren().clear();
-							rightBattleVBox.getChildren().clear();
-							if (isPlayersTurn) {
-								submitButton.setDisable(false);
-								abilityList = null;
-							}
-							break;
-						case 1:
-							if (isPlayersTurn) {
-								submitButton.setDisable(true);
-							}
-							middleBattleVBox.getChildren().clear();
-							abilityList = new ListView<>(TESTINGGAME.getPlayer().getAbilities());
-							middleBattleVBox.getChildren().add(abilityList);
-							abilityList.getSelectionModel().selectedItemProperty()
-									.addListener(new ChangeListener<Ability>() {
-
-										@Override
-										public void changed(ObservableValue<? extends Ability> observable,
-												Ability oldValue, Ability newValue) {
-											rightBattleVBox.getChildren().clear();
-											if (abilityList.getSelectionModel().getSelectedItem() != null) {
-												Label abilityDescription = new Label(abilityList.getSelectionModel()
-														.getSelectedItem().getDescription());
-												abilityDescription.wrapTextProperty().set(true);
-												rightBattleVBox.getChildren().add(abilityDescription);
-												if (isPlayersTurn) {
-													submitButton.setDisable(false);
-												}
-											}
-										}
-									});
-							abilityList.getSelectionModel().selectFirst();
-							break;
-						case 2:
-							if (isPlayersTurn) {
-								submitButton.setDisable(true);
-								abilityList = null;
-							}
-							middleBattleVBox.getChildren().clear();
-							rightBattleVBox.getChildren().clear();
-							ArrayList<Usable> usable = new ArrayList<>();
-							for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
-								if (TESTINGGAME.getPlayer().getInventoryContents()[i] instanceof Usable) {
-									usable.add((Usable) TESTINGGAME.getPlayer().getInventoryContents()[i]);
-								}
-							}
-							itemList = new ListView<Usable>(FXCollections.observableArrayList(usable));
-							itemList.getSelectionModel().selectedItemProperty()
-									.addListener(new ChangeListener<Usable>() {
-
-										@Override
-										public void changed(ObservableValue<? extends Usable> observable,
-												Usable oldValue, Usable newValue) {
-											if (isPlayersTurn) {
-												submitButton.setDisable(false);
-											}
-											Label l = new Label(((Item) newValue).getDescription());
-											l.wrapTextProperty().set(true);
-											rightBattleVBox.getChildren().clear();
-											rightBattleVBox.getChildren().add(l);
-										}
-
-									});
-							itemList.getSelectionModel().select(0);
-							middleBattleVBox.getChildren().add(itemList);
-							break;
+			leftActionList.setOnMouseClicked(event -> {
+				switch (event.getButton()) {
+				case PRIMARY:
+					switch (leftActionList.getSelectionModel().getSelectedIndex()) {
+					case 0:
+						middleBattleVBox.getChildren().clear();
+						rightBattleVBox.getChildren().clear();
+						if (isPlayersTurn) {
+							submitButton.setDisable(false);
+							abilityList = null;
 						}
 						break;
-					default:
+					case 1:
+						if (isPlayersTurn) {
+							submitButton.setDisable(true);
+						}
+						middleBattleVBox.getChildren().clear();
+						abilityList = new ListView<>(TESTINGGAME.getPlayer().getAbilities());
+						middleBattleVBox.getChildren().add(abilityList);
+						abilityList.getSelectionModel().selectedItemProperty()
+								.addListener((observable, oldValue, newValue) -> {
+									rightBattleVBox.getChildren().clear();
+									if (abilityList.getSelectionModel().getSelectedItem() != null) {
+										Label abilityDescription = new Label(
+												abilityList.getSelectionModel().getSelectedItem().getDescription());
+										abilityDescription.wrapTextProperty().set(true);
+										rightBattleVBox.getChildren().add(abilityDescription);
+										if (isPlayersTurn) {
+											submitButton.setDisable(false);
+										}
+									}
+
+								});
+						abilityList.getSelectionModel().selectFirst();
+						break;
+					case 2:
+						if (isPlayersTurn) {
+							submitButton.setDisable(true);
+							abilityList = null;
+						}
+						middleBattleVBox.getChildren().clear();
+						rightBattleVBox.getChildren().clear();
+						ArrayList<Usable> usable = new ArrayList<>();
+						for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
+							if (TESTINGGAME.getPlayer().getInventoryContents()[i] instanceof Usable) {
+								usable.add((Usable) TESTINGGAME.getPlayer().getInventoryContents()[i]);
+							}
+						}
+						itemList = new ListView<Usable>(FXCollections.observableArrayList(usable));
+						itemList.getSelectionModel().selectedItemProperty()
+								.addListener((observable, oldValue, newValue) -> {
+									if (isPlayersTurn) {
+										submitButton.setDisable(false);
+									}
+									Label l = new Label(((Item) newValue).getDescription());
+									l.wrapTextProperty().set(true);
+									rightBattleVBox.getChildren().clear();
+									rightBattleVBox.getChildren().add(l);
+								});
+						itemList.getSelectionModel().select(0);
+						middleBattleVBox.getChildren().add(itemList);
 						break;
 					}
+					break;
+				default:
+					break;
 				}
 			});
 
-			submitButton.setOnAction(new EventHandler<ActionEvent>() {
-
-				@Override
-				public void handle(ActionEvent event) {
-					submitButton.setDisable(true);
-					isPlayersTurn = false;
-					synchronized (lock) {
-						lock.notifyAll();
-					}
+			submitButton.setOnAction(event -> {
+				submitButton.setDisable(true);
+				isPlayersTurn = false;
+				synchronized (lock) {
+					lock.notifyAll();
 				}
-
 			});
 			playerEnergyBar.progressProperty().bind(TESTINGGAME.getPlayer().getEnergyProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxEnergyProperty().doubleValue()));
@@ -493,7 +414,9 @@ public class GameGUI extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			GameEngine.startBattle(b);
-		} catch (IOException e) {
+		} catch (
+
+		IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -527,15 +450,10 @@ public class GameGUI extends Application {
 		default:
 			break;
 		}
-		Platform.runLater(new Runnable() {
-
-			@Override
-			public void run() {
-				leftActionList.getSelectionModel().clearSelection();
-				middleBattleVBox.getChildren().clear();
-				rightBattleVBox.getChildren().clear();
-			}
-
+		Platform.runLater(() -> {
+			leftActionList.getSelectionModel().clearSelection();
+			middleBattleVBox.getChildren().clear();
+			rightBattleVBox.getChildren().clear();
 		});
 	}
 
@@ -552,88 +470,79 @@ public class GameGUI extends Application {
 			p = loader.load();
 			playerImageView.setImage(TESTINGGAME.getPlayer().getWorldIcon());
 			drawToGeneralCanvas(TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
-			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			p.setOnKeyPressed(event -> {
+				if (currentLayout == GUILayouts.GENERAL) {
+					KeyCode keyEvent = event.getCode();
 
-				@Override
-				public void handle(KeyEvent event) {
-					if (currentLayout == GUILayouts.GENERAL) {
-						KeyCode keyEvent = event.getCode();
-
-						switch (keyEvent) {
-						case W:
-							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.UP)) {
-									playMoveAnimation(Direction.UP);
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
-								} else if (!isAnimating) {
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
-									drawToGeneralCanvas(
-											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
-											0);
-								}
+					switch (keyEvent) {
+					case W:
+						if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+							if (!isAnimating && GameEngine.checkMovement(Direction.UP)) {
+								playMoveAnimation(Direction.UP);
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
+							} else if (!isAnimating) {
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.UP);
+								drawToGeneralCanvas(
+										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 							}
-							break;
-						case S:
-							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.DOWN)) {
-									playMoveAnimation(Direction.DOWN);
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
-								} else if (!isAnimating) {
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
-									drawToGeneralCanvas(
-											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
-											0);
-
-								}
-							}
-							break;
-						case A:
-							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.LEFT)) {
-									playMoveAnimation(Direction.LEFT);
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
-								} else if (!isAnimating) {
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
-									drawToGeneralCanvas(
-											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
-											0);
-								}
-							}
-							break;
-						case D:
-							if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								if (!isAnimating && GameEngine.checkMovement(Direction.RIGHT)) {
-									playMoveAnimation(Direction.RIGHT);
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
-								} else if (!isAnimating) {
-									TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
-									drawToGeneralCanvas(
-											TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0,
-											0);
-								}
-							}
-							break;
-						case E:
-							if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-								((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
-								GameEngine.checkLoot();
-							} else {
-								if (!GameEngine.checkForBoss()) {
-									GameEngine.checkNote();
-								}
-							}
-
-							break;
-						case ESCAPE:
-							displayPauseMenu();
-							break;
-						default:
-							break;
 						}
-						// NOTE(andrew): added this if statement to ensure that
-						// this code only runs when it needs to.
+						break;
+					case S:
+						if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+							if (!isAnimating && GameEngine.checkMovement(Direction.DOWN)) {
+								playMoveAnimation(Direction.DOWN);
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
+							} else if (!isAnimating) {
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.DOWN);
+								drawToGeneralCanvas(
+										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
 
+							}
+						}
+						break;
+					case A:
+						if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+							if (!isAnimating && GameEngine.checkMovement(Direction.LEFT)) {
+								playMoveAnimation(Direction.LEFT);
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
+							} else if (!isAnimating) {
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.LEFT);
+								drawToGeneralCanvas(
+										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+							}
+						}
+						break;
+					case D:
+						if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+							if (!isAnimating && GameEngine.checkMovement(Direction.RIGHT)) {
+								playMoveAnimation(Direction.RIGHT);
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
+							} else if (!isAnimating) {
+								TESTINGGAME.getPlayer().setDirectionFacing(Direction.RIGHT);
+								drawToGeneralCanvas(
+										TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1), 0, 0);
+							}
+						}
+						break;
+					case E:
+						if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+							((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
+							GameEngine.checkLoot();
+						} else {
+							if (!GameEngine.checkForBoss()) {
+								GameEngine.checkNote();
+							}
+						}
+
+						break;
+					case ESCAPE:
+						displayPauseMenu();
+						break;
+					default:
+						break;
 					}
+					// NOTE(andrew): added this if statement to ensure that
+					// this code only runs when it needs to.
 				}
 			});
 			// TODO
@@ -644,13 +553,8 @@ public class GameGUI extends Application {
 			}
 			statGrid.addRow(Stats.values().length, new Label("LVL"),
 					new Label("" + TESTINGGAME.getPlayer().getLevel()));
-			menuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
-					displayPauseMenu();
-				}
-
+			menuButton.setOnMouseClicked(event -> {
+				displayPauseMenu();
 			});
 			playerHealthBar.progressProperty().bind(TESTINGGAME.getPlayer().getHPProperty()
 					.divide(TESTINGGAME.getPlayer().getMaxHPProperty().doubleValue()));
@@ -672,26 +576,20 @@ public class GameGUI extends Application {
 	public void displayMessage(String message) {
 		displayText.setText(message);
 
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-
-				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
-
-				// NOTE(andrew): this must be an event filter that is passed in
-				// the type of event and its function, rather than using the
-				// setOnKeyPressed() method, because there are selections made
-				// in the battle view, and those selections eat up the ESCAPE
-				// event. Using this filter allows us to read the keycode before
-				// it is eaten up.
-				p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-					if ((event.getCode().equals(KeyCode.ESCAPE) || event.getCode().equals(KeyCode.E))
-							&& currentLayout.equals(GUILayouts.BATTLE)) {
-						displayGeneralView();
-					}
-				});
-			}
-
+		Platform.runLater(() -> {
+			((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+			// NOTE(andrew): this must be an event filter that is passed in
+			// the type of event and its function, rather than using the
+			// setOnKeyPressed() method, because there are selections made
+			// in the battle view, and those selections eat up the ESCAPE
+			// event. Using this filter allows us to read the keycode before
+			// it is eaten up.
+			p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+				if ((event.getCode().equals(KeyCode.ESCAPE) || event.getCode().equals(KeyCode.E))
+						&& currentLayout.equals(GUILayouts.BATTLE)) {
+					displayGeneralView();
+				}
+			});
 		});
 	}
 
@@ -722,27 +620,21 @@ public class GameGUI extends Application {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
 			displayText.setText("You real bad at this videogame thign");
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-
-					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
-
-					// NOTE(andrew): this must be an event filter that is passed
-					// in the type of event and its function, rather than using
-					// the
-					// setOnKeyPressed() method, because there are selections
-					// made in the battle view, and those selections eat up the
-					// escape
-					// event. Using this filter allows us to read the keycode
-					// before it is eaten up.
-					p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-						if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
-							displayMainMenu();
-						}
-					});
-				}
-
+			Platform.runLater(() -> {
+				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+				// NOTE(andrew): this must be an event filter that is passed
+				// in the type of event and its function, rather than using
+				// the
+				// setOnKeyPressed() method, because there are selections
+				// made in the battle view, and those selections eat up the
+				// escape
+				// event. Using this filter allows us to read the keycode
+				// before it is eaten up.
+				p.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+					if (event.getCode().equals(KeyCode.ESCAPE) && currentLayout.equals(GUILayouts.BATTLE)) {
+						displayMainMenu();
+					}
+				});
 			});
 		}
 	}
@@ -788,27 +680,19 @@ public class GameGUI extends Application {
 
 		try {
 			p = loader.load();
-			p.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-				@Override
-				public void handle(KeyEvent event) {
-					KeyCode k = event.getCode();
-					switch (k) {
-					case ESCAPE:
-						displayPauseMenu();
-						break;
-					default:
-						break;
-					}
+			p.setOnKeyPressed(event -> {
+				KeyCode k = event.getCode();
+				switch (k) {
+				case ESCAPE:
+					displayPauseMenu();
+					break;
+				default:
+					break;
 				}
-
 			});
 
-			exitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent event) {
-					displayPauseMenu();
-				}
+			exitButton.setOnMouseClicked(event -> {
+				displayPauseMenu();
 			});
 			characterView.setImage(TESTINGGAME.getPlayer().getWorldIcon());
 			characterView.setFitWidth(150);
@@ -832,18 +716,19 @@ public class GameGUI extends Application {
 
 				GridPane.setHalignment(item, HPos.CENTER);
 				if (theItem instanceof Usable) {
-					MenuItem mi = new MenuItem("Use");
-					mi.setOnAction(new EventHandler<ActionEvent>() {
-
-						@Override
-						public void handle(ActionEvent event) {
-							((Usable) theItem).use(TESTINGGAME.getPlayer());
-							TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
-							playerInventoryGrid.getChildren().remove(item);
-						}
-
+					MenuItem use = new MenuItem("Use");
+					MenuItem drop = new MenuItem("Drop");
+					use.setOnAction(event -> {
+						((Usable) theItem).use(TESTINGGAME.getPlayer());
+						TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
+						playerInventoryGrid.getChildren().remove(item);
 					});
-					m.getItems().add(mi);
+					drop.setOnAction(event -> {
+						TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
+						playerInventoryGrid.getChildren().remove(item);
+					});
+					m.getItems().add(use);
+					m.getItems().add(drop);
 				}
 				playerInventoryGrid.addRow(i, item);
 			}
@@ -870,44 +755,33 @@ public class GameGUI extends Application {
 				otherInventoryGrid.getItems().add(l.obtainLoot()[i]);
 
 			}
-			lootManagerButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent event) {
-					Item item = otherInventoryGrid.getSelectionModel().getSelectedItem();
-					boolean successful = false;
-					if (item != null) {
-						successful = TESTINGGAME.getPlayer().modifyInventory(InventoryAction.GIVE, item);
-					}
-					if (!successful && !((AnchorPane) p).getChildren().contains(displayText)) {
-						displayMessage("You can't take the item!");
-					}
-					if (successful) {
-						otherInventoryGrid.getItems().remove(item);
-						l.removeItem(item);
-						Label label = new Label(item.toString() + ": " + item.getDescription());
-						GridPane.setHalignment(label, HPos.CENTER);
-						playerInventoryGrid.addRow(TESTINGGAME.getPlayer().getInventoryContents().length, label);
-					}
+			lootManagerButton.setOnMouseClicked(event -> {
+				Item item = otherInventoryGrid.getSelectionModel().getSelectedItem();
+				boolean successful = false;
+				if (item != null) {
+					successful = TESTINGGAME.getPlayer().modifyInventory(InventoryAction.GIVE, item);
+				}
+				if (!successful && !((AnchorPane) p).getChildren().contains(displayText)) {
+					displayMessage("You can't take the item!");
+				}
+				if (successful) {
+					otherInventoryGrid.getItems().remove(item);
+					l.removeItem(item);
+					Label label = new Label(item.toString() + ": " + item.getDescription());
+					GridPane.setHalignment(label, HPos.CENTER);
+					playerInventoryGrid.addRow(TESTINGGAME.getPlayer().getInventoryContents().length, label);
 				}
 			});
-			exitLootButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent event) {
-					displayGeneralView();
-				}
+			exitLootButton.setOnMouseClicked(event -> {
+				displayGeneralView();
 			});
 			for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
 				Item theItem = TESTINGGAME.getPlayer().getInventoryContents()[i];
 				Label item = new Label(theItem.toString() + ": " + theItem.getDescription());
-				item.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-					@Override
-					public void handle(MouseEvent event) {
-						otherInventoryGrid.getItems().add(theItem);
-						playerInventoryGrid.getChildren().remove(item);
-						TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
-					}
-
+				item.setOnMouseClicked(event -> {
+					otherInventoryGrid.getItems().add(theItem);
+					playerInventoryGrid.getChildren().remove(item);
+					TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
 				});
 				GridPane.setHalignment(item, HPos.CENTER);
 				playerInventoryGrid.addRow(i, item);
@@ -917,7 +791,9 @@ public class GameGUI extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch (IOException e) {
+		} catch (
+
+		IOException e) {
 			e.printStackTrace();
 		}
 
@@ -1050,33 +926,29 @@ public class GameGUI extends Application {
 			}
 		}
 		character.setIsBattleAnimating(true);
-		Platform.runLater(new Runnable() {
+		Platform.runLater(() -> {
 
-			@Override
-			public void run() {
+			new AnimationTimer() {
+				int x = -1;
 
-				new AnimationTimer() {
-					int x = -1;
+				@Override
+				public void handle(long now) {
+					x += 1;
+					WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0,
+							widthOfFrame, heightOfFrame);
+					view.setImage(currentFrame);
+					if (x > numOfFrames * framesPlayedPerAnimationFrame) {
 
-					@Override
-					public void handle(long now) {
-						x += 1;
-						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0,
-								widthOfFrame, heightOfFrame);
-						view.setImage(currentFrame);
-						if (x > numOfFrames * framesPlayedPerAnimationFrame) {
-
-							view.setImage(character.getBattleImage());
-							synchronized (attackAnimationLock) {
-								character.setIsBattleAnimating(false);
-								attackAnimationLock.notifyAll();
-							}
-							this.stop();
+						view.setImage(character.getBattleImage());
+						synchronized (attackAnimationLock) {
+							character.setIsBattleAnimating(false);
+							attackAnimationLock.notifyAll();
 						}
+						this.stop();
 					}
+				}
 
-				}.start();
-			}
+			}.start();
 		});
 	}
 
@@ -1100,34 +972,31 @@ public class GameGUI extends Application {
 			}
 		}
 		character.setIsBattleAnimating(true);
-		Platform.runLater(new Runnable() {
+		Platform.runLater(() -> {
 
-			@Override
-			public void run() {
+			new AnimationTimer() {
+				int x = -1;
 
-				new AnimationTimer() {
-					int x = -1;
+				@Override
+				public void handle(long now) {
+					x += 1;
+					WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0,
+							widthOfFrame, heightOfFrame);
+					view.setImage(currentFrame);
+					if (x > numOfFrames * framesPlayedPerAnimationFrame) {
 
-					@Override
-					public void handle(long now) {
-						x += 1;
-						WritableImage currentFrame = new WritableImage(reader, ((x / numOfFrames) * widthOfFrame), 0,
-								widthOfFrame, heightOfFrame);
-						view.setImage(currentFrame);
-						if (x > numOfFrames * framesPlayedPerAnimationFrame) {
+						view.setImage(character.getBattleImage());
+						synchronized (takeDamageAnimationLock) {
 
-							view.setImage(character.getBattleImage());
-							synchronized (takeDamageAnimationLock) {
-
-								character.setIsBattleAnimating(false);
-								takeDamageAnimationLock.notifyAll();
-							}
-							this.stop();
+							character.setIsBattleAnimating(false);
+							takeDamageAnimationLock.notifyAll();
 						}
+						this.stop();
 					}
+				}
 
-				}.start();
-			}
+			}.start();
+
 		});
 	}
 
@@ -1172,29 +1041,24 @@ public class GameGUI extends Application {
 			tg.getToggles().add(girlRadioButton);
 			boyRadioButton.setSelected(true);
 
-			submitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-				@Override
-				public void handle(MouseEvent event) {
-					if (nameTextField.getText().equals("")
-							&& !((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-						displayMessage("Please enter a name.");
-					} else if (!nameTextField.getText().equals("")) {
-						if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
-							((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
-						}
-						TESTINGGAME = new Game(
-								new Player(nameTextField.getText(), (Genders) tg.getSelectedToggle().getUserData(), 0));
-						GameEngine.setGame(TESTINGGAME);
-						displayGeneralView();
-						displayMessage("Use the 'E' key to interact with notes, backpacks, and bosses.\n"
-								+ "Also use 'E' to close these dialog boxes when you see them on the screen.\n"
-								+ "Use 'W' to move up	'S' to move down	'A' to move left	and 'D' to move right.\n"
-								+ "Pressing escape will bring you to the pause menu.\n"
-								+ "Walk around to get into battles, fight the enemies, and level up to defeat the bosses on each floor.");
+			submitButton.setOnMouseClicked(event -> {
+				if (nameTextField.getText().equals("")
+						&& !((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+					displayMessage("Please enter a name.");
+				} else if (!nameTextField.getText().equals("")) {
+					if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+						((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 					}
+					TESTINGGAME = new Game(
+							new Player(nameTextField.getText(), (Genders) tg.getSelectedToggle().getUserData(), 0));
+					GameEngine.setGame(TESTINGGAME);
+					displayGeneralView();
+					displayMessage("Use the 'E' key to interact with notes, backpacks, and bosses.\n"
+							+ "Also use 'E' to close these dialog boxes when you see them on the screen.\n"
+							+ "Use 'W' to move up	'S' to move down	'A' to move left	and 'D' to move right.\n"
+							+ "Pressing escape will bring you to the pause menu.\n"
+							+ "Walk around to get into battles, fight the enemies, and level up to defeat the bosses on each floor.");
 				}
-
 			});
 
 			String css = getClass().getResource("application.css").toExternalForm();
