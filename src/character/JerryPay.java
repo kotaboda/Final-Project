@@ -21,6 +21,8 @@ public class JerryPay extends Boss {
 	public JerryPay() {
 		super("Jerry Pay", 1200, 73, new ShowAPowerpoint(), new AssignATeamAssignment(), new AddValue(),
 				new BoreToDeath());
+		levelUp(9);
+		updateDerivedStats();
 	}
 	
 	private void readObject(ObjectInputStream ois){

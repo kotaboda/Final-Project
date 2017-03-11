@@ -25,14 +25,8 @@ public class SecurityGuard extends Boss {
 		this.inv.clearInventory();
 		this.inv.addItem(new Planeswalker());
 		this.inv.addAllItems(new MountainDew(), new Doritos(), new Coffee());
-		this.stats.clear();
-		this.stats.put(Stats.MOTIVATION, 15);
-		this.stats.put(Stats.INTELLIGIENCE, 13);
-		this.stats.put(Stats.WIT, 15);
-		this.stats.put(Stats.ENDURANCE, 13);
-		this.stats.put(Stats.STAMINA, 13);
-		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
-		this.energy = stats.get(Stats.STAMINA) * 10;
+		levelUp(5);
+		updateDerivedStats();
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));

@@ -146,16 +146,7 @@ public class Player extends Character {
 		}
 	}
 
-	private void updateDerivedStats() {
-		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
-		this.maxHitPoints = hitPoints;
-		this.energy = stats.get(Stats.STAMINA) * 10;
-		this.maxEnergy = energy;
-		energyProperty.set(energy);
-		maxEnergyProperty.set(energy);
-		hpProperty.set(hitPoints);
-		maxHPProperty.set(hitPoints);
-	}
+	
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
 	}

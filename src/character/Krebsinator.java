@@ -1,7 +1,7 @@
 package character;
 
 public class Krebsinator extends Boss {
-	
+
 	/**
 	 * 
 	 */
@@ -9,5 +9,7 @@ public class Krebsinator extends Boss {
 
 	public Krebsinator() {
 		super("Krebsinator", 500, 76, new PickOnYou());
+		levelUp(7);
+		updateDerivedStats();
 	}
 }

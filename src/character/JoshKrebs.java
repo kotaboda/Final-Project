@@ -18,6 +18,8 @@ public class JoshKrebs extends Boss {
 
 	public JoshKrebs() {
 		super("Josh Krebs", 1500, 74, new AssignFraculator(), new PlayDivision(), new Lecture());
+		levelUp(14);
+		updateDerivedStats();
 	}
 	
 	private void readObject(ObjectInputStream ois){
