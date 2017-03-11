@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /images/
 /ability/
 /draw/
@@ -17,3 +18,17 @@
 /saves/
 
 /models/
+=======
+/abilities/
+/application/
+/battleSystem/
+/character/
+/enums/
+/floors/
+/images/
+/interfaces/
+/itemSystem/
+/tiles/
+/fxmls/
+/saves/
+>>>>>>> Stashed changes

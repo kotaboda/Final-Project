@@ -615,7 +615,7 @@ public class GameGUI extends Application {
 					levelUp += "You learned a new ability!\n";
 				}
 			}
-			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + itemsDropped);
+			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + "\n" + itemsDropped);
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
