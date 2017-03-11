@@ -58,14 +58,17 @@ public abstract class Boss extends Enemy implements Interactable {
 	public int takeDmg(int dmg) {
 		GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
 		int damage = dmg-getStat(Stats.ENDURANCE);
-		hitPoints -= damage;
-		hitPoints = hitPoints < 0 ? 0 : hitPoints;
-		hpProperty.set(hitPoints);
-		if(hitPoints <= 0){
-			hitPoints = 0;
-			isDefeated = true;
+
+		if (damage <= 0) {
+			hitPoints -= 1;
+		} else {
+			hitPoints -= damage;
 		}
-		return damage;
+		hitPoints = hitPoints < 0 ? 0 : hitPoints;
+		hitPoints = hitPoints > maxHitPoints ? maxHitPoints : hitPoints;
+		hpProperty.set(hitPoints);
+
+		return dmg;
 	}
 
 	@Override
