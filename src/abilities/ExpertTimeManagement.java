@@ -19,7 +19,7 @@ public class ExpertTimeManagement extends AttackAbility implements GroupAbility 
 	@Override
 	public boolean use(Character user, Character... targets) {
 		// TODO Auto-generated method stub
-		if (user.useEnergy(5)) {
+		if (user.useEnergy(13)) {
 			for (Character c : targets) {
 				c.takeDmg(user.attack());
 			}

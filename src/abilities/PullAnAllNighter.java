@@ -16,7 +16,7 @@ public class PullAnAllNighter extends AttackAbility {
 
 	@Override
 	public boolean use(Character user, Character... targets) {
-		if(user.getEnergy() > 3 && user.useEnergy(user.getEnergyProperty().get())){
+		if(user.getEnergy() > 50 && user.useEnergy(user.getEnergyProperty().get())){
 			targets[0].takeDmg(user.attack() * 3);
 			return true;
 		}
@@ -25,7 +25,7 @@ public class PullAnAllNighter extends AttackAbility {
 
 	@Override
 	public String getDescription() {
-		return "Ultimate attack that will drain all energy but inflict massive damage. A minimum of 3 energy is required to use this ability.";
+		return "Ultimate attack that will drain all energy but inflict massive damage. A minimum of 50 energy is required to use this ability.";
 	}
 
 }
