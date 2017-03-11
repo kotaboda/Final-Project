@@ -47,7 +47,6 @@ public class Player extends Character {
 		this.stats.put(Stats.ENDURANCE, 3);
 		this.stats.put(Stats.STAMINA, 3);
 		updateDerivedStats();
-		System.out.println(energy);
 		inv.addAllItems(new Coffee(), new Doritos(), new MountainDew());
 		switch (gender) {
 		case BOY:

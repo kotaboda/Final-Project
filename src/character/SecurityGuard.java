@@ -28,10 +28,11 @@ public class SecurityGuard extends Boss {
 		this.stats.put(Stats.INTELLIGIENCE, 15);
 		this.stats.put(Stats.MOTIVATION, 20);
 		this.stats.put(Stats.WIT, 7);
-		this.stats.put(Stats.ENDURANCE, 3);
+		this.stats.put(Stats.ENDURANCE, 4);
 		this.stats.put(Stats.STAMINA, 3);
-		levelUp(5);
+		levelUp(4);
 		updateDerivedStats();
+		System.out.println(getStat(Stats.ENDURANCE));
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));
@@ -54,5 +55,7 @@ public class SecurityGuard extends Boss {
 		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));
 		
 	}
+	
+
 
 }

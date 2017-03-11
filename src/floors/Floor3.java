@@ -18,14 +18,8 @@ public class Floor3 extends Floor {
 	private static final long serialVersionUID = 167455105787912757L;
 	
 	public Floor3(Player player) {
-		genTiles();
-		setBoss(new JoshKrebs() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -2926182399108237508L;
-		});
+	
+		setBoss(new JoshKrebs());
 		setBossBattle(new KrebsBattle(player, boss));
 		getBoss().getCoordinates().setCoordinates(9, 1);
 		setPlayer(player);

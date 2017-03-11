@@ -88,6 +88,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 				this.stats.put(Stats.WIT, currentWit + 2);
 				this.stats.put(Stats.ENDURANCE, currentEnd + 2);
 				this.stats.put(Stats.STAMINA, currentSta + 2);
+				updateDerivedStats();
 			}
 		}
 	}

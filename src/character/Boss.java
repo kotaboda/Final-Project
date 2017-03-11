@@ -80,6 +80,19 @@ public abstract class Boss extends Enemy implements Interactable {
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
 	}
+	
+	
+	@Override
+	protected void updateDerivedStats() {
+		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
+		this.maxHitPoints = hitPoints;
+		this.energy = stats.get(Stats.STAMINA) * 10;
+		this.maxEnergy = energy;
+		energyProperty.set(energy);
+		maxEnergyProperty.set(energy);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
+	}
 
 	@Override
 	public String toString() {

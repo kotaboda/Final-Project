@@ -136,13 +136,13 @@ public class GameEngine {
 				Enemy e = null;
 				int spawn = r.nextInt(100) + 1;
 				if(spawn >= firstBound){
-					e = new Exercise();
+					e = new Exercise(game.getPlayer().getLevel() - r.nextInt(3));
 				}
 				else if(spawn < firstBound && spawn > secondBound){
-					e = new Lab();
+					e = new Lab(game.getPlayer().getLevel() - r.nextInt(3));
 				}
 				else if(spawn <= secondBound){
-					e = new Project();
+					e = new Project(game.getPlayer().getLevel() - r.nextInt(3));
 				}
 				
 				enemies[i] = e;
