@@ -398,8 +398,8 @@ public class GameGUI extends Application {
 
 			submitButton.setOnAction(event -> {
 				submitButton.setDisable(true);
-				isPlayersTurn = false;
 				synchronized (lock) {
+					isPlayersTurn = false;
 					lock.notifyAll();
 				}
 			});
@@ -422,8 +422,8 @@ public class GameGUI extends Application {
 	}
 
 	public void waitForPlayerSelection(Battle battle) {
-		isPlayersTurn = true;
 		try {
+			isPlayersTurn = true;
 			synchronized (lock) {
 				lock.wait();
 			}
@@ -619,7 +619,7 @@ public class GameGUI extends Application {
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
-			displayText.setText("You real bad at this videogame thign");
+			displayText.setText("Game Over\nPress escape to go back to the Main Menu.");
 			Platform.runLater(() -> {
 				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
 				// NOTE(andrew): this must be an event filter that is passed
