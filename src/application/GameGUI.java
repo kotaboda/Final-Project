@@ -154,6 +154,9 @@ public class GameGUI extends Application {
 
 			loadGameButton.setOnAction(event -> {
 				TESTINGGAME = GameEngine.loadGame();
+				TESTINGGAME.getPlayer().moveUpFloor();
+				TESTINGGAME.getPlayer().moveUpFloor();
+				TESTINGGAME.getPlayer().getCoordinates().setCoordinates(TESTINGGAME.getPlayer().getCoordinates().getX() - 5, TESTINGGAME.getPlayer().getCoordinates().getY() + 5);
 				displayGeneralView();
 			});
 
@@ -398,8 +401,8 @@ public class GameGUI extends Application {
 
 			submitButton.setOnAction(event -> {
 				submitButton.setDisable(true);
-				isPlayersTurn = false;
 				synchronized (lock) {
+					isPlayersTurn = false;
 					lock.notifyAll();
 				}
 			});
@@ -422,8 +425,8 @@ public class GameGUI extends Application {
 	}
 
 	public void waitForPlayerSelection(Battle battle) {
-		isPlayersTurn = true;
 		try {
+			isPlayersTurn = true;
 			synchronized (lock) {
 				lock.wait();
 			}
@@ -615,11 +618,11 @@ public class GameGUI extends Application {
 					levelUp += "You learned a new ability!\n";
 				}
 			}
-			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + itemsDropped);
+			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + "\n" + itemsDropped);
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
-			displayText.setText("You real bad at this videogame thign");
+			displayText.setText("Game Over\nPress escape to go back to the Main Menu.");
 			Platform.runLater(() -> {
 				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
 				// NOTE(andrew): this must be an event filter that is passed
@@ -1010,7 +1013,8 @@ public class GameGUI extends Application {
 		} else if (TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getTiles()
 				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4
 				&& TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).bossIsDefeated()) {
-			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+//			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+			TESTINGGAME.getPlayer().moveUpFloor();
 			TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
 					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getPlayerStart().getX(),
 					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getPlayerStart().getY());

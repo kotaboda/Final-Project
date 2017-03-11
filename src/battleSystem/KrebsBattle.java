@@ -6,8 +6,11 @@ import application.GameEngine;
 import character.Boss;
 import character.Character;
 import character.Krebsinator;
+import character.PickOnYou;
 import character.Player;
 import enums.Character.InventoryAction;
+import interfaces.ability.Ability;
+import interfaces.ability.AttackAbility;
 import itemSystem.Item;
 
 public class KrebsBattle extends BossBattle {
@@ -16,12 +19,11 @@ public class KrebsBattle extends BossBattle {
 	 * 
 	 */
 	private static final long serialVersionUID = -3108289910004524673L;
-	private Boss krebsinator = new Krebsinator();
 
 	public KrebsBattle(Player player, Boss boss) {
-		super(player, boss);
+		super(player, boss, new Krebsinator());
 	}
-	
+
 	@Override
 	public void start() {
 		Character[] turnList = createTurnList();
@@ -37,19 +39,31 @@ public class KrebsBattle extends BossBattle {
 					playerTakesTurn();
 				} else if (turnList[i] instanceof Boss) {
 					if (turnList[i].getHPProperty().get() > 0) {
+						Boss boss = (Boss) turnList[i];
 						Random r = new Random();
 						switch (r.nextInt(2)) {
 						case 0:
 							if (boss.getAbilities().size() != 0) {
-								boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
-								break;
+								Ability bossAbility;
+								if ((bossAbility = boss.getAbilities()
+										.get(r.nextInt(boss.getAbilities().size()))) instanceof AttackAbility) {
+									boss.ability(bossAbility, player);
+									loggedAction = boss.NAME + " Used: " + bossAbility;
+									break;
+								} else if ((bossAbility) instanceof PickOnYou) {
+									boss.ability(bossAbility, this.boss);
+									loggedAction = boss.NAME + " Used: " + bossAbility + "\nMr. Krebs Wit went up!";
+									break;
+								}
 							}
 						case 1:
 							player.takeDmg(boss.attack());
+							loggedAction = boss.NAME + " attacked " + player.NAME;
 							break;
 						default:
 							break;
 						}
+						notifySubscribers();
 					}
 
 				} else {
@@ -89,6 +103,7 @@ public class KrebsBattle extends BossBattle {
 		} while (battleOngoing);
 		// System.out.println(Thread.currentThread().getName());
 		isCompleted = true;
+		subscribers.clear();
 		GameEngine.displayEndBattle(this, leveledUp);
 	}
 

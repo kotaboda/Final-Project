@@ -21,18 +21,18 @@ public class SecurityGuard extends Boss {
 	private static final long serialVersionUID = 8572599965260907613L;
 
 	public SecurityGuard() {
-		super("Security Guard", 600, 72, new MinionAssault(), new PlayEnchantment());
+		super("Security Guard", 900, 72, new MinionAssault(), new PlayEnchantment());
 		this.inv.clearInventory();
 		this.inv.addItem(new Planeswalker());
 		this.inv.addAllItems(new MountainDew(), new Doritos(), new Coffee());
-		this.stats.clear();
-		this.stats.put(Stats.MOTIVATION, 15);
-		this.stats.put(Stats.INTELLIGIENCE, 13);
-		this.stats.put(Stats.WIT, 15);
-		this.stats.put(Stats.ENDURANCE, 13);
-		this.stats.put(Stats.STAMINA, 13);
-		this.hitPoints = stats.get(Stats.MOTIVATION) * 6;
-		this.energy = stats.get(Stats.STAMINA) * 10;
+		this.stats.put(Stats.INTELLIGIENCE, 15);
+		this.stats.put(Stats.MOTIVATION, 20);
+		this.stats.put(Stats.WIT, 7);
+		this.stats.put(Stats.ENDURANCE, 4);
+		this.stats.put(Stats.STAMINA, 3);
+		levelUp(4);
+		updateDerivedStats();
+		System.out.println(getStat(Stats.ENDURANCE));
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));
@@ -40,8 +40,12 @@ public class SecurityGuard extends Boss {
 		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));
 	}
 	
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
-		in.defaultReadObject();		
+	private void readObject(ObjectInputStream ois){
+		try {
+			ois.defaultReadObject();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 		hpProperty = new SimpleIntegerProperty(hitPoints);
 		maxHPProperty = new SimpleIntegerProperty(hitPoints);
 		energyProperty = new SimpleIntegerProperty(energy);
@@ -50,5 +54,6 @@ public class SecurityGuard extends Boss {
 		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/guarddamage.png"));
 		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));
 	}
+	
 
 }

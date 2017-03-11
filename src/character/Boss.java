@@ -60,14 +60,19 @@ public abstract class Boss extends Enemy implements Interactable {
 			GameEngine.playTakeDamageAnimation(takeDamageAnimation, this);
 		}
 		int damage = dmg-getStat(Stats.ENDURANCE);
-		hitPoints -= damage;
+
+		if (damage <= 0) {
+			hitPoints -= 1;
+		} else {
+			hitPoints -= damage;
+		}
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
+		hitPoints = hitPoints > maxHitPoints ? maxHitPoints : hitPoints;
 		hpProperty.set(hitPoints);
-		if(hitPoints <= 0){
-			hitPoints = 0;
+		if(hitPoints == 0){
 			isDefeated = true;
 		}
-		return damage;
+		return dmg;
 	}
 
 	@Override
@@ -78,6 +83,19 @@ public abstract class Boss extends Enemy implements Interactable {
 		int damage = 0;
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
+	}
+	
+	
+	@Override
+	protected void updateDerivedStats() {
+		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
+		this.maxHitPoints = hitPoints;
+		this.energy = stats.get(Stats.STAMINA) * 10;
+		this.maxEnergy = energy;
+		energyProperty.set(energy);
+		maxEnergyProperty.set(energy);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 	}
 
 	@Override

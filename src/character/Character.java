@@ -59,35 +59,49 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		} else if (name.isEmpty()) {
 			throw new IllegalArgumentException("Name cannot be empty.");
 		}
-		this.coordinates = new Coordinates(0,0);
+		this.coordinates = new Coordinates(0, 0);
 		this.stats.put(Stats.MOTIVATION, 1);
 		this.stats.put(Stats.INTELLIGIENCE, 1);
 		this.stats.put(Stats.WIT, 1);
 		this.stats.put(Stats.ENDURANCE, 1);
 		this.stats.put(Stats.STAMINA, 1);
+		updateDerivedStats();
 		this.NAME = name;
 		hpProperty.set(hitPoints);
 		maxHPProperty.set(hitPoints);
 		energyProperty.set(energy);
 		maxEnergyProperty.set(maxEnergy);
-		
-		
+
 	}
 
 	protected void levelUp(int level) {
 		if (level > 0) {
-			this.level += level;
-			int currentMot = stats.get(Stats.MOTIVATION);
-			int currentInt = stats.get(Stats.INTELLIGIENCE);
-			int currentWit = stats.get(Stats.WIT);
-			int currentEnd = stats.get(Stats.ENDURANCE);
-			int currentSta = stats.get(Stats.STAMINA);
-			this.stats.put(Stats.MOTIVATION, currentMot + 2);
-			this.stats.put(Stats.INTELLIGIENCE, currentInt + 2);
-			this.stats.put(Stats.WIT, currentWit + 2);
-			this.stats.put(Stats.ENDURANCE, currentEnd + 2);
-			this.stats.put(Stats.STAMINA, currentSta + 2);
+			for (; level > 0; level--) {
+				this.level += 1;
+				int currentMot = stats.get(Stats.MOTIVATION);
+				int currentInt = stats.get(Stats.INTELLIGIENCE);
+				int currentWit = stats.get(Stats.WIT);
+				int currentEnd = stats.get(Stats.ENDURANCE);
+				int currentSta = stats.get(Stats.STAMINA);
+				this.stats.put(Stats.MOTIVATION, currentMot + 2);
+				this.stats.put(Stats.INTELLIGIENCE, currentInt + 2);
+				this.stats.put(Stats.WIT, currentWit + 2);
+				this.stats.put(Stats.ENDURANCE, currentEnd + 2);
+				this.stats.put(Stats.STAMINA, currentSta + 2);
+				updateDerivedStats();
+			}
 		}
+	}
+
+	protected void updateDerivedStats() {
+		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
+		this.maxHitPoints = hitPoints;
+		this.energy = stats.get(Stats.STAMINA) * 10;
+		this.maxEnergy = energy;
+		energyProperty.set(energy);
+		maxEnergyProperty.set(energy);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
 	}
 
 	public boolean giveCredits(int credits) {
@@ -100,35 +114,37 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 				levelUp(1);
 				creditReq *= 2;
 			} else {
-				break;				
+				break;
 			}
 		} while (true);
 		return leveledUp;
 	}
-	
+
 	public int getLevel() {
 		return level;
 	}
-	
-	public IntegerProperty getHPProperty(){
+
+	public IntegerProperty getHPProperty() {
 		return hpProperty;
 	}
-	
-	public IntegerProperty getMaxHPProperty(){
+
+	public IntegerProperty getMaxHPProperty() {
 		return maxHPProperty;
 	}
+
 	public IntegerProperty getMaxEnergyProperty() {
 		return maxEnergyProperty;
 	}
+
 	public IntegerProperty getEnergyProperty() {
 		return energyProperty;
 	}
-	
-	public int getNumOfCredits(){
+
+	public int getNumOfCredits() {
 		return currentCredits;
 	}
-	
-	public int getCreditRequirement(){
+
+	public int getCreditRequirement() {
 		return creditReq;
 	}
 
@@ -169,7 +185,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 	public int getStat(Stats STAT) {
 		return stats.get(STAT);
 	}
-	
+
 	public HashMap<Stats, Integer> getStats() {
 		return stats;
 	}
@@ -189,65 +205,67 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 			subscriber.notify();
 		}
 	}
+
 	@Override
 	public void removeSubscriber(Listener<Character> sub) {
 		subscribers.remove(sub);
-	
+
 	}
-	
-	public int getCurrentHealth(){
+
+	public int getCurrentHealth() {
 		return hitPoints;
 	}
-	
+
 	public int getMaxEnergy() {
 		return maxEnergy;
 	}
-	
-	public int getMaxHealth(){
+
+	public int getMaxHealth() {
 		return maxHitPoints;
 	}
 
-	public int getFloorNum(){
+	public int getFloorNum() {
 		return floorNum;
 	}
-	
-	public ImageView getBattleImageView(){
+
+	public ImageView getBattleImageView() {
 		return battleImageView;
 	}
-	
-	public void setBattleImageView(ImageView battleImageView){
+
+	public void setBattleImageView(ImageView battleImageView) {
 		this.battleImageView = battleImageView;
 	}
-	
+
 	public Image getWorldImage() {
 		return worldImage;
 	}
-	
-	public Image getBattleImage(){
+
+	public Image getBattleImage() {
 		return battleImage;
 	}
-	
-	public Image getTakeDamageAnimation(){
+
+	public Image getTakeDamageAnimation() {
 		return takeDamageAnimation;
 	}
-	
-	public boolean isBattleAnimating(){
+
+	public boolean isBattleAnimating() {
 		return isBattleAnimating;
 	}
-	
-	public void setIsBattleAnimating(boolean isAnimating){
+
+	public void setIsBattleAnimating(boolean isAnimating) {
 		isBattleAnimating = isAnimating;
 	}
-	
+
 	public int compareWit(Character chara) {
 		int num = 0;
-		if(this.getStat(Stats.WIT) > chara.getStat(Stats.WIT)) {
+		if (this.getStat(Stats.WIT) > chara.getStat(Stats.WIT)) {
 			num = 1;
-		} else if(this.getStat(Stats.WIT) < chara.getStat(Stats.WIT)) {
+		} else if (this.getStat(Stats.WIT) < chara.getStat(Stats.WIT)) {
 			num = -1;
 		}
 		return num;
 	}
+
 	public abstract int takeDmg(int dmg);
 
 	public abstract int attack();
@@ -257,17 +275,18 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		return "Character [name=" + NAME + ", hitPoints=" + hitPoints + ", energy=" + energy + ", level=" + level
 				+ ", floorNum=" + floorNum + "]";
 	}
-	
-	private void writeObject(ObjectOutputStream out) throws IOException{		
+
+	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
 	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException{
-		in.defaultReadObject();		
+
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
 		hpProperty = new SimpleIntegerProperty(hitPoints);
 		maxHPProperty = new SimpleIntegerProperty(hitPoints);
 		energyProperty = new SimpleIntegerProperty(energy);
 		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
-		
+
 	}
 
 	public boolean useEnergy(int i) {
@@ -287,15 +306,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 		energy += i;
 		energy = energy > maxEnergy ? maxEnergy : energy;
 		energyProperty.set(energy);
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

@@ -78,5 +78,17 @@ public class Enemy extends Character {
 		damage = getStat(Stats.INTELLIGIENCE);
 		return damage;
 	}
+	
+	@Override
+	protected void updateDerivedStats() {
+		this.hitPoints = stats.get(Stats.MOTIVATION);
+		this.maxHitPoints = hitPoints;
+		this.energy = stats.get(Stats.STAMINA);
+		this.maxEnergy = energy;
+		energyProperty.set(energy);
+		maxEnergyProperty.set(energy);
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
+	}
 
 }

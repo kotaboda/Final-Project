@@ -2,15 +2,11 @@ package battleSystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
-import application.GameEngine;
 import character.Boss;
 import character.Character;
 import character.Enemy;
 import character.Player;
-import enums.Character.InventoryAction;
-import itemSystem.Item;
 
 public class BossBattle extends Battle {
 	/**

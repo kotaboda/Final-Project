@@ -89,6 +89,7 @@ public class GuardBattle extends BossBattle {
 			}
 		} while (battleOngoing);
 		isCompleted = true;
+		subscribers.clear();
 		GameEngine.displayEndBattle(this, leveledUp);
 	}
 }

@@ -109,6 +109,7 @@ public class PayBattle extends BossBattle {
 		} while (battleOngoing);
 		// System.out.println(Thread.currentThread().getName());
 		isCompleted = true;
+		subscribers.clear();
 		GameEngine.displayEndBattle(this, leveledUp);
 	}
 }

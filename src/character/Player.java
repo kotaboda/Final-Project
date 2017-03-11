@@ -43,17 +43,10 @@ public class Player extends Character {
 		ABILITIES.addAll(Arrays.asList((new Procrastinate()), (new ExpertTimeManagement()), (new AnExcuse())));
 		this.stats.put(Stats.INTELLIGIENCE, 15);
 		this.stats.put(Stats.MOTIVATION, 20);
-		this.stats.put(Stats.WIT, 12);
-		this.stats.put(Stats.ENDURANCE, 1);
-		this.stats.put(Stats.STAMINA, 12);
-		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
-		this.maxHitPoints = hitPoints;
-		this.energy = stats.get(Stats.STAMINA) * 2;
-		this.maxEnergy = energy;
-		energyProperty.set(energy);
-		maxEnergyProperty.set(energy);
-		hpProperty.set(hitPoints);
-		maxHPProperty.set(hitPoints);
+		this.stats.put(Stats.WIT, 7);
+		this.stats.put(Stats.ENDURANCE, 3);
+		this.stats.put(Stats.STAMINA, 3);
+		updateDerivedStats();
 		inv.addAllItems(new Coffee(), new Doritos(), new MountainDew());
 		switch (gender) {
 		case BOY:
@@ -80,7 +73,11 @@ public class Player extends Character {
 	}
 	@Override
 	public int takeDmg(int dmg) {
-		hitPoints -= (dmg - getStat(Stats.ENDURANCE));
+		int damage = dmg - getStat(Stats.ENDURANCE);
+		if(damage <= 0){
+			damage = 1;
+		}
+		hitPoints -= damage;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hitPoints = maxHitPoints < hitPoints ? maxHitPoints : hitPoints;
 		hpProperty.set(hitPoints);
@@ -133,25 +130,22 @@ public class Player extends Character {
 	
 	@Override
 	protected void levelUp(int level) {
-		Random r = new Random();
 		if (level > 0) {
 			this.level += level;
-			int currentMot = stats.get(Stats.MOTIVATION);
-			int currentInt = stats.get(Stats.INTELLIGIENCE);
-			int currentWit = stats.get(Stats.WIT);
-			int currentEnd = stats.get(Stats.ENDURANCE);
-			int currentSta = stats.get(Stats.STAMINA);
-			this.stats.put(Stats.MOTIVATION, currentMot + r.nextInt(3) + 4);
-			this.stats.put(Stats.INTELLIGIENCE, currentInt + r.nextInt(3) + 4);
-			this.stats.put(Stats.WIT, currentWit + r.nextInt(3) + 4);
-			this.stats.put(Stats.ENDURANCE, currentEnd + r.nextInt(1));
-			this.stats.put(Stats.STAMINA, currentSta + r.nextInt(3) + 4);
+			Random r = new Random(83948);
+			this.stats.put(Stats.MOTIVATION, getStat(Stats.MOTIVATION) + r.nextInt(3) + 1);
+			this.stats.put(Stats.INTELLIGIENCE, getStat(Stats.INTELLIGIENCE) + r.nextInt(3) + 1);
+			this.stats.put(Stats.WIT, getStat(Stats.WIT) + r.nextInt(3)+1);
+			this.stats.put(Stats.ENDURANCE, getStat(Stats.ENDURANCE) +r.nextInt(3)+ 1);
+			this.stats.put(Stats.STAMINA, getStat(Stats.STAMINA) + r.nextInt(3)+1);
+			updateDerivedStats();
 		}
 		if(this.level == 5){
 			ABILITIES.add(new PullAnAllNighter());
 		}
 	}
 
+	
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
 	}
@@ -180,6 +174,9 @@ public class Player extends Character {
 		default:
 			break;
 		}
+	}
+	public void moveUpFloor() {
+		setFloorNum(getFloorNum() + 1);
 	}
 
 }

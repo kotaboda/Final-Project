@@ -128,20 +128,22 @@ public class GameEngine {
 	public static Battle chanceABattle() {
 		Random r = new Random();
 		Battle battle = null;
+		int firstBound = game.getPlayer().getLevel() < 4 ? 60 : 20;
+		int secondBound = game.getPlayer().getLevel() < 4 ? 10 : 40;
 		if(r.nextInt(100) + 1 <= BATTLE_CHANCE){
 			int numOfEnemies = r.nextInt(3) + 1;
 			Enemy[] enemies = new Enemy[numOfEnemies];
 			for(int i = 0; i < numOfEnemies; i++){
 				Enemy e = null;
 				int spawn = r.nextInt(100) + 1;
-				if(spawn >= 60){
-					e = new Exercise();
+				if(spawn >= firstBound){
+					e = new Exercise(game.getPlayer().getLevel() - r.nextInt(3));
 				}
-				else if(spawn < 60 && spawn > 10){
-					e = new Lab();
+				else if(spawn < firstBound && spawn > secondBound){
+					e = new Lab(game.getPlayer().getLevel() - r.nextInt(3));
 				}
-				else if(spawn <= 10){
-					e = new Project();
+				else if(spawn <= secondBound){
+					e = new Project(game.getPlayer().getLevel() - r.nextInt(3));
 				}
 				
 				enemies[i] = e;
@@ -237,8 +239,11 @@ public class GameEngine {
 			}
 
 		};
-
-		battleService.start();
+		try{
+			battleService.start();
+		}catch(Exception t){
+			t.printStackTrace();
+		}
 	}
 
 	public static void displayEndBattle(Battle b, boolean leveledUp) {

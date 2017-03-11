@@ -1,8 +1,8 @@
 package floors;
 
-import battleSystem.GuardBattle;
+import battleSystem.KrebsBattle;
+import character.JoshKrebs;
 import character.Player;
-import character.SecurityGuard;
 import itemSystem.Doritos;
 import itemSystem.Item;
 import itemSystem.MountainDew;
@@ -18,15 +18,9 @@ public class Floor3 extends Floor {
 	private static final long serialVersionUID = 167455105787912757L;
 	
 	public Floor3(Player player) {
-		genTiles();
-		setBoss(new SecurityGuard() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -2926182399108237508L;
-		});
-		setBossBattle(new GuardBattle(player, boss));
+	
+		setBoss(new JoshKrebs());
+		setBossBattle(new KrebsBattle(player, boss));
 		getBoss().getCoordinates().setCoordinates(9, 1);
 		setPlayer(player);
 		getPlayer().getCoordinates().setCoordinates(9, 12);
