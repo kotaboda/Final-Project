@@ -67,7 +67,9 @@ public abstract class Boss extends Enemy implements Interactable {
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hitPoints = hitPoints > maxHitPoints ? maxHitPoints : hitPoints;
 		hpProperty.set(hitPoints);
-
+		if(hitPoints == 0){
+			isDefeated = true;
+		}
 		return dmg;
 	}
 
