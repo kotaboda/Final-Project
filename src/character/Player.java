@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import abilities.AnExcuse;
 import abilities.ExpertTimeManagement;
@@ -42,6 +43,8 @@ public class Player extends Character {
 		ABILITIES.addAll(Arrays.asList((new Procrastinate()), (new ExpertTimeManagement()), (new AnExcuse())));
 		this.stats.put(Stats.INTELLIGIENCE, 15);
 		this.stats.put(Stats.MOTIVATION, 20);
+		this.stats.put(Stats.WIT, 7);
+		this.stats.put(Stats.ENDURANCE, 3);
 		this.hitPoints = stats.get(Stats.MOTIVATION) * 10;
 		this.maxHitPoints = hitPoints;
 		this.energy = stats.get(Stats.STAMINA) * 10;
@@ -135,16 +138,17 @@ public class Player extends Character {
 	protected void levelUp(int level) {
 		if (level > 0) {
 			this.level += level;
+			Random r = new Random(83948);
 			int currentMot = stats.get(Stats.MOTIVATION);
 			int currentInt = stats.get(Stats.INTELLIGIENCE);
 			int currentWit = stats.get(Stats.WIT);
 			int currentEnd = stats.get(Stats.ENDURANCE);
 			int currentSta = stats.get(Stats.STAMINA);
-			this.stats.put(Stats.MOTIVATION, currentMot + 2);
-			this.stats.put(Stats.INTELLIGIENCE, currentInt + 2);
-			this.stats.put(Stats.WIT, currentWit + 2);
-			this.stats.put(Stats.ENDURANCE, currentEnd + 2);
-			this.stats.put(Stats.STAMINA, currentSta + 2);
+			this.stats.put(Stats.MOTIVATION, currentMot + r.nextInt(3) + 1);
+			this.stats.put(Stats.INTELLIGIENCE, currentInt + r.nextInt(3) + 1);
+			this.stats.put(Stats.WIT, currentWit + r.nextInt(3)+1);
+			this.stats.put(Stats.ENDURANCE, currentEnd +r.nextInt(3)+ 1);
+			this.stats.put(Stats.STAMINA, currentSta + r.nextInt(3)+1);
 		}
 		if(this.level == 5){
 			ABILITIES.add(new PullAnAllNighter());
