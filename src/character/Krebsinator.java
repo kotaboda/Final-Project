@@ -1,5 +1,7 @@
 package character;
 
+import enums.Character.Stats;
+
 public class Krebsinator extends Boss {
 
 	/**
@@ -9,6 +11,11 @@ public class Krebsinator extends Boss {
 
 	public Krebsinator() {
 		super("Krebsinator", 500, 76, new PickOnYou());
+		this.stats.put(Stats.INTELLIGIENCE, 15);
+		this.stats.put(Stats.MOTIVATION, 20);
+		this.stats.put(Stats.WIT, 7);
+		this.stats.put(Stats.ENDURANCE, 3);
+		this.stats.put(Stats.STAMINA, 3);
 		levelUp(7);
 		updateDerivedStats();
 	}

@@ -8,6 +8,7 @@ import abilities.AddValue;
 import abilities.AssignATeamAssignment;
 import abilities.BoreToDeath;
 import abilities.ShowAPowerpoint;
+import enums.Character.Stats;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 
@@ -21,6 +22,11 @@ public class JerryPay extends Boss {
 	public JerryPay() {
 		super("Jerry Pay", 1200, 73, new ShowAPowerpoint(), new AssignATeamAssignment(), new AddValue(),
 				new BoreToDeath());
+		this.stats.put(Stats.INTELLIGIENCE, 15);
+		this.stats.put(Stats.MOTIVATION, 20);
+		this.stats.put(Stats.WIT, 7);
+		this.stats.put(Stats.ENDURANCE, 3);
+		this.stats.put(Stats.STAMINA, 3);
 		levelUp(9);
 		updateDerivedStats();
 	}
