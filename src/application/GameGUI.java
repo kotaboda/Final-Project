@@ -154,6 +154,7 @@ public class GameGUI extends Application {
 
 			loadGameButton.setOnAction(event -> {
 				TESTINGGAME = GameEngine.loadGame();
+				TESTINGGAME.getPlayer().setFloorNum(3);
 				displayGeneralView();
 			});
 
@@ -1010,7 +1011,8 @@ public class GameGUI extends Application {
 		} else if (TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getTiles()
 				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4
 				&& TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).bossIsDefeated()) {
-			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+//			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+			TESTINGGAME.getPlayer().moveUpFloor();
 			TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
 					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getPlayerStart().getX(),
 					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getPlayerStart().getY());

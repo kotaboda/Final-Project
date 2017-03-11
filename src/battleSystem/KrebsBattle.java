@@ -16,10 +16,9 @@ public class KrebsBattle extends BossBattle {
 	 * 
 	 */
 	private static final long serialVersionUID = -3108289910004524673L;
-	private Boss krebsinator = new Krebsinator();
 
 	public KrebsBattle(Player player, Boss boss) {
-		super(player, boss);
+		super(player, boss, new Krebsinator());
 	}
 	
 	@Override
@@ -89,6 +88,7 @@ public class KrebsBattle extends BossBattle {
 		} while (battleOngoing);
 		// System.out.println(Thread.currentThread().getName());
 		isCompleted = true;
+		subscribers.clear();
 		GameEngine.displayEndBattle(this, leveledUp);
 	}
 
