@@ -76,7 +76,11 @@ public class Player extends Character {
 	}
 	@Override
 	public int takeDmg(int dmg) {
-		hitPoints -= (dmg - getStat(Stats.ENDURANCE));
+		int damage = dmg - getStat(Stats.ENDURANCE);
+		if(damage <= 0){
+			damage = 1;
+		}
+		hitPoints -= damage;
 		hitPoints = hitPoints < 0 ? 0 : hitPoints;
 		hitPoints = maxHitPoints < hitPoints ? maxHitPoints : hitPoints;
 		hpProperty.set(hitPoints);
@@ -175,6 +179,9 @@ public class Player extends Character {
 		default:
 			break;
 		}
+	}
+	public void moveUpFloor() {
+		setFloorNum(getFloorNum() + 1);
 	}
 
 }
