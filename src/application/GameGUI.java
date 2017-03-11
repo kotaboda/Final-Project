@@ -154,6 +154,9 @@ public class GameGUI extends Application {
 
 			loadGameButton.setOnAction(event -> {
 				TESTINGGAME = GameEngine.loadGame();
+				TESTINGGAME.getPlayer().moveUpFloor();
+				TESTINGGAME.getPlayer().moveUpFloor();
+				TESTINGGAME.getPlayer().getCoordinates().setCoordinates(TESTINGGAME.getPlayer().getCoordinates().getX() - 5, TESTINGGAME.getPlayer().getCoordinates().getY() + 5);
 				displayGeneralView();
 			});
 
