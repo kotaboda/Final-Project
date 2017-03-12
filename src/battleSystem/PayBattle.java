@@ -2,11 +2,13 @@ package battleSystem;
 
 import java.util.Random;
 
+import abilities.AddValue;
 import application.GameEngine;
 import character.Boss;
 import character.Character;
 import character.Player;
 import enums.Character.InventoryAction;
+import interfaces.ability.Ability;
 import itemSystem.Item;
 
 public class PayBattle extends BossBattle {
@@ -39,15 +41,22 @@ public class PayBattle extends BossBattle {
 						switch (r.nextInt(2)) {
 						case 0:
 							if (boss.getAbilities().size() != 0) {
-								boss.ability(boss.getAbilities().get(r.nextInt(boss.getAbilities().size())), player);
+								Ability bossAbility = boss.getAbilities().get(r.nextInt(boss.getAbilities().size()));
+								boss.ability(bossAbility, player);
+								loggedAction = boss.NAME + " Used: " + bossAbility.NAME;
+								if(bossAbility instanceof AddValue){
+									loggedAction += "\n" + boss.NAME + "'s stats and health went up.";
+								}
 								break;
 							}
 						case 1:
 							player.takeDmg(boss.attack());
+							loggedAction = boss.NAME + " Attacked " + player.NAME;
 							break;
 						default:
 							break;
 						}
+						notifySubscribers();
 					}
 
 				} else {

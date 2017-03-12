@@ -2,9 +2,9 @@ package abilities;
 
 import character.Character;
 import enums.Character.ModifiableFields;
-import interfaces.ability.BuffAbility;
+import interfaces.ability.AttackAbility;
 
-public class ShowAPowerpoint extends BuffAbility {
+public class ShowAPowerpoint extends AttackAbility {
 	
 	/**
 	 * 
