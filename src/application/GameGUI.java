@@ -154,9 +154,6 @@ public class GameGUI extends Application {
 
 			loadGameButton.setOnAction(event -> {
 				TESTINGGAME = GameEngine.loadGame();
-				TESTINGGAME.getPlayer().moveUpFloor();
-				TESTINGGAME.getPlayer().moveUpFloor();
-				TESTINGGAME.getPlayer().getCoordinates().setCoordinates(TESTINGGAME.getPlayer().getCoordinates().getX() - 5, TESTINGGAME.getPlayer().getCoordinates().getY() + 5);
 				displayGeneralView();
 			});
 
@@ -281,7 +278,7 @@ public class GameGUI extends Application {
 				enemyImage.setFitHeight(100);
 				enemyImage.setFitWidth(100);
 				enemyImage.setPreserveRatio(true);
-				Label enemyName = new Label(currentEnemy.NAME);
+				Label enemyName = new Label(currentEnemy.NAME + " Lvl. " + currentEnemy.getLevel());
 				enemyNames.add(enemyName);
 				ProgressBar enemyHealth = new ProgressBar();
 				enemyHealth.progressProperty()

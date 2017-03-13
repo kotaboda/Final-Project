@@ -42,6 +42,7 @@ public class PayBattle extends BossBattle {
 						Random r = new Random();
 						switch (r.nextInt(5)) {
 						case 0:
+
 						case 1:
 						case 2:
 							if (boss.getAbilities().size() != 0 &&
@@ -68,6 +69,14 @@ public class PayBattle extends BossBattle {
 								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
 								notifySubscribers();
 								boss.ability(nextAbility, player);
+							}
+							if (boss.getAbilities().size() != 0) {
+								Ability bossAbility = boss.getAbilities().get(r.nextInt(boss.getAbilities().size()));
+								boss.ability(bossAbility, player);
+								loggedAction = boss.NAME + " Used: " + bossAbility.NAME;
+								if(bossAbility instanceof AddValue){
+									loggedAction += "\n" + boss.NAME + "'s stats and health went up.";
+								}
 								break;
 							}
 						case 3:
@@ -75,10 +84,12 @@ public class PayBattle extends BossBattle {
 							loggedAction = turnList[i].NAME + ": Attacked " + player.NAME;
 							notifySubscribers();
 							player.takeDmg(boss.attack());
+							loggedAction = boss.NAME + " Attacked " + player.NAME;
 							break;
 						default:
 							break;
 						}
+						notifySubscribers();
 					}
 
 				}
