@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import battleSystem.Battle;
+import battleSystem.KrebsBattle;
 import character.Character;
 import character.Enemy;
 import character.Player;
@@ -603,6 +604,7 @@ public class GameGUI extends Application {
 				itemsDropped += i.NAME + "\n";
 			}
 			String levelUp = "";
+			String extraMessage = "";
 			if (leveledUp) {
 				levelUp += "\n";
 				levelUp += "You leveled up! Here are your new stats!\n";
@@ -615,7 +617,10 @@ public class GameGUI extends Application {
 					levelUp += "You learned a new ability!\n";
 				}
 			}
-			displayMessage("Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + "\n" + itemsDropped);
+			if(b instanceof KrebsBattle){
+				extraMessage += "Congratulations! You have defeated Mr. Doctor Professor Kaiser Krebs! You are free to roam the third floor for as long as you want!";
+			}
+			displayMessage(extraMessage + "Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + "\n" + itemsDropped);
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
