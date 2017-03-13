@@ -37,7 +37,4 @@ public class AssignATeamAssignment extends AttackAbility {
 		return "Assign a team assignment to make the student dread group work and lazy teammates.";
 	}
 
-	public int getTimesForUse(){
-		return timesForUse;
-	}
 }

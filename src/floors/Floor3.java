@@ -7,6 +7,7 @@ import itemSystem.Doritos;
 import itemSystem.Item;
 import itemSystem.MountainDew;
 import itemSystem.Ramen;
+import models.Coordinates;
 import tiles.Tile;
 import tiles.TileManager;
 
@@ -21,9 +22,9 @@ public class Floor3 extends Floor {
 	
 		setBoss(new JoshKrebs());
 		setBossBattle(new KrebsBattle(player, boss));
-		getBoss().getCoordinates().setCoordinates(9, 1);
+		getBoss().getCoordinates().setCoordinates(1, 17);
 		setPlayer(player);
-		getPlayer().getCoordinates().setCoordinates(9, 12);
+		playerStart = new Coordinates(9,2);
 
 		genTiles();
 		Note[] notesTemp = new Note[7];
