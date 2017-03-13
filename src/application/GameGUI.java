@@ -150,6 +150,7 @@ public class GameGUI extends Application {
 
 			newGameButton.setOnAction(event -> {
 				displayCharacterCreation();
+				
 			});
 
 			loadGameButton.setOnAction(event -> {
