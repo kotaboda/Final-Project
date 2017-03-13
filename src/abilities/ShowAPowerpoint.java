@@ -16,6 +16,10 @@ public class ShowAPowerpoint extends AttackAbility {
 		super("Show a Powerpoint");
 	}
 	
+	public int getTimesForUse() {
+		return timesForUse;
+	}
+	
 	@Override
 	public boolean use(Character user, Character... targets) {
 		boolean successful = true;

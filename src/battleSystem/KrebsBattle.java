@@ -2,6 +2,8 @@ package battleSystem;
 
 import java.util.Random;
 
+import abilities.AssignFraculator;
+import abilities.PlayDivision;
 import application.GameEngine;
 import character.Boss;
 import character.Character;
@@ -11,6 +13,7 @@ import character.Player;
 import enums.Character.InventoryAction;
 import interfaces.ability.Ability;
 import interfaces.ability.AttackAbility;
+import interfaces.ability.BuffAbility;
 import itemSystem.Item;
 
 public class KrebsBattle extends BossBattle {
@@ -41,12 +44,19 @@ public class KrebsBattle extends BossBattle {
 					if (turnList[i].getHPProperty().get() > 0) {
 						Boss boss = (Boss) turnList[i];
 						Random r = new Random();
-						switch (r.nextInt(2)) {
-						case 0:
+						switch (r.nextInt(5)) {
+						case 0: case 1:
 							if (boss.getAbilities().size() != 0) {
-								Ability bossAbility;
-								if ((bossAbility = boss.getAbilities()
-										.get(r.nextInt(boss.getAbilities().size()))) instanceof AttackAbility) {
+								Ability bossAbility = boss.getAbilities()
+										.get(r.nextInt(boss.getAbilities().size()));
+								
+								if(bossAbility == boss.getAbilities().get(1) && !(((PlayDivision)boss.getAbilities().get(1)).getUsedBuff())) {
+									bossAbility = boss.getAbilities().get(1);
+								} else if(bossAbility == boss.getAbilities().get(0) && !(((AssignFraculator)boss.getAbilities().get(0)).getUsedBuff())) {
+									bossAbility = boss.getAbilities().get(0);
+								}
+								
+								if (bossAbility instanceof AttackAbility || bossAbility instanceof BuffAbility) {
 									boss.ability(bossAbility, player);
 									loggedAction = boss.NAME + " Used: " + bossAbility;
 									break;
@@ -56,7 +66,7 @@ public class KrebsBattle extends BossBattle {
 									break;
 								}
 							}
-						case 1:
+						case 2: case 3: case 4:
 							player.takeDmg(boss.attack());
 							loggedAction = boss.NAME + " attacked " + player.NAME;
 							break;
