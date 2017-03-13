@@ -151,7 +151,7 @@ public class GameGUI extends Application {
 
 			newGameButton.setOnAction(event -> {
 				displayCharacterCreation();
-				
+
 			});
 
 			loadGameButton.setOnAction(event -> {
@@ -207,7 +207,7 @@ public class GameGUI extends Application {
 			});
 
 			saveGameButton.setOnMouseClicked(event -> {
-				GameEngine.saveGame(TESTINGGAME);
+				displayMessage("Saved to\n" + GameEngine.saveGame(TESTINGGAME));
 			});
 
 			characterButton.setOnMouseClicked(event -> {
@@ -579,7 +579,9 @@ public class GameGUI extends Application {
 		displayText.setText(message);
 
 		Platform.runLater(() -> {
-			((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+			if (!((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)) {
+				((AnchorPane) primaryStage.getScene().getRoot()).getChildren().add(displayText);
+			}
 			// NOTE(andrew): this must be an event filter that is passed in
 			// the type of event and its function, rather than using the
 			// setOnKeyPressed() method, because there are selections made
@@ -590,6 +592,8 @@ public class GameGUI extends Application {
 				if ((event.getCode().equals(KeyCode.ESCAPE) || event.getCode().equals(KeyCode.E))
 						&& currentLayout.equals(GUILayouts.BATTLE)) {
 					displayGeneralView();
+				}else if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText) && currentLayout.equals(GUILayouts.PAUSE)){
+					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 				}
 			});
 		});
@@ -618,10 +622,11 @@ public class GameGUI extends Application {
 					levelUp += "You learned a new ability!\n";
 				}
 			}
-			if(b instanceof KrebsBattle){
+			if (b instanceof KrebsBattle) {
 				extraMessage += "Congratulations! You have defeated Mr. Doctor Professor Kaiser Krebs! You are free to roam the third floor for as long as you want!";
 			}
-			displayMessage(extraMessage + "Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + "\n" + itemsDropped);
+			displayMessage(
+					extraMessage + "Credits Earned: " + b.getCreditsDropped() + "\n" + levelUp + "\n" + itemsDropped);
 		} else {
 			// TODO(andrew): pop a text view displaying "YOU SUCK" or something
 			// along those lines.
@@ -1016,7 +1021,8 @@ public class GameGUI extends Application {
 		} else if (TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getTiles()
 				.get(playerCoord.getY()).get(playerCoord.getX()).getTileSheetNum() == 4
 				&& TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).bossIsDefeated()) {
-//			TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum() + 1);
+			// TESTINGGAME.getPlayer().setFloorNum(TESTINGGAME.getPlayer().getFloorNum()
+			// + 1);
 			TESTINGGAME.getPlayer().moveUpFloor();
 			TESTINGGAME.getPlayer().getCoordinates().setCoordinates(
 					TESTINGGAME.getFloors().get(TESTINGGAME.getPlayer().getFloorNum() - 1).getPlayerStart().getX(),

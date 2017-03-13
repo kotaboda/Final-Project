@@ -37,10 +37,10 @@ public class GameEngine {
 
 	public static Game loadGame() {
 		Game g = null;
-
-		if (Files.exists(Paths.get("resources/saves/savedGame.neu"))) {
+		String usersPath = System.getProperty("user.home");
+		if (Files.exists(Paths.get(usersPath + "/Documents/NeuBeginnings/savedGame.neu"))) {
 			try (ObjectInputStream ois = new ObjectInputStream(
-					Files.newInputStream(Paths.get("resources/saves/savedGame.neu")))) {
+					Files.newInputStream(Paths.get(usersPath+"/Documents/NeuBeginnings/savedGame.neu")))) {
 				g = (Game) ois.readObject();
 			} catch (IOException | ClassNotFoundException e) {
 				System.out.println("Failed Load");
@@ -51,14 +51,25 @@ public class GameEngine {
 		return g;
 	}
 
-	public static void saveGame(Game state) {
+	public static String saveGame(Game state) {
+		String usersPath = System.getProperty("user.home") + "\\Documents\\NeuBeginnings\\";
+		if(Files.notExists(Paths.get(usersPath))){
+			try {
+				Files.createDirectories(Paths.get(usersPath));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		usersPath += "savedGame.neu";
 		try (ObjectOutputStream oos = new ObjectOutputStream(
-				Files.newOutputStream(Paths.get("resources/saves/savedGame.neu"), StandardOpenOption.CREATE))) {
+				Files.newOutputStream(Paths.get(usersPath), StandardOpenOption.CREATE))) {
 			oos.writeObject(state);
 			oos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return usersPath;
 	}
 
 	public static void setView(GameGUI newView) {
