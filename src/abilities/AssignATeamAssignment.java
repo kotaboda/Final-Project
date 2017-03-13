@@ -14,10 +14,7 @@ public class AssignATeamAssignment extends AttackAbility {
 	public AssignATeamAssignment() {
 		super("Assign a Team Assignment");
 	}
-	
-	public int getTimesForUse() {
-		return timesForUse;
-	}
+
 	
 	@Override
 	public boolean use(Character user, Character... targets) {

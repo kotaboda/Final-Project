@@ -1,7 +1,8 @@
 package itemSystem;
 
 import character.Character;
-import characterEnums.ModifiableFields;
+import enums.Character.ModifiableFields;
+import interfaces.item.Usable;
 
 public class Doritos extends Item implements Usable {
 

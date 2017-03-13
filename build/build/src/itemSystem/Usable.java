@@ -1,9 +1,0 @@
-package itemSystem;
-
-import java.io.Serializable;
-
-import character.Character;
-
-public interface Usable extends Serializable {
-	public void use(Character target);
-}

@@ -1,6 +1,6 @@
 package tiles;
 
-import tileinterfaces.Collidable;
+import interfaces.tile.Collidable;
 
 public class Wall extends Tile implements Collidable {
 

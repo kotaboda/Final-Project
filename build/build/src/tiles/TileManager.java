@@ -1,5 +1,10 @@
 package tiles;
 
+import java.util.List;
+
+import character.JerryPay;
+import character.JoshKrebs;
+import character.SecurityGuard;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -8,14 +13,11 @@ import javafx.scene.paint.Color;
 import models.Coordinates;
 
 public class TileManager {
-	//NOTE(andrew): This whole class is subject to change, mostly just test code right now
-
 	//NOTE(andrew): This number is the bound for how many tiles are drawn squared
 		//This number must be > 0 and <= tiles.length
 	private final static byte TILES_WIDE_TO_DRAW = 11;
 	private final static byte TILES_HIGH_TO_DRAW = 11;
 	private final static byte TILE_WIDTH = 32;
-	//TODO(andrew): add in the file path for the tile sheet when we have it
 	public static Image tileSheet = new Image((new Object()).getClass().getResourceAsStream("/images/tileset.png"));
 	private final static int TILESHEET_TILES_WIDE = (int)tileSheet.getWidth() / TILE_WIDTH;
 	
@@ -36,13 +38,22 @@ public class TileManager {
 			tile = new WallMessage(tileSheetNum);
 		}else if(tileSheetNum >= (TILESHEET_TILES_WIDE * 4)&& tileSheetNum < (TILESHEET_TILES_WIDE * 5)){
 			tile = new Wall(tileSheetNum);
+		}else if(tileSheetNum >= (TILESHEET_TILES_WIDE * 5)&& tileSheetNum < (TILESHEET_TILES_WIDE * 6)){
+			tile = new Wall(tileSheetNum);
+		}else if(tileSheetNum == 72) {
+			tile = new SecurityGuard();
+		}else if(tileSheetNum == 73) {
+			tile = new JerryPay();
+		}else if(tileSheetNum == 74) {
+			tile = new JoshKrebs();
 		}
+		//(dakota) i needed to add another column to accomodate more wall tiles without having to completely rewrite the floors
 		return tile;
 	}
 	
 	
 	
-	public static WritableImage getImageToDraw(Tile[][] tiles, Coordinates playerPosition){
+	public static WritableImage getImageToDraw(List<List<Tile>> list, Coordinates playerPosition){
 		//NOTE(andrew): The width and length of the image WILL change depending on the size
 			//of the image that will be displayed at the end
 		int startYTile = playerPosition.getY() - (TILES_HIGH_TO_DRAW/2);
@@ -50,8 +61,8 @@ public class TileManager {
 		WritableImage wi = new WritableImage(TILES_WIDE_TO_DRAW * TILE_WIDTH, TILES_HIGH_TO_DRAW * TILE_WIDTH);
 		
 		for(int i = 0; i < TILES_HIGH_TO_DRAW; i++){
-			if(i + startYTile >= 0 && i + startYTile < tiles.length){
-				buildRow(tiles[i + startYTile], wi, i, startXTile);
+			if(i + startYTile >= 0 && i + startYTile < list.size()){
+				buildRow(list.get(i + startYTile), wi, i, startXTile);
 			}else{
 				buildBlankRow(wi, i);
 			}
@@ -60,7 +71,7 @@ public class TileManager {
 		return wi;
 	}
 	
-	private static void buildRow(Tile[] tiles, WritableImage wi, int row, int startXTile){
+	private static void buildRow(List<Tile> list, WritableImage wi, int row, int startXTile){
 		//NOTE(andrew): grab the objects that allow reading from the tile sheet and writing to the writable image
 		PixelReader pr = tileSheet.getPixelReader();
 		PixelWriter pw = wi.getPixelWriter();
@@ -89,9 +100,9 @@ public class TileManager {
 					y = 0;
 					//NOTE(andrew): if the tile that is trying to be accessed is outside of the array, we don't
 						//need to read a tile, it will just be black.
-					if(tileCounter + startXTile >= 0 && tileCounter + startXTile < tiles.length){
+					if(tileCounter + startXTile >= 0 && tileCounter + startXTile < list.size()){
 						//NOTE(andrew): get the tile number that we are currently needing to access
-						tileSheetNum = tiles[tileCounter + startXTile].getTileSheetNum();
+						tileSheetNum = list.get(tileCounter + startXTile).getTileSheetNum();
 						//NOTE(andrew): if the tile we are trying to access is not on the initial row, we use this loop to edit
 							//y based on the tile num, this is used to find the ROW
 						while(tileSheetNum > TILESHEET_TILES_WIDE - 1){
@@ -111,7 +122,7 @@ public class TileManager {
 				Color color = null;
 				//NOTE(andrew): if the tile that is trying to be accessed is outside of the array, we don't
 					//need to read a tile, it will just be black.
-				if(tileCounter + startXTile >= 0 && tileCounter + startXTile < tiles.length){
+				if(tileCounter + startXTile >= 0 && tileCounter + startXTile < list.size()){
 					//NOTE(andrew): read the current pixel from the tilesheet
 					color = pr.getColor(x , y + i);
 				}else{
