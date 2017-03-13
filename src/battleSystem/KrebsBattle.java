@@ -7,6 +7,7 @@ import abilities.PlayDivision;
 import application.GameEngine;
 import character.Boss;
 import character.Character;
+import character.JoshKrebs;
 import character.Krebsinator;
 import character.PickOnYou;
 import character.Player;
@@ -40,9 +41,9 @@ public class KrebsBattle extends BossBattle {
 				allEnemiesDead = true;
 				if (turnList[i] instanceof Player) {
 					playerTakesTurn();
-				} else if (turnList[i] instanceof Boss) {
+				} else if (turnList[i] instanceof JoshKrebs) {
 					if (turnList[i].getHPProperty().get() > 0) {
-						Boss boss = (Boss) turnList[i];
+						JoshKrebs boss = (JoshKrebs) turnList[i];
 						Random r = new Random();
 						switch (r.nextInt(5)) {
 						case 0: case 1:
@@ -76,7 +77,35 @@ public class KrebsBattle extends BossBattle {
 						notifySubscribers();
 					}
 
-				} else {
+				} else if(turnList[i] instanceof Krebsinator){
+					Krebsinator boss = (Krebsinator) turnList[i];
+					Random r = new Random();
+					switch (r.nextInt(5)) {
+					case 0: case 1:
+						if (boss.getAbilities().size() != 0) {
+							Ability bossAbility = boss.getAbilities()
+									.get(r.nextInt(boss.getAbilities().size()));
+							
+							if(bossAbility == boss.getAbilities().get(0)) {
+								bossAbility = boss.getAbilities().get(0);
+							}
+							
+							if ((bossAbility) instanceof PickOnYou) {
+								boss.ability(bossAbility, this.boss);
+								loggedAction = boss.NAME + " Used: " + bossAbility + "\nMr. Krebs Wit went up!";
+								break;
+							}
+						}
+					case 2: case 3: case 4:
+						player.takeDmg(boss.attack());
+						loggedAction = boss.NAME + " attacked " + player.NAME;
+						break;
+					default:
+						break;
+					}
+					notifySubscribers();
+				}
+					else {
 					// NOTE(andrew): this branch runs if it's the enemies turn,
 					// this should probably be changed, not totally sure,
 					// because

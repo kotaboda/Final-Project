@@ -36,7 +36,4 @@ public class ShowAPowerpoint extends AttackAbility {
 		return "Show a powerpoint with graphics from the 90s";
 	}
 	
-	public int getTimesForUse(){
-		return timesForUse;
-	}
 }
