@@ -3,6 +3,8 @@ package battleSystem;
 import java.util.Random;
 
 import abilities.AddValue;
+import abilities.AssignATeamAssignment;
+import abilities.ShowAPowerpoint;
 import application.GameEngine;
 import character.Boss;
 import character.Character;
@@ -38,10 +40,17 @@ public class PayBattle extends BossBattle {
 				} else if (turnList[i] instanceof Boss) {
 					if (turnList[i].getHPProperty().get() > 0) {
 						Random r = new Random();
-						switch (r.nextInt(2)) {
-						case 0:
+						switch (r.nextInt(5)) {
+						case 0: case 1:
 							if (boss.getAbilities().size() != 0) {
 								Ability bossAbility = boss.getAbilities().get(r.nextInt(boss.getAbilities().size()));
+								if(boss.getCurrentHealth() < boss.getMaxHealth()-50 && !((AddValue)boss.getAbilities().get(2)).getUsedBuff()) {
+									bossAbility = boss.getAbilities().get(2);
+								} else if(bossAbility == boss.getAbilities().get(1) && ((AssignATeamAssignment)(boss.getAbilities().get(1))).getTimesForUse() != 0){
+									bossAbility = boss.getAbilities().get(1);
+								} else if(bossAbility == boss.getAbilities().get(0) && ((ShowAPowerpoint)(boss.getAbilities().get(0))).getTimesForUse() != 0){
+									bossAbility = boss.getAbilities().get(0);
+								}
 								boss.ability(bossAbility, player);
 								loggedAction = boss.NAME + " Used: " + bossAbility.NAME;
 								if(bossAbility instanceof AddValue){
@@ -49,7 +58,7 @@ public class PayBattle extends BossBattle {
 								}
 								break;
 							}
-						case 1:
+						case 2: case 3: case 4:
 							player.takeDmg(boss.attack());
 							loggedAction = boss.NAME + " Attacked " + player.NAME;
 							break;

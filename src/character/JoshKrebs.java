@@ -21,8 +21,8 @@ public class JoshKrebs extends Boss {
 		super("Josh Krebs", 1500, 74, new AssignFraculator(), new PlayDivision(), new Lecture());
 		this.stats.put(Stats.INTELLIGIENCE, 15);
 		this.stats.put(Stats.MOTIVATION, 20);
-		this.stats.put(Stats.WIT, 7);
-		this.stats.put(Stats.ENDURANCE, 4);
+		this.stats.put(Stats.WIT, 10);
+		this.stats.put(Stats.ENDURANCE, 6);
 		this.stats.put(Stats.STAMINA, 3);
 		levelUp(14);
 		updateDerivedStats();
