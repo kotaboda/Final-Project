@@ -112,7 +112,7 @@ public abstract class Character extends Tile implements Subscribable<Character>,
 				leveledUp = true;
 				currentCredits -= creditReq;
 				levelUp(1);
-				creditReq *= 2;
+				creditReq *= 1.3;
 			} else {
 				break;
 			}

@@ -137,13 +137,19 @@ public class GameEngine {
 				Enemy e = null;
 				int spawn = r.nextInt(100) + 1;
 				if(spawn >= firstBound){
-					e = new Exercise(game.getPlayer().getLevel() - r.nextInt(3));
+					int temp = (r.nextInt(3) + 2);
+					temp = game.getPlayer().getLevel() - temp > 0 ? temp : 0;
+					e = new Exercise(game.getPlayer().getLevel() - temp);
 				}
 				else if(spawn < firstBound && spawn > secondBound){
-					e = new Lab(game.getPlayer().getLevel() - r.nextInt(3));
+					int temp = (r.nextInt(3) + 2);
+					temp = game.getPlayer().getLevel() - temp > 0 ? temp : 0;
+					e = new Lab(game.getPlayer().getLevel() - temp);
 				}
 				else if(spawn <= secondBound){
-					e = new Project(game.getPlayer().getLevel() - r.nextInt(3));
+					int temp = (r.nextInt(3) + 2);
+					temp = game.getPlayer().getLevel() - temp > 0 ? temp : 0;
+					e = new Project(game.getPlayer().getLevel() - temp);
 				}
 				
 				enemies[i] = e;
