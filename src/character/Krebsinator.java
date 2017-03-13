@@ -23,7 +23,7 @@ public class Krebsinator extends Boss {
 		this.stats.put(Stats.STAMINA, 3);
 		levelUp(7);
 		updateDerivedStats();
-		battleImage = new Image(getClass().getResourceAsStream("/images/krebsinator.png"));
+		battleImage = new Image(getClass().getResourceAsStream("/images/Krebsinator.png"));
 	}
 	
 	private void readObject(ObjectInputStream ois){
@@ -38,7 +38,7 @@ public class Krebsinator extends Boss {
 		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
 		
 		//TODO Replace image paths with correct images
-		battleImage = new Image(getClass().getResourceAsStream("/images/krebsinator.png"));
+		battleImage = new Image(getClass().getResourceAsStream("/images/Krebsinator.png"));
 		
 	}
 }
