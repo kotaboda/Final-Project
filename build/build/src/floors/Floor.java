@@ -1,21 +1,21 @@
 package floors;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Random;
+import java.util.List;
 
-import battleSystem.Battle;
 import battleSystem.BossBattle;
 import character.Boss;
-import character.Enemy;
-import character.Exercise;
-import character.Lab;
 import character.Player;
-import character.Project;
-import drawinterfaces.Paintable;
+import interfaces.draw.Paintable;
+import interfaces.note.Noteable;
+import interfaces.tile.Lootable;
+import itemSystem.Item;
 import javafx.scene.image.Image;
 import models.Coordinates;
-import tileinterfaces.Collidable;
 import tiles.Tile;
 
 public abstract class Floor implements Paintable, Serializable{
@@ -25,9 +25,8 @@ public abstract class Floor implements Paintable, Serializable{
 	 */
 	private static final long serialVersionUID = -4879286765234322293L;
 	protected Tile[][] tiles;
-	private Boss boss;
+	protected Boss boss;
 	private BossBattle bossBattle;
-	private Battle[] battles;
 	private Player player;
 	protected Coordinates playerStart;
 	private HashMap<Coordinates, Note> notes = new HashMap<>();
@@ -36,48 +35,36 @@ public abstract class Floor implements Paintable, Serializable{
 		return playerStart;
 	}
 	
-	public Tile[][] getTiles(){
-		return this.tiles;
+	public  List<List<Tile>> getTiles(){
+		ArrayList<List<Tile>> t = new ArrayList<>();
+		for(int i = 0; i < this.tiles.length; i++){
+			t.add(Collections.unmodifiableList(Arrays.asList(this.tiles[i])));
+		}
+		return Collections.unmodifiableList(t);
 	}
 	
+	public void changeTile(int y, int x, Tile tile){
+		if(tile != null){
+			tiles[y][x] = tile;
+		}else{
+			throw new IllegalArgumentException("You cannot set a tile on a floor to null");
+		}
+	}
 	
-	public void genBattles() {
-		Random xD = new Random();
-		int mapBorderX = getTiles()[0].length - 2;
-		int mapBorderY = getTiles().length - 2;
-		for(int i = 0 ; i < getBattles().length ; i++) {
-			boolean validPlace = false;
-			int x = 0;
-			int y = 0;
-			
-			do {
-				x = xD.nextInt(mapBorderY)+1;
-				y = xD.nextInt(mapBorderX)+1;
-				if(getTiles()[x][y] instanceof Collidable && getBoss().getCoordinates().equals(new Coordinates(x,y))) {
-					validPlace = false;
-				} else {
-					validPlace = true;
+	protected void genNotes(Note[] notesTemp, Item[][] floorLoot) {
+		int noteCounter = 0;
+		int lootCounter = 0;
+		for(int i = 0; i < tiles.length; i++){
+			for(int j = 0; j < tiles[i].length; j++){
+				if(tiles[i][j] instanceof Noteable){
+					((Noteable) tiles[i][j]).setNote(notesTemp[noteCounter]);
+					noteCounter++;
 				}
-			}while(!validPlace);
-			
-			Enemy[] enemies = new Enemy[xD.nextInt(3)+1];
-			for (int j = 0; j < enemies.length; j++) {
-				//TODO Dress up enemy generation here.
-				int e = xD.nextInt(3);
-				switch(e) {
-				case 0:
-					enemies[j] = new Exercise();
-					break;
-				case 1:
-					enemies[j] = new Lab();
-					break;
-				case 2:
-					enemies[j] = new Project();
-					break;
+				if(tiles[i][j] instanceof Lootable){
+					((Lootable)tiles[i][j]).setLoot(floorLoot[lootCounter]);
+					lootCounter++;
 				}
 			}
-			getBattles()[i] = new Battle(getPlayer(), enemies);
-			getBattles()[i].getCoordinates().setCoordinates(x, y);
 		}
 	}
 	
@@ -85,8 +72,10 @@ public abstract class Floor implements Paintable, Serializable{
 		return boss;
 	}
 	
-	public void setBoss(Boss boss) {
-		this.boss = boss;
+	protected void setBoss(Boss boss) {
+		if (boss != null) {
+			this.boss = boss;
+		}
 	}
 	
 	public Player getPlayer() {
@@ -94,28 +83,31 @@ public abstract class Floor implements Paintable, Serializable{
 	}
 	
 	public void setPlayer(Player player) {
-		this.player = player;
+		if (player != null) {
+			this.player = player;
+			
+		}
 	}
 	
 	public BossBattle getBossBattle() {
 		return bossBattle;
 	}
 
-	public void setBossBattle(BossBattle bossBattle) {
-		this.bossBattle = bossBattle;
-	}
-
-	public Battle[] getBattles() {
-		return battles;
-	}
-
-	public void setBattles(Battle[] battles) {
-		this.battles = battles;
+	protected void setBossBattle(BossBattle bossBattle) {
+		if (bossBattle != null) {
+			this.bossBattle = bossBattle;			
+		}
 	}
 
 	public HashMap<Coordinates, Note> getNotes() {
 		return notes;
 	}
+	
+	public boolean bossIsDefeated(){
+		return boss.isDefeated();
+	}
+	
+	protected abstract void genTiles();
 
 	@Override
 	public Image getWorldImage() {

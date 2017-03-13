@@ -287,7 +287,6 @@ public class GameEngine {
 		if (t instanceof Boss
 				&& !game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle().isCompleted()) {
 			view.displayBattleView(game.getFloors().get(game.getPlayer().getFloorNum() - 1).getBossBattle());
-			System.out.println(game.getFloors().get(p.getFloorNum() - 1).getTiles().size());
 			game.getFloors().get(p.getFloorNum() - 1).changeTile(
 					game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getY(),
 					game.getFloors().get(p.getFloorNum() - 1).getBoss().getCoordinates().getX(), new GroundTile(5));
