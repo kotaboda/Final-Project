@@ -41,37 +41,16 @@ public class PayBattle extends BossBattle {
 					if (turnList[i].getHPProperty().get() > 0) {
 						Random r = new Random();
 						switch (r.nextInt(5)) {
-						case 0:
-
-						case 1:
-						case 2:
-							if (boss.getAbilities().size() != 0 &&
-									(((ShowAPowerpoint) boss.getAbilities().get(0)).getTimesForUse() > 0)) {
-								Ability nextAbility = boss.getAbilities().get(0);
-								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
-								notifySubscribers();
-								boss.ability(nextAbility, player);
-								break;
-							}else if((((AssignATeamAssignment) boss.getAbilities().get(1)).getTimesForUse() > 0)){
-								Ability nextAbility = boss.getAbilities().get(1);
-								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
-								notifySubscribers();
-								boss.ability(nextAbility, player);
-								break;
-							}else if(!((AddValue) boss.getAbilities().get(2)).getUsedBuff()){
-								Ability nextAbility = boss.getAbilities().get(2);
-								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
-								notifySubscribers();
-								boss.ability(nextAbility, player);
-								break;
-							}else{
-								Ability nextAbility = boss.getAbilities().get(3);
-								loggedAction = turnList[i].NAME + ": Used " + nextAbility;
-								notifySubscribers();
-								boss.ability(nextAbility, player);
-							}
+						case 0: case 1:
 							if (boss.getAbilities().size() != 0) {
 								Ability bossAbility = boss.getAbilities().get(r.nextInt(boss.getAbilities().size()));
+								if(boss.getCurrentHealth() < boss.getMaxHealth()-50 && !((AddValue)boss.getAbilities().get(2)).getUsedBuff()) {
+									bossAbility = boss.getAbilities().get(2);
+								} else if(bossAbility == boss.getAbilities().get(1) && ((AssignATeamAssignment)(boss.getAbilities().get(1))).getTimesForUse() != 0){
+									bossAbility = boss.getAbilities().get(1);
+								} else if(bossAbility == boss.getAbilities().get(0) && ((ShowAPowerpoint)(boss.getAbilities().get(0))).getTimesForUse() != 0){
+									bossAbility = boss.getAbilities().get(0);
+								}
 								boss.ability(bossAbility, player);
 								loggedAction = boss.NAME + " Used: " + bossAbility.NAME;
 								if(bossAbility instanceof AddValue){
@@ -79,10 +58,7 @@ public class PayBattle extends BossBattle {
 								}
 								break;
 							}
-						case 3:
-						case 4:
-							loggedAction = turnList[i].NAME + ": Attacked " + player.NAME;
-							notifySubscribers();
+						case 2: case 3: case 4:
 							player.takeDmg(boss.attack());
 							loggedAction = boss.NAME + " Attacked " + player.NAME;
 							break;
