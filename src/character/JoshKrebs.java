@@ -26,6 +26,11 @@ public class JoshKrebs extends Boss {
 		this.stats.put(Stats.STAMINA, 3);
 		levelUp(14);
 		updateDerivedStats();
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
+		battleImage = new Image(getClass().getResourceAsStream("/images/krebsicon.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/krebsdamage.png"));
+		attackAnimation = new Image(getClass().getResourceAsStream("/images/krebsattack.png"));
 	}
 	
 	private void readObject(ObjectInputStream ois){
@@ -40,9 +45,9 @@ public class JoshKrebs extends Boss {
 		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
 		
 		//TODO Replace image paths with correct images
-		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));
-		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/guarddamage.png"));
-		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));
+		battleImage = new Image(getClass().getResourceAsStream("/images/krebsicon.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/krebsdamage.png"));
+		attackAnimation = new Image(getClass().getResourceAsStream("/images/krebsattack.png"));
 		
 	}
 }
