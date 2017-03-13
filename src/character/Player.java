@@ -41,7 +41,7 @@ public class Player extends Character {
 	public Player(String name, Genders gender, int tileSheetNum) {
 		super(name, tileSheetNum);
 		ABILITIES.addAll(Arrays.asList((new Procrastinate()), (new ExpertTimeManagement()), (new AnExcuse())));
-		this.stats.put(Stats.INTELLIGIENCE, 15);
+		this.stats.put(Stats.INTELLIGIENCE, 1500);
 		this.stats.put(Stats.MOTIVATION, 20);
 		this.stats.put(Stats.WIT, 7);
 		this.stats.put(Stats.ENDURANCE, 3);

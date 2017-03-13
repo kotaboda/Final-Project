@@ -29,6 +29,11 @@ public class JerryPay extends Boss {
 		this.stats.put(Stats.STAMINA, 3);
 		levelUp(9);
 		updateDerivedStats();
+		hpProperty.set(hitPoints);
+		maxHPProperty.set(hitPoints);
+		battleImage = new Image(getClass().getResourceAsStream("/images/payicon.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/paytakedamage.png"));
+		attackAnimation = new Image(getClass().getResourceAsStream("/images/payattack.png"));
 	}
 	
 	private void readObject(ObjectInputStream ois){
@@ -43,9 +48,9 @@ public class JerryPay extends Boss {
 		maxEnergyProperty = new SimpleIntegerProperty(maxEnergy);
 		
 		//TODO Replace the image paths
-		battleImage = new Image(getClass().getResourceAsStream("/images/guardicon.png"));
-		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/guarddamage.png"));
-		attackAnimation = new Image(getClass().getResourceAsStream("/images/guardattack.png"));
+		battleImage = new Image(getClass().getResourceAsStream("/images/payicon.png"));
+		takeDamageAnimation = new Image(getClass().getResourceAsStream("/images/paytakedamage.png"));
+		attackAnimation = new Image(getClass().getResourceAsStream("/images/payattack.png"));
 		
 	}
 
