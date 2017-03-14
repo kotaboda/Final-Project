@@ -455,7 +455,7 @@ public class GameGUI extends Application {
 			battle.setPlayerNextItemUse(itemList.getSelectionModel().getSelectedItem());
 			Platform.runLater(() -> {
 				try {
-					Thread.sleep(100L);
+					Thread.sleep(10L);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
