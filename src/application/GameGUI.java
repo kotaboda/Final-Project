@@ -769,7 +769,9 @@ public class GameGUI extends Application {
 
 			for (int i = 0; i < l.obtainLoot().length; i++) {
 				otherInventoryGrid.getItems().add(l.obtainLoot()[i]);
-
+			}
+			if (otherInventoryGrid.getSelectionModel().isEmpty()) {
+				otherInventoryGrid.getSelectionModel().select(0);
 			}
 			lootManagerButton.setOnMouseClicked(event -> {
 				Item item = otherInventoryGrid.getSelectionModel().getSelectedItem();
@@ -787,11 +789,14 @@ public class GameGUI extends Application {
 					label.setPrefWidth(playerInventoryGrid.getPrefWidth());
 					label.setOnMouseClicked(labelEvent -> {
 						otherInventoryGrid.getItems().add(item);
+						if(otherInventoryGrid.getSelectionModel().isEmpty()){
+							otherInventoryGrid.getSelectionModel().select(0);
+						}
 						playerInventoryGrid.getChildren().remove(label);
 						TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, item);
 					});
 					GridPane.setHalignment(label, HPos.CENTER);
-					playerInventoryGrid.addRow(TESTINGGAME.getPlayer().getInventoryContents().length, label);
+					playerInventoryGrid.addColumn(0, label);
 				}
 			});
 			exitLootButton.setOnMouseClicked(event -> {
@@ -801,14 +806,16 @@ public class GameGUI extends Application {
 				Item theItem = TESTINGGAME.getPlayer().getInventoryContents()[i];
 				Label item = new Label(theItem.toString() + ": " + theItem.getDescription());
 				item.setPrefWidth(playerInventoryGrid.getPrefWidth());
-				;
 				item.setOnMouseClicked(event -> {
 					otherInventoryGrid.getItems().add(theItem);
+					if(otherInventoryGrid.getSelectionModel().isEmpty()){
+						otherInventoryGrid.getSelectionModel().select(0);
+					}
 					playerInventoryGrid.getChildren().remove(item);
 					TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, theItem);
 				});
 				GridPane.setHalignment(item, HPos.CENTER);
-				playerInventoryGrid.addRow(i, item);
+				playerInventoryGrid.addColumn(0, item);
 			}
 
 			Scene scene = new Scene(p);
