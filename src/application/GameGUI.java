@@ -56,6 +56,8 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -328,7 +330,6 @@ public class GameGUI extends Application {
 				});
 				if (i == 0) {
 					child.getOnMouseClicked().handle(null);
-					;
 				}
 			}
 			submitButton.setDisable(true);
@@ -430,6 +431,7 @@ public class GameGUI extends Application {
 	public void waitForPlayerSelection(Battle battle) {
 		try {
 			isPlayersTurn = true;
+			submitButton.setDisable(false);
 			synchronized (lock) {
 				lock.wait();
 			}
@@ -451,16 +453,19 @@ public class GameGUI extends Application {
 		case 2:
 			// items
 			battle.setPlayerNextItemUse(itemList.getSelectionModel().getSelectedItem());
+			Platform.runLater(() -> {
+				try {
+					Thread.sleep(100L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				leftActionList.getOnMouseClicked().handle(new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, false, false, false, false, false, false, false, false, false, false, null));				
+			});
 			break;
 
 		default:
 			break;
 		}
-		Platform.runLater(() -> {
-			leftActionList.getSelectionModel().clearSelection();
-			middleBattleVBox.getChildren().clear();
-			rightBattleVBox.getChildren().clear();
-		});
 	}
 
 	// GeneralView specific elements

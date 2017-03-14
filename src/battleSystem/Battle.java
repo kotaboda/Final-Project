@@ -83,9 +83,9 @@ public class Battle implements Subscribable<Battle>, Serializable {
 			// Player chose to use an item.
 		} else if (playerNextItemUse != null) {
 			loggedAction = player.NAME + ": Used " + (playerNextItemUse);
-			notifySubscribers();
 			playerNextItemUse.use(player);
 			player.modifyInventory(InventoryAction.TAKE, (Item)playerNextItemUse);
+			notifySubscribers();
 			// If the player did not choose to use an ability or item but their
 			// target was not null.
 			// Attacks the target.
