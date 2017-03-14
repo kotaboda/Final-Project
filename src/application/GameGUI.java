@@ -597,7 +597,7 @@ public class GameGUI extends Application {
 						&& currentLayout.equals(GUILayouts.BATTLE)) {
 					displayGeneralView();
 				} else if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)
-						&& currentLayout.equals(GUILayouts.PAUSE)) {
+						&& (currentLayout.equals(GUILayouts.PAUSE) || currentLayout.equals(GUILayouts.LOOT_MANAGER))) {
 					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 				}
 			});
