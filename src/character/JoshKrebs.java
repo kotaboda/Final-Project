@@ -18,7 +18,7 @@ public class JoshKrebs extends Boss {
 	private static final long serialVersionUID = 1532878735222428440L;
 
 	public JoshKrebs() {
-		super("Josh Krebs", 1500, 74, new AssignFraculator(), new PlayDivision(), new Lecture());
+		super("Josh Krebs", 3600, 74, new AssignFraculator(), new PlayDivision(), new Lecture());
 		this.stats.put(Stats.INTELLIGIENCE, 15);
 		this.stats.put(Stats.MOTIVATION, 20);
 		this.stats.put(Stats.WIT, 10);

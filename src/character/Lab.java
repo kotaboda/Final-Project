@@ -16,7 +16,7 @@ public class Lab extends Enemy {
 	private static final long serialVersionUID = 3646917878935608668L;
 	
 	public Lab(int level) {
-		super("Lab", 200 * level + 200, 1);
+		super("Lab", 175 * level, 1);
 		coordinates = new Coordinates(5,5);
 		this.stats.put(Stats.MOTIVATION, 11);
 		this.stats.put(Stats.INTELLIGIENCE, 10);

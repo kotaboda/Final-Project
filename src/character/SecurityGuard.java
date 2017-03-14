@@ -21,7 +21,7 @@ public class SecurityGuard extends Boss {
 	private static final long serialVersionUID = 8572599965260907613L;
 
 	public SecurityGuard() {
-		super("Security Guard", 900, 72, new MinionAssault(), new PlayEnchantment());
+		super("Security Guard", 1200, 72, new MinionAssault(), new PlayEnchantment());
 		this.inv.clearInventory();
 		this.inv.addItem(new Planeswalker());
 		this.inv.addAllItems(new MountainDew(), new Doritos(), new Coffee());
