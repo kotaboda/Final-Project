@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.sun.corba.se.impl.orb.ParserTable.TestAcceptor1;
+
 import battleSystem.Battle;
 import battleSystem.KrebsBattle;
 import character.Character;
@@ -156,7 +158,11 @@ public class GameGUI extends Application {
 
 			loadGameButton.setOnAction(event -> {
 				TESTINGGAME = GameEngine.loadGame();
-				displayGeneralView();
+				if (TESTINGGAME == null) {
+					displayCharacterCreation();
+				} else {
+					displayGeneralView();
+				}
 			});
 
 			exitButton.setOnAction(event -> {
@@ -592,7 +598,8 @@ public class GameGUI extends Application {
 				if ((event.getCode().equals(KeyCode.ESCAPE) || event.getCode().equals(KeyCode.E))
 						&& currentLayout.equals(GUILayouts.BATTLE)) {
 					displayGeneralView();
-				}else if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText) && currentLayout.equals(GUILayouts.PAUSE)){
+				} else if (((AnchorPane) primaryStage.getScene().getRoot()).getChildren().contains(displayText)
+						&& currentLayout.equals(GUILayouts.PAUSE)) {
 					((AnchorPane) primaryStage.getScene().getRoot()).getChildren().remove(displayText);
 				}
 			});
