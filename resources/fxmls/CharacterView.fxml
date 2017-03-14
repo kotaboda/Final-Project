@@ -31,7 +31,10 @@
                                     <ImageView fx:id="characterView" fitHeight="113.0" fitWidth="163.0" pickOnBounds="true" preserveRatio="true" />
                                     <Label fx:id="playerName" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="25.0" text="Player Name" />
                                     <Button fx:id="exitButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Exit" />
-                                    <ProgressBar fx:id="playerHealthBar" prefHeight="18.0" prefWidth="247.0" progress="0.0" />
+                                    <ProgressBar fx:id="playerHealthBar" prefHeight="18.0" prefWidth="247.0" progress="0.0">
+                                       <VBox.margin>
+                                          <Insets top="3.0" />
+                                       </VBox.margin></ProgressBar>
                                     <ProgressBar fx:id="playerEnergyBar" prefHeight="18.0" prefWidth="247.0" progress="0.0">
                                        <VBox.margin>
                                           <Insets top="3.0" />
