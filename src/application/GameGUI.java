@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
-import com.sun.corba.se.impl.orb.ParserTable.TestAcceptor1;
-
 import battleSystem.Battle;
 import battleSystem.KrebsBattle;
 import character.Character;
@@ -786,6 +784,12 @@ public class GameGUI extends Application {
 					otherInventoryGrid.getItems().remove(item);
 					l.removeItem(item);
 					Label label = new Label(item.toString() + ": " + item.getDescription());
+					label.setPrefWidth(playerInventoryGrid.getPrefWidth());
+					label.setOnMouseClicked(labelEvent -> {
+						otherInventoryGrid.getItems().add(item);
+						playerInventoryGrid.getChildren().remove(label);
+						TESTINGGAME.getPlayer().modifyInventory(InventoryAction.TAKE, item);
+					});
 					GridPane.setHalignment(label, HPos.CENTER);
 					playerInventoryGrid.addRow(TESTINGGAME.getPlayer().getInventoryContents().length, label);
 				}
@@ -796,6 +800,8 @@ public class GameGUI extends Application {
 			for (int i = 0; i < TESTINGGAME.getPlayer().getInventoryContents().length; i++) {
 				Item theItem = TESTINGGAME.getPlayer().getInventoryContents()[i];
 				Label item = new Label(theItem.toString() + ": " + theItem.getDescription());
+				item.setPrefWidth(playerInventoryGrid.getPrefWidth());
+				;
 				item.setOnMouseClicked(event -> {
 					otherInventoryGrid.getItems().add(theItem);
 					playerInventoryGrid.getChildren().remove(item);
